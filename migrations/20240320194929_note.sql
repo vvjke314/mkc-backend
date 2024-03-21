@@ -2,14 +2,14 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE IF NOT EXISTS "Note" (
 	"id" uuid NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
-	"project_id" uuid NOT NULL DEFAULT '',
+	"project_id" uuid,
 	"title" varchar(255) NOT NULL DEFAULT '',
 	"content" varchar(255) NOT NULL DEFAULT '',
-	"upload_datetime" date NOT NULL DEFAULT '',
-	"deadline" date NOT NULL DEFAULT '',
+	"upload_datetime" date,
+	"deadline" date,
 	PRIMARY KEY ("id")
 );
 
 
 -- +goose Down
-DROP TABLE Note;
+DROP TABLE "Note";

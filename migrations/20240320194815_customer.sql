@@ -7,11 +7,11 @@ CREATE TABLE IF NOT EXISTS "Customer" (
 	"login" varchar(255) NOT NULL UNIQUE DEFAULT '',
 	"password" varchar(255) NOT NULL DEFAULT '',
 	"email" varchar(255) NOT NULL UNIQUE DEFAULT '',
-	"type" int NOT NULL DEFAULT '',
+	"type" int NOT NULL DEFAULT 0,
 	PRIMARY KEY ("id")
 );
 
 
 -- +goose Down
-DROP TABLE Customer;
+DROP TABLE "Customer";
 
