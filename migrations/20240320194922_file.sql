@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS "File" (
 	"size" int NOT NULL DEFAULT 0,
 	"file_path" varchar(255) NOT NULL DEFAULT '',
 	"upload_datetime" date,
-	PRIMARY KEY ("id")
+	PRIMARY KEY ("id"),
+	FOREIGN KEY (project_id) REFERENCES "Project"(id) ON DELETE CASCADE
 );
 
 

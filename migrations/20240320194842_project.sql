@@ -6,7 +6,9 @@ CREATE TABLE IF NOT EXISTS "Project" (
 	"name" varchar(255) NOT NULL DEFAULT '',
 	"creation_date" date,
 	"admin_id" uuid,
-	PRIMARY KEY ("id")
+	PRIMARY KEY ("id"),
+	FOREIGN KEY (owner_id) REFERENCES "Customer"(id) ON DELETE CASCADE,
+	FOREIGN KEY (admin_id) REFERENCES "Administrator"(id) ON DELETE CASCADE
 );
 
 

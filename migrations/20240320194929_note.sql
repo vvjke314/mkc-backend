@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS "Note" (
 	"content" varchar(255) NOT NULL DEFAULT '',
 	"upload_datetime" date,
 	"deadline" date,
-	PRIMARY KEY ("id")
+	PRIMARY KEY ("id"),
+	FOREIGN KEY (project_id) REFERENCES "Project"(id) ON DELETE CASCADE
 );
 
 
