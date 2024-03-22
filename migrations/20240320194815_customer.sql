@@ -14,4 +14,3 @@ CREATE TABLE IF NOT EXISTS "Customer" (
 
 -- +goose Down
 DROP TABLE "Customer";
-

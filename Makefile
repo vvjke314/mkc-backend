@@ -5,7 +5,8 @@ build:
 build-migrate:
 	go build -o bin/migrations cmd/migrations/migrations.go
 migrate:
-# if FLAG != '' will do down migration
+# if FLAG != '' will do down migration 
 	./bin/migrations $(FLAG)
 docker-run:
 	docker compose up -d
+	
