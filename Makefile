@@ -9,4 +9,5 @@ migrate:
 	./bin/migrations $(FLAG)
 docker-run:
 	docker compose up -d
-	
+swag:
+	swag init -g cmd/main/mkc/main.go
