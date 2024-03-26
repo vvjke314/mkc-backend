@@ -2,16 +2,20 @@ package db
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
-	_ "github.com/jackc/pgx/v5/stdlib"
+	//"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 
+	pgxUUID "github.com/vgarvardt/pgx-google-uuid/v5"
 	"github.com/vvjke314/mkc-backend/internal/pkg/dsn"
 )
 
 type Repo struct {
-	db *sql.DB
+	ctx    context.Context
+	config *pgxpool.Config
+	pool   *pgxpool.Pool
 }
 
 func NewRepo() *Repo {
@@ -19,29 +23,41 @@ func NewRepo() *Repo {
 }
 
 // Init
-// медот для инициализации структуры sql.DB
+// медот для инициализации конфига
 func (r *Repo) Init() error {
 	url, err := dsn.GetDSN()
 	if err != nil {
 		return fmt.Errorf("[dsn.GetDSN]: Can't get data string name: %w", err)
 	}
 
-	db, err := sql.Open("pgx", url)
+	pgxConfig, err := pgxpool.ParseConfig(url)
 	if err != nil {
-		return fmt.Errorf("[sql.Open]: Can't open database: %w", err)
+		return fmt.Errorf("[pgxpool.ParseConfig]: Can't parse config: %w", err)
 	}
 
-	r.db = db
+	pgxConfig.AfterConnect = func(ctx context.Context, conn *pgx.Conn) error {
+		pgxUUID.Register(conn.TypeMap())
+		return nil
+	}
+
+	r.config = pgxConfig
 	return nil
 }
 
 // Connect
-// метод для подключения к БД
-func (r *Repo) Connect(ctx context.Context) (*sql.Conn, error) {
-	conn, err := r.db.Conn(ctx)
+// метод для создания pool'a
+func (r *Repo) Connect() error {
+	pgxConnPool, err := pgxpool.NewWithConfig(context.TODO(), r.config)
 	if err != nil {
-		return nil, fmt.Errorf("[sql.Db.Conn]: Can't connect to database: %w", err)
+		return fmt.Errorf("[pgxpool.NewWithConfig]: Can't parse config: %w", err)
 	}
 
-	return conn, err
+	r.pool = pgxConnPool
+	return nil
+}
+
+// Close
+// метод для закрытия pgxPool
+func (r *Repo) Close() {
+	r.pool.Close()
 }

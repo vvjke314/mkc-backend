@@ -1,6 +1,6 @@
 -- +goose Up
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE TABLE IF NOT EXISTS "Customer" (
+CREATE TABLE IF NOT EXISTS customer (
 	"id" uuid NOT NULL UNIQUE DEFAULT uuid_generate_v4(),
 	"first_name" varchar(255) NOT NULL DEFAULT '',
 	"second_name" varchar(255) NOT NULL DEFAULT '',
@@ -13,4 +13,4 @@ CREATE TABLE IF NOT EXISTS "Customer" (
 
 
 -- +goose Down
-DROP TABLE "Customer";
+DROP TABLE customer;

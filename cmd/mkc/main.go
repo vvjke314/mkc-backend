@@ -19,8 +19,12 @@ import (
 // @schemes					http
 func main() {
 	app := app.NewApplication()
-	app.Init()
-	err := app.Run()
+	err := app.Init()
+	if err != nil {
+		// switch to logger here
+		fmt.Printf("[app.Init]: Can't initialize application: %s", err)
+	}
+	err = app.Run()
 	if err != nil {
 		// switch to logger here
 		fmt.Printf("[app.Run] Error occured: %s", err)
