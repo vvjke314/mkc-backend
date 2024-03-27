@@ -40,6 +40,7 @@ func (r *Repo) Init() error {
 		return nil
 	}
 
+	r.ctx = context.Background()
 	r.config = pgxConfig
 	return nil
 }

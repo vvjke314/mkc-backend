@@ -11,6 +11,6 @@ type Note struct {
 	ProjectId      uuid.UUID
 	Title          string
 	Content        string
-	UploadDatetime time.Time
+	UpdateDatetime time.Time
 	Deadline       time.Time
 }

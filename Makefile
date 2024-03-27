@@ -11,3 +11,8 @@ docker-run:
 	docker compose up -d
 swag:
 	swag init -g cmd/main/mkc/main.go
+test-repo:
+	make migrate FLAG=-d
+	make migrate
+	make build
+	make run

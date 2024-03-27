@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS file (
 	"extension" varchar(255) NOT NULL DEFAULT '',
 	"size" int NOT NULL DEFAULT 0,
 	"file_path" varchar(255) NOT NULL DEFAULT '',
-	"upload_datetime" date,
+	"update_datetime" TIMESTAMP,
 	PRIMARY KEY ("id"),
 	FOREIGN KEY (project_id) REFERENCES "project"(id) ON DELETE CASCADE
 );

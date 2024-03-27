@@ -13,5 +13,5 @@ type File struct {
 	Extension      string
 	Size           int
 	FilePath       string
-	UploadDatetime time.Time
+	UpdateDatetime time.Time
 }
