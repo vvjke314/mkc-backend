@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 )
 
@@ -29,12 +30,16 @@ func (r *Repo) UpgradeCustomerStatus(customerId string, status int) error {
 	return nil
 }
 
-// GetCustomerByEmail [unchecked]
+// GetCustomerByEmail
 // Получаем id клиента через email
 func (r *Repo) GetCustomerByEmail(customerEmail string, c *ds.Customer) error {
 	query := "SELECT id, first_name, second_name, login, password, email, type FROM customer WHERE email = $1"
 	err := r.pool.QueryRow(r.ctx, query, customerEmail).Scan(&c.Id, &c.FirstName, &c.SecondName, &c.Login, &c.Password, &c.Email, &c.Type)
 	if err != nil {
+		if err == pgx.ErrNoRows {
+			// Если запись отсутствует, возвращаем nil ошибку
+			return nil
+		}
 		return fmt.Errorf("[pgxpool.Pool.QueryRow] Can't exec query %w", err)
 	}
 

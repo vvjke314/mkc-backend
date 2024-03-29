@@ -230,5 +230,143 @@ func (app *ApplicationTest) Run() error {
 	// 	return fmt.Errorf("[db.UpdateNoteName] %w", err)
 	// }
 
+	// 16. Получаем клиента через его email
+	c := ds.Customer{}
+	err = app.r.GetCustomerByEmail("vvjkee@mail.ru", &c)
+	if err != nil {
+		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	}
+	fmt.Println(c)
+
+	// 17. Несуществующий пользователь
+	c2 := ds.Customer{}
+	err = app.r.GetCustomerByEmail("ufgdhjkkg@mail.ru", &c2)
+	if err != nil {
+		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	}
+	fmt.Println(c2)
+
+	// 18. Обновление дед лайна заметки
+	err = app.r.UpdateNoteDeadLine(note.Id.String(), time.Date(2025, time.August, 25, 0, 0, 0, 0, time.Local))
+	if err != nil {
+		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	}
+
+	// 19. Получение заметки по id
+	n := ds.Note{}
+	err = app.r.GetNoteById(note.Id.String(), &n)
+	if err != nil {
+		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	}
+	fmt.Println(n)
+
+	// 20. Создание заметки и вывод всех заметок проекта
+	note2 := ds.Note{
+		Id:             uuid.New(),
+		ProjectId:      project.Id,
+		Title:          "second-note",
+		Content:        "",
+		UpdateDatetime: time.Now(),
+		Deadline:       time.Date(2024, time.March, 23, 12, 50, 0, 0, time.Local),
+	}
+	err = app.r.CreateNote(note2)
+	if err != nil {
+		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	}
+	notes, err := app.r.GetNotes(project.Id.String())
+	if err != nil {
+		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	}
+	fmt.Println(notes)
+
+	// 21. Создание пустого проекта и вывод всех его заметок
+	emptyProject := ds.Project{
+		Id:           uuid.New(),
+		OwnerId:      customer.Id,
+		Name:         "EmptyProject",
+		CreationDate: time.Now(),
+	}
+	err = app.r.CreateProject(emptyProject)
+	if err != nil {
+		return fmt.Errorf("[db.CreateProject]: Can't create project: %w", err)
+	}
+	notes, err = app.r.GetNotes(emptyProject.Id.String())
+	if err != nil {
+		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	}
+	fmt.Println(notes)
+
+	// 22. Удаление пустого проекта
+	// err = app.r.DeleteProject(emptyProject.Id.String())
+	// if err != nil {
+	// 	return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	// }
+
+	// 23. Изменение имени проекта
+	err = app.r.UpdateProjectName(project.Id.String(), "New-Project-Name")
+	if err != nil {
+		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	}
+
+	// 24. Получение проекта по Id
+	p := ds.Project{}
+	err = app.r.GetProjectById(project.Id.String(), &p)
+	if err != nil {
+		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	}
+	fmt.Println(p)
+
+	// 25.
+	projects, err := app.r.GetProjects(customer.Id.String())
+	if err != nil {
+		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	}
+	fmt.Println(projects)
+
+	// 26.
+	b, err := app.r.AccessControl(customer.Id.String(), project.Id.String())
+	if err != nil {
+		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	}
+	fmt.Println(b)
+
+	b, err = app.r.AccessControl(uuid.NewString(), project.Id.String())
+	if err != nil {
+		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	}
+	fmt.Println(b)
+
+	// 27.
+	participant := ds.Customer{
+		Id:         uuid.New(),
+		FirstName:  "Vlad",
+		SecondName: "Abramov",
+		Login:      "pvrts",
+		Password:   "bufybuff2002",
+		Email:      "pvrts@mail.ru",
+		Type:       0,
+	}
+	err = app.r.SignUpCustomer(participant)
+	if err != nil {
+		return fmt.Errorf("[db.SignUpCustomer]: Can't signup customer: %w", err)
+	}
+
+	pa := ds.ProjectAccess{
+		Id:             uuid.New(),
+		ProjectId:      project.Id,
+		CustomerId:     participant.Id,
+		CustomerAccess: 0,
+	}
+
+	err = app.r.CreateParticipant(pa)
+	if err != nil {
+		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	}
+
+	err = app.r.DeleteParticipant(pa.CustomerId.String(), pa.ProjectId.String())
+	if err != nil {
+		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
+	}
+
 	return nil
 }

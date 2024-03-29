@@ -42,7 +42,7 @@ func (r *Repo) UpdateNoteName(noteId, noteName string) error {
 	return nil
 }
 
-// UpdateNoteDeadLine [unchecked]
+// UpdateNoteDeadLine
 // Изменение дедлайна заметки
 func (r *Repo) UpdateNoteDeadLine(noteId string, deadline time.Time) error {
 	query := "UPDATE note SET deadline = $1, update_datetime = $2 WHERE id = $3"
@@ -54,7 +54,7 @@ func (r *Repo) UpdateNoteDeadLine(noteId string, deadline time.Time) error {
 	return nil
 }
 
-// GetNoteById [unchecked]
+// GetNoteById
 // Получение ифнормации о заметке через БД
 func (r *Repo) GetNoteById(noteId string, n *ds.Note) error {
 	query := "SELECT id, project_id, title, content, update_datetime, deadline FROM note WHERE id = $1"
@@ -66,7 +66,7 @@ func (r *Repo) GetNoteById(noteId string, n *ds.Note) error {
 	return nil
 }
 
-// GetNotes [unchecked]
+// GetNotes
 // Получение всех файлов проекта
 func (r *Repo) GetNotes(projectId string) ([]ds.Note, error) {
 	var notes []ds.Note

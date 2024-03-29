@@ -17,7 +17,7 @@ func (r *Repo) CreateProject(p ds.Project) error {
 	return nil
 }
 
-// DeleteProject [unchecked]
+// DeleteProject
 // Удаляет проект из БД
 func (r *Repo) DeleteProject(projectId string) error {
 	err := r.DeleteFiles(projectId)
@@ -44,10 +44,10 @@ func (r *Repo) DeleteProject(projectId string) error {
 	return nil
 }
 
-// UpdateProjectName [unchecked]
+// UpdateProjectName
 // Изменение имени проекта в БД
 func (r *Repo) UpdateProjectName(projectId, projectName string) error {
-	query := "UPDATE project SET project_name = $1 WHERE project_id = $2"
+	query := "UPDATE project SET name = $1 WHERE id = $2"
 	_, err := r.pool.Exec(r.ctx, query, projectName, projectId)
 	if err != nil {
 		return fmt.Errorf("[*pgxpool.Pool.Exec] Can't exec query: %w", err)
@@ -56,7 +56,7 @@ func (r *Repo) UpdateProjectName(projectId, projectName string) error {
 	return nil
 }
 
-// GetProjectById [unchecked]
+// GetProjectById
 // Получает структуру проект по id проекта
 func (r *Repo) GetProjectById(projectId string, p *ds.Project) error {
 	query := "SELECT id, owner_id, capacity, name, creation_date FROM project WHERE id = $1"
@@ -68,11 +68,11 @@ func (r *Repo) GetProjectById(projectId string, p *ds.Project) error {
 	return nil
 }
 
-// GetProjects [unchecked]
+// GetProjects
 // Возращает все проекты пользователя
 func (r *Repo) GetProjects(customerId string) ([]ds.Project, error) {
 	var projects []ds.Project
-	query := "SELECT id, project_id, filename, extension, size, file_path, update_datetime FROM project WHERE project_id = $1"
+	query := "SELECT id, owner_id, capacity, name, creation_date, admin_id FROM project WHERE owner_id = $1"
 
 	rows, err := r.pool.Query(r.ctx, query, customerId)
 	if err != nil {
@@ -82,7 +82,7 @@ func (r *Repo) GetProjects(customerId string) ([]ds.Project, error) {
 
 	for rows.Next() {
 		var p ds.Project
-		if err := rows.Scan(&p.Id, &p.OwnerId, &p.Capacity, &p.Name, &p.CreationDate); err != nil {
+		if err := rows.Scan(&p.Id, &p.OwnerId, &p.Capacity, &p.Name, &p.CreationDate, &p.AdminId); err != nil {
 			return projects, fmt.Errorf("[pgx.Rows.Scan] Can't scan data: %w", err)
 		}
 		projects = append(projects, p)
