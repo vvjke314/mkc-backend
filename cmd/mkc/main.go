@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	testrepohandlers "github.com/vvjke314/mkc-backend/internal/test-repo-handlers"
+	"github.com/vvjke314/mkc-backend/internal/app"
 )
 
 type Application interface {
@@ -14,7 +14,7 @@ type Application interface {
 //	@title			MKC API
 //	@version		1.0
 //	@description	MK CLOUD backend service.
-//	@contact.email	mail-bla-bla
+//	@contact.email	mail@dump
 //	@host			localhost:8080
 //	@BasePath		/
 
@@ -24,7 +24,7 @@ type Application interface {
 // @schemes					http
 func main() {
 	// Поменять на app.NewApplication()
-	app := testrepohandlers.NewApplicationTest()
+	app := app.NewApplication()
 	err := app.Init()
 	if err != nil {
 		// switch to logger here

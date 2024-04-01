@@ -4,42 +4,48 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/gin-gonic/gin"
 	"github.com/vvjke314/mkc-backend/internal/pkg/db"
 )
 
 type Application struct {
-	ctx context.Context
-	r   *db.Repo
-	//srv *service.Service
+	ctx  context.Context
+	repo *db.Repo
 }
 
 func NewApplication() *Application {
 	return &Application{}
 }
 
-// Init
-// Инициализирует сервис
+// Init инициализирует сервис
 func (app *Application) Init() error {
 	app.ctx = context.Background()
-	app.r = db.NewRepo()
-	err := app.r.Init()
+	app.repo = db.NewRepo()
+	err := app.repo.Init()
 	if err != nil {
 		return fmt.Errorf("[db.Init]: Can't initialize to database: %w", err)
 	}
-
-	//TO-DO: SERVICE INIT
 	return nil
 }
 
-// Run
-// Запускает сервис
+// Run запускает сервис
 func (app *Application) Run() error {
-	// подключение к бд
-	err := app.r.Connect()
+	// Подключение к бд
+	err := app.repo.Connect()
 	if err != nil {
 		return fmt.Errorf("[db.Connect]: Can't connect to database: %w", err)
 	}
-	defer app.r.Close()
+	defer app.repo.Close()
+
+	r := gin.Default()
+	r.Use(CORSMiddleware())
+
+	// authorize
+	r.POST("/login", Login)
+	r.GET("/logout", Logout)
+	r.POST("/signup", app.Signup)
+
+	r.Run()
 
 	return nil
 }
