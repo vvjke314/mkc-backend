@@ -41,9 +41,19 @@ func (app *Application) Run() error {
 	r.Use(CORSMiddleware())
 
 	// authorize
-	r.POST("/login", Login)
-	r.GET("/logout", Logout)
+	r.POST("/login", app.Login)
 	r.POST("/signup", app.Signup)
+
+	authorized := r.Group("/")
+
+	authorized.Use(AuthMiddleware())
+	{
+		authorized.GET("/logout", app.Logout)
+
+		//project
+		authorized.POST("/project", app.CreateProject)
+	}
+	//
 
 	r.Run()
 

@@ -21,7 +21,7 @@ type Application interface {
 // @securityDefinitions.apikey	BearerAuth
 // @in							header
 // @name						Authorization
-// @schemes					http
+// @schemes					    http
 func main() {
 	// Поменять на app.NewApplication()
 	app := app.NewApplication()

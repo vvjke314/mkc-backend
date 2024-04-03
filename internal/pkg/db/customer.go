@@ -45,3 +45,19 @@ func (r *Repo) GetCustomerByEmail(customerEmail string, c *ds.Customer) error {
 
 	return nil
 }
+
+// GetCustomerByCredentials
+// Получаем id клиента через credentials
+func (r *Repo) GetCustomerByCredentials(custCredentials ds.LoginCustomerReq, c *ds.Customer) error {
+	query := "SELECT id, first_name, second_name, login, password, email, type FROM customer WHERE login = $1 AND password = $2"
+	err := r.pool.QueryRow(r.ctx, query, custCredentials.Login, custCredentials.Password).Scan(&c.Id, &c.FirstName, &c.SecondName, &c.Login, &c.Password, &c.Email, &c.Type)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			// Если запись отсутствует, возвращаем nil ошибку
+			return err
+		}
+		return fmt.Errorf("[pgxpool.Pool.QueryRow] Can't exec query %w", err)
+	}
+
+	return nil
+}

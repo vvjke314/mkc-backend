@@ -8,3 +8,9 @@ type ProjectAccess struct {
 	CustomerId     uuid.UUID
 	CustomerAccess int
 }
+
+type AddParticipantReq struct {
+}
+
+type DeleteParticipantReq struct {
+}

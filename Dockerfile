@@ -1,12 +1,13 @@
+# Базовый образ на основании которого мы создаем свой
 FROM golang
 
 RUN go version 
-ENV GOPATH=/
 
-COPY ./ ./
+WORKDIR /home/mkc-backend/
+COPY . .
 RUN go mod download
 RUN go build -o ./bin/main ./cmd/mkc/main.go
 
 EXPOSE 8080
 
-CMD ["./bin/main"]
+CMD ["./bin/mkc"]

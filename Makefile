@@ -1,6 +1,9 @@
+swag:
+	swag init -g cmd/mkc/main.go
 run:
 	./bin/mkc
 build:
+	make swag
 	go build -o bin/mkc cmd/mkc/main.go
 build-migrate:
 	go build -o bin/migrations cmd/migrations/migrations.go
@@ -9,8 +12,6 @@ migrate:
 	./bin/migrations $(FLAG)
 docker-run:
 	docker compose up -d
-swag:
-	swag init -g cmd/main/mkc/main.go
 test-repo:
 	make migrate FLAG=-d
 	make migrate

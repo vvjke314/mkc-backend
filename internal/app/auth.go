@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 )
 
@@ -23,8 +25,9 @@ type AuthToken struct {
 }
 
 // createToken создание JWT-токена
-func createToken(login string) (string, error) {
+func createToken(login, id string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":    id,
 		"login": login,
 		"exp":   time.Now().Add(time.Hour * 2).Unix(),
 	})
@@ -36,20 +39,33 @@ func createToken(login string) (string, error) {
 	return tokenString, nil
 }
 
-type Credentials struct {
-	Login    string
-	Password string
-}
-
-func Login(c *gin.Context) {
-	var creds Credentials
+// Login godoc
+// @Summary      Login customer
+// @Description  Login customer
+// @Tags         auth
+// @Produce      json
+// @Param data body ds.LoginCustomerReq true "Customer data"
+// @Success      200 {object} AuthToken
+// @Failure 500 {object} errorResponse
+// @Failure 400 {object} errorResponse
+// @Router      /login [post]
+func (a *Application) Login(c *gin.Context) {
+	var creds ds.LoginCustomerReq
 	if err := c.ShouldBindJSON(&creds); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
+		newErrorResponse(c, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
 
+	customer := ds.Customer{}
+	if err := a.repo.GetCustomerByCredentials(creds, &customer); err != nil {
+		if err == pgx.ErrNoRows {
+			newErrorResponse(c, http.StatusBadRequest, "No such customer")
+			return
+		}
+	}
+
 	// Здесь следует выполнить проверку учетных данных пользователя и, в случае успеха, создать JWT-токен
-	token, err := createToken(creds.Login)
+	token, err := createToken(customer.Login, customer.Id.String())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create token"})
 		return
@@ -61,7 +77,16 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, AuthToken{Token: token})
 }
 
-// Signup создание пользователя
+// SignUp godoc
+// @Summary      Signup customer
+// @Description  Signup customer
+// @Tags         auth
+// @Produce      json
+// @Param data body ds.SignUpCustomerReq true "Customer data"
+// @Success      200 {object} AuthToken
+// @Failure 500 {object} errorResponse
+// @Failure 400 {object} errorResponse
+// @Router      /signup [post]
 func (a *Application) Signup(c *gin.Context) {
 	req := &ds.SignUpCustomerReq{}
 
@@ -95,16 +120,7 @@ func (a *Application) Signup(c *gin.Context) {
 		return
 	}
 
-	// Здесь следует выполнить регистрацию пользователя и, в случае успеха, создать JWT-токен
-	token, err := createToken(req.Login)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create token"})
-		return
-	}
-
-	activeTokens[token] = true
-
-	err = a.repo.SignUpCustomer(ds.Customer{
+	customer := ds.Customer{
 		Id:         uuid.New(),
 		FirstName:  req.FirstName,
 		SecondName: req.SecondName,
@@ -112,46 +128,48 @@ func (a *Application) Signup(c *gin.Context) {
 		Email:      req.Email,
 		Password:   req.Password,
 		Type:       0,
-	})
+	}
+	err = a.repo.SignUpCustomer(customer)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "Failed with signing up. Customer with entered data alredy exist")
+		return
+	}
+	// Здесь следует выполнить регистрацию пользователя и, в случае успеха, создать JWT-токен
+	token, err := createToken(customer.Login, customer.Id.String())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create token"})
+		return
+	}
+	activeTokens[token] = true
 
 	// Возврат JWT-токена клиенту
 	c.JSON(http.StatusOK, AuthToken{Token: token})
 }
 
-// authMiddleware промежуточное ПО для проверки на наличие JWT-токена
-func authMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// Получаем JWT-токен из заголовка Authorization
-		tokenString := c.GetHeader("Authorization")
-		if tokenString == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-			c.Abort()
-			return
-		}
-
-		// Проверяем, есть ли токен в списке активных токенов
-		if _, ok := activeTokens[tokenString]; !ok {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-			c.Abort()
-			return
-		}
-
-		// Продолжаем выполнение запроса
-		c.Next()
-	}
-}
-
-func Logout(c *gin.Context) {
+// Logout godoc
+// @Summary      Logout user
+// @Description  Logout user
+// @Tags         auth
+// @Produce      json
+// @Security 	 BearerAuth
+// @Success      200 {object} successResponse
+// @Failure 403 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Router      /logout [get]
+func (a *Application) Logout(c *gin.Context) {
 	// Получаем JWT-токен из заголовка авторизации
-	tokenString := c.GetHeader("Authorization")
-	if tokenString == "" {
+	tokenRawString := c.GetHeader("Authorization")
+	if tokenRawString == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
+	// Удбираем Bearer из заголовка аутентификации
+	tokenSplitString := strings.Split(tokenRawString, " ")
+	tokenString := tokenSplitString[1]
 
 	// Удаляем токен из списка активных токенов
 	delete(activeTokens, tokenString)
 
-	// В данном примере просто возвращаем сообщение об успешном выходе.
-	c.JSON(http.StatusOK, gin.H{"message": "Logout successful"})
+	// Отдаем сообщение об успешном выходе.
+	newSuccessResponse(c, http.StatusOK, "Logout successful")
 }
