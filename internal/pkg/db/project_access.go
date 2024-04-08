@@ -9,8 +9,7 @@ import (
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 )
 
-// CreateParticipant
-// Добавляет участника в проект
+// CreateParticipant добавляет участника в проект
 func (r *Repo) CreateParticipant(p ds.ProjectAccess) error {
 	query := "INSERT INTO project_access (id, project_id, customer_id, customer_access) VALUES ($1, $2, $3, $4)"
 	_, err := r.pool.Exec(r.ctx, query, p.Id, p.ProjectId, p.CustomerId, p.CustomerAccess)
@@ -32,8 +31,7 @@ func (r *Repo) UpdateParticipantAccess(participantId string, mod int) error {
 	return nil
 }
 
-// DeleteParticipant
-// Удаляет участника из проекта
+// DeleteParticipant удаляет участника из проекта
 func (r *Repo) DeleteParticipant(participantId, projectId string) error {
 	query := "DELETE FROM project_access WHERE customer_id = $1 AND project_id = $2"
 	_, err := r.pool.Exec(r.ctx, query, participantId, projectId)
@@ -44,8 +42,7 @@ func (r *Repo) DeleteParticipant(participantId, projectId string) error {
 	return nil
 }
 
-// DeleteParticipants
-// Удаляет всех участников из проекта
+// DeleteParticipants удаляет всех участников из проекта
 func (r *Repo) DeleteParticipants(projectId string) error {
 	query := "DELETE FROM project_access WHERE project_id = $1"
 	_, err := r.pool.Exec(r.ctx, query, projectId)
@@ -55,9 +52,8 @@ func (r *Repo) DeleteParticipants(projectId string) error {
 	return nil
 }
 
-// AccessControl
-// Проверяет имеет ли пользователь доступ к проекту
-func (r *Repo) AccessControl(customerId, projectId string) (bool, error) {
+// AccessControl проверяет имеет ли пользователь доступ к проекту
+func (r *Repo) AccessControl(customerId, projectId string, access int) (bool, error) {
 	// var pa ds.ProjectAccess
 
 	// Проверка на владельца проекта
@@ -72,8 +68,8 @@ func (r *Repo) AccessControl(customerId, projectId string) (bool, error) {
 	}
 
 	// Проверка на участника проекта
-	query := "SELECT FROM project_access WHERE customer_id = $1 AND project_id = $2"
-	err = r.pool.QueryRow(r.ctx, query, customerId, projectId).Scan()
+	query := "SELECT FROM project_access WHERE customer_id = $1 AND project_id = $2 AND customer_access = $3"
+	err = r.pool.QueryRow(r.ctx, query, customerId, projectId, access).Scan()
 	if err != nil {
 		if err == pgx.ErrNoRows {
 			// Если запись отсутствует, возвращаем nil и nil ошибку
@@ -92,10 +88,16 @@ func (r *Repo) GetParticipants(projectId string) ([]ds.Customer, error) {
 	var customers []ds.Customer
 
 	var customer ds.Customer
-	query := "SELECT owner_id FROM project WHERE project_id = $1"
-	err := r.pool.QueryRow(r.ctx, query, projectId).Scan(&customer)
+	query := "SELECT owner_id FROM project WHERE id = $1"
+	err := r.pool.QueryRow(r.ctx, query, projectId).Scan(&customer.Id)
 	if err != nil {
-		return nil, fmt.Errorf("[pgxpool.Pool.Exec] Can't exec query %w", err)
+		return nil, fmt.Errorf("[pgxpool.Pool.QueryRow] Can't exec query %w", err)
+	}
+
+	query = "SELECT * FROM customer WHERE id = $1"
+	err = r.pool.QueryRow(r.ctx, query, customer.Id.String()).Scan(&customer.Id, &customer.FirstName, &customer.SecondName, &customer.Login, &customer.Password, &customer.Email, &customer.Type)
+	if err != nil {
+		return nil, fmt.Errorf("[pgxpool.Pool.QueryRow] Can't exec query %w", err)
 	}
 	customers = append(customers, customer)
 
@@ -106,7 +108,7 @@ func (r *Repo) GetParticipants(projectId string) ([]ds.Customer, error) {
 	WHERE pa.project_id = $1
 	`, projectId)
 	if err != nil {
-		return nil, fmt.Errorf("[pgxpool.Pool.Exec] Can't exec query %w", err)
+		return nil, fmt.Errorf("[pgxpool.Pool.Query] Can't exec query %w", err)
 	}
 	defer rows.Close()
 
@@ -119,4 +121,15 @@ func (r *Repo) GetParticipants(projectId string) ([]ds.Customer, error) {
 		customers = append(customers, customer)
 	}
 	return customers, nil
+}
+
+// CheckParticipant проверяет добавлен ли уже участник в проект и если да, то возравщает ошибку
+func (r *Repo) CheckParticipant(participantId, projectId string) error {
+	pa := &ds.ProjectAccess{}
+	query := "SELECT id FROM project_access WHERE project_id = $1 AND customer_id = $2"
+	err := r.pool.QueryRow(r.ctx, query, projectId, participantId).Scan(&pa.Id)
+	if err == pgx.ErrNoRows {
+		return nil
+	}
+	return fmt.Errorf("such participant already in this project")
 }

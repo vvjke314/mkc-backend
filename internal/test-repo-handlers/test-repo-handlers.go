@@ -34,6 +34,10 @@ func (app *ApplicationTest) Init() error {
 	return nil
 }
 
+func (app *ApplicationTest) Log(message string) {
+	fmt.Println(message)
+}
+
 // Run
 // Запускает тест-сервис с симуляцией работы сервиса
 func (app *ApplicationTest) Run() error {
@@ -324,13 +328,13 @@ func (app *ApplicationTest) Run() error {
 	fmt.Println(projects)
 
 	// 26.
-	b, err := app.r.AccessControl(customer.Id.String(), project.Id.String())
+	b, err := app.r.AccessControl(customer.Id.String(), project.Id.String(), 0)
 	if err != nil {
 		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
 	}
 	fmt.Println(b)
 
-	b, err = app.r.AccessControl(uuid.NewString(), project.Id.String())
+	b, err = app.r.AccessControl(uuid.NewString(), project.Id.String(), 0)
 	if err != nil {
 		return fmt.Errorf("[db.GetCustomerByEmail] %w", err)
 	}

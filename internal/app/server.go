@@ -9,6 +9,46 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// FullAccessControl промежуточное ПО для проверки доступа к работе с проектом
+func (a *Application) FullAccessControl() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Получаем JWT Токен
+		tokenString := getJWT(c)
+		// Парсим токен и получаем id клиента
+		customerId, err := getJWTClaims(tokenString)
+		if err != nil {
+			newErrorResponse(c, http.StatusForbidden, "Can't parse JWT token")
+			return
+		}
+		b, err := a.repo.AccessControl(customerId, c.Param("project_id"), 1)
+		if !b || err != nil {
+			newErrorResponse(c, http.StatusForbidden, "You don't have permission to work with that project")
+			return
+		}
+		c.Next()
+	}
+}
+
+// AccessControl промежуточное ПО для проверки доступа к работе с проектом
+func (a *Application) AccessControl() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Получаем JWT Токен
+		tokenString := getJWT(c)
+		// Парсим токен и получаем id клиента
+		customerId, err := getJWTClaims(tokenString)
+		if err != nil {
+			newErrorResponse(c, http.StatusForbidden, "Can't parse JWT token")
+			return
+		}
+		b, err := a.repo.AccessControl(customerId, c.Param("project_id"), 0)
+		if !b || err != nil {
+			newErrorResponse(c, http.StatusForbidden, "You don't have permission to work with that project")
+			return
+		}
+		c.Next()
+	}
+}
+
 // CORSMiddleware промежуточное ПО для настройки политики CORS
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {

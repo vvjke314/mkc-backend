@@ -67,10 +67,16 @@ func (app *Application) Run() error {
 		authorized.GET("/logout", app.Logout)
 
 		//project
+		authorized.GET("/projects", app.GetProjects)
 		authorized.POST("/project", app.CreateProject)
-		authorized.PUT("/project/:project_id", app.UpdateProjectName)
+		authorized.Use(app.FullAccessControl()).PUT("/project/:project_id", app.UpdateProjectName)
+		authorized.Use(app.FullAccessControl()).DELETE("/project/:project_id", app.DeleteProject)
+
+		//participants
+		authorized.Use(app.FullAccessControl()).POST("/participants/:project_id", app.AddParticipant)
+		authorized.Use(app.FullAccessControl()).PUT("/participants/:project_id", app.UpdateParticipantAccess)
+		authorized.Use(app.FullAccessControl()).DELETE("/participants/:project_id", app.DeleteParticipant)
 	}
-	//
 
 	r.Run()
 

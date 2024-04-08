@@ -3,15 +3,22 @@ package ds
 import "github.com/google/uuid"
 
 type ProjectAccess struct {
-	Id             uuid.UUID
-	ProjectId      uuid.UUID
-	CustomerId     uuid.UUID
-	CustomerAccess int
+	Id             uuid.UUID `json:"id"`
+	ProjectId      uuid.UUID `json:"project_id"`
+	CustomerId     uuid.UUID `json:"customer_id"`
+	CustomerAccess int       `json:"customer_access"`
 }
 
 type AddParticipantReq struct {
-	ParticipantLogin string `json:"login"`
+	ParticipantEmail string `json:"email"`
+	CustomerAccess   string `json:"customer_access"`
+}
+
+type UpdateParticipantAccessReq struct {
+	ParticipantEmail string `json:"email"`
+	CustomerAccess   string `json:"customer_access"`
 }
 
 type DeleteParticipantReq struct {
+	ParticipantEmail string `json:"email"`
 }

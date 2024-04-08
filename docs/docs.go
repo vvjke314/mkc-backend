@@ -144,7 +144,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "participants"
                 ],
                 "summary": "Adds participant to project",
                 "parameters": [
@@ -173,6 +173,18 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/ds.Customer"
                             }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
                         }
                     },
                     "500": {
@@ -322,6 +334,18 @@ const docTemplate = `{
                             }
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "obejct"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -451,7 +475,15 @@ const docTemplate = `{
             }
         },
         "ds.AddParticipantReq": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "customer_access": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                }
+            }
         },
         "ds.CreateProjectReq": {
             "type": "object",

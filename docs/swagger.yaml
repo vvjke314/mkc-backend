@@ -16,6 +16,11 @@ definitions:
         type: string
     type: object
   ds.AddParticipantReq:
+    properties:
+      customer_access:
+        type: string
+      email:
+        type: string
     type: object
   ds.CreateProjectReq:
     properties:
@@ -219,6 +224,14 @@ paths:
             items:
               $ref: '#/definitions/ds.Customer'
             type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
         "500":
           description: Internal Server Error
           schema:
@@ -227,7 +240,7 @@ paths:
       - BearerAuth: []
       summary: Adds participant to project
       tags:
-      - auth
+      - participants
   /project:
     post:
       description: Creates customer project in storage
@@ -312,6 +325,14 @@ paths:
             items:
               $ref: '#/definitions/ds.Project'
             type: array
+        "401":
+          description: Unauthorized
+          schema:
+            type: obejct
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
         "500":
           description: Internal Server Error
           schema:
