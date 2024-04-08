@@ -93,3 +93,14 @@ func (r *Repo) GetProjects(customerId string) ([]ds.Project, error) {
 
 	return projects, nil
 }
+
+// GetProjectbyName получаем нужный проект по имени
+func (r *Repo) GetProjectbyName(customerId, projectName string, p *ds.Project) error {
+	query := "SELECT id, owner_id, capacity, name, creation_date FROM project WHERE name = $1 AND owner_id = $2"
+	err := r.pool.QueryRow(r.ctx, query, projectName, customerId).Scan(&p.Id, &p.OwnerId, &p.Capacity, &p.Name, &p.CreationDate)
+	if err != nil {
+		return fmt.Errorf("[*pgxpool.Pool.QueryRow] Can't exec query: %w", err)
+	}
+
+	return nil
+}

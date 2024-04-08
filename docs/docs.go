@@ -291,7 +291,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "project"
                 ],
                 "summary": "Updates project name",
                 "parameters": [
@@ -548,7 +548,12 @@ const docTemplate = `{
             }
         },
         "ds.UpdateProjectNameReq": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
         }
     },
     "securityDefinitions": {

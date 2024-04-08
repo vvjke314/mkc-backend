@@ -1,7 +1,9 @@
 package db
 
 import (
+	"context"
 	"fmt"
+	"log"
 
 	pgx "github.com/jackc/pgx/v5"
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
@@ -83,4 +85,38 @@ func (r *Repo) AccessControl(customerId, projectId string) (bool, error) {
 
 	// Возвращаем указатель на user и nil ошибку
 	return true, nil
+}
+
+// GetParticipants возвращает всех участников проекта включая владельца проекта (первый в списке)
+func (r *Repo) GetParticipants(projectId string) ([]ds.Customer, error) {
+	var customers []ds.Customer
+
+	var customer ds.Customer
+	query := "SELECT owner_id FROM project WHERE project_id = $1"
+	err := r.pool.QueryRow(r.ctx, query, projectId).Scan(&customer)
+	if err != nil {
+		return nil, fmt.Errorf("[pgxpool.Pool.Exec] Can't exec query %w", err)
+	}
+	customers = append(customers, customer)
+
+	rows, err := r.pool.Query(context.Background(), `
+	SELECT c.*
+	FROM customer c
+	JOIN project_access pa ON c.id = pa.customer_id
+	WHERE pa.project_id = $1
+	`, projectId)
+	if err != nil {
+		return nil, fmt.Errorf("[pgxpool.Pool.Exec] Can't exec query %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var customer ds.Customer
+		err := rows.Scan(&customer.Id, &customer.FirstName, &customer.SecondName, &customer.Login, &customer.Password, &customer.Email, &customer.Type)
+		if err != nil {
+			log.Fatalf("Scan error: %v\n", err)
+		}
+		customers = append(customers, customer)
+	}
+	return customers, nil
 }

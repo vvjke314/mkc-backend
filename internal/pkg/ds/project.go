@@ -20,6 +20,7 @@ type CreateProjectReq struct {
 }
 
 type UpdateProjectNameReq struct {
+	Name string `json:"name"`
 }
 
 type DeleteProjectReq struct {

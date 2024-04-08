@@ -9,6 +9,7 @@ import (
 type Application interface {
 	Init() error
 	Run() error
+	Log(string)
 }
 
 //	@title			MKC API
@@ -28,11 +29,11 @@ func main() {
 	err := app.Init()
 	if err != nil {
 		// switch to logger here
-		fmt.Printf("[app.Init]: Can't initialize application: %s\n", err)
+		app.Log(fmt.Sprintf("[app.Init]: Can't initialize application: %s\n", err))
 	}
 	err = app.Run()
 	if err != nil {
 		// switch to logger here
-		fmt.Printf("[app.Run] Error occured: %s\n", err)
+		app.Log(fmt.Sprintf("[app.Run] Error occured: %s\n", err))
 	}
 }

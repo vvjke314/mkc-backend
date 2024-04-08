@@ -284,7 +284,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "project"
                 ],
                 "summary": "Updates project name",
                 "parameters": [
@@ -541,7 +541,12 @@
             }
         },
         "ds.UpdateProjectNameReq": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
         }
     },
     "securityDefinitions": {

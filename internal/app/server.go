@@ -9,8 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// CORSMiddleware
-// мидлвейр для настройки политики CORS
+// CORSMiddleware промежуточное ПО для настройки политики CORS
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*") //localhost:3000
@@ -53,6 +52,7 @@ func AuthMiddleware() gin.HandlerFunc {
 	}
 }
 
+// Получаем наш токен в виде строки
 func getJWT(c *gin.Context) string {
 	tokenRawString := c.GetHeader("Authorization")
 	// Удбираем Bearer из заголовка аутентификации
@@ -61,18 +61,19 @@ func getJWT(c *gin.Context) string {
 	return tokenString
 }
 
+// Парсим и проверяем токен и получаем payload из него
 func getJWTClaims(tokenString string) (string, error) {
 	parsedToken, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Проверяем алгоритм подписи токена
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 		// Возвращаем секретный ключ для проверки подписи токена
 		return []byte("mkc-forever-alone"), nil
 	})
 	if err != nil {
 		// Обработка ошибки парсинга токена
-		return "", fmt.Errorf("Failed to parse token: %w", err)
+		return "", fmt.Errorf("failed to parse token: %w", err)
 	}
 
 	if claims, ok := parsedToken.Claims.(jwt.MapClaims); ok && parsedToken.Valid {
@@ -80,7 +81,7 @@ func getJWTClaims(tokenString string) (string, error) {
 		id := claims["id"].(string)
 		return id, nil
 	}
-	return "", fmt.Errorf("Invalid token")
+	return "", fmt.Errorf("invalid token")
 
 }
 

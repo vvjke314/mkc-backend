@@ -79,6 +79,9 @@ definitions:
         type: string
     type: object
   ds.UpdateProjectNameReq:
+    properties:
+      name:
+        type: string
     type: object
 host: localhost:8080
 info:
@@ -317,7 +320,7 @@ paths:
       - BearerAuth: []
       summary: Updates project name
       tags:
-      - auth
+      - project
   /signup:
     post:
       description: Signup customer

@@ -10,6 +10,7 @@ type ProjectAccess struct {
 }
 
 type AddParticipantReq struct {
+	ParticipantLogin string `json:"login"`
 }
 
 type DeleteParticipantReq struct {
