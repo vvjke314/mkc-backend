@@ -11,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 	"github.com/vvjke314/mkc-backend/internal/pkg/filehandler"
 )
@@ -116,6 +117,12 @@ func (a *Application) DeleteFile(c *gin.Context) {
 	file := &ds.File{}
 	err = a.repo.GetFileByName(req.Filename, req.Extension, projectId, file)
 	if err != nil {
+		if err == pgx.ErrNoRows {
+			err = fmt.Errorf("[repo.GetFileByName] %w", err)
+			newErrorResponse(c, http.StatusBadRequest, err.Error())
+			a.Log(err.Error())
+			return
+		}
 		err = fmt.Errorf("[repo.GetFileByName] %w", err)
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		a.Log(err.Error())
