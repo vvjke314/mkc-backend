@@ -7,11 +7,21 @@ import (
 )
 
 type File struct {
-	Id             uuid.UUID
-	ProjectId      uuid.UUID
-	Filename       string
-	Extension      string
-	Size           int
-	FilePath       string
-	UpdateDatetime time.Time
+	Id             uuid.UUID `json:"id"`
+	ProjectId      uuid.UUID `json:"project_id"`
+	Filename       string    `json:"filename"`
+	Extension      string    `json:"extension"`
+	Size           int       `json:"size"`
+	FilePath       string    `json:"file_path"`
+	UpdateDatetime time.Time `json:"update_datetime"`
+}
+
+type DeleteFileReq struct {
+	Filename  string `json:"filename"`
+	Extension string `json:"extension"`
+}
+
+type UpdateFileNameReq struct {
+	Filename  string `json:"filename"`
+	Extension string `json:"extension"`
 }

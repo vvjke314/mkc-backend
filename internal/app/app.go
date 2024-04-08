@@ -72,6 +72,10 @@ func (app *Application) Run() error {
 		authorized.Use(app.FullAccessControl()).PUT("/project/:project_id", app.UpdateProjectName)
 		authorized.Use(app.FullAccessControl()).DELETE("/project/:project_id", app.DeleteProject)
 
+		//file
+		authorized.Use(app.FullAccessControl()).POST("/project/:project_id/file", app.CreateFile)
+		authorized.Use(app.FullAccessControl()).DELETE("/project/:project_id/file", app.DeleteFile)
+
 		//participants
 		authorized.Use(app.FullAccessControl()).POST("/participants/:project_id", app.AddParticipant)
 		authorized.Use(app.FullAccessControl()).PUT("/participants/:project_id", app.UpdateParticipantAccess)

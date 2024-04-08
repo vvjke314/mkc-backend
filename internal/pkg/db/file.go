@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 )
 
-// CreateFile
-// Добавление информации о файле в БД
+// CreateFile добавление информации о файле в БД
 func (r *Repo) CreateFile(f ds.File) error {
 	query := "INSERT INTO file (id, project_id, filename, extension, size, file_path, update_datetime) VALUES ($1, $2, $3, $4, $5, $6, $7)"
 	_, err := r.pool.Exec(r.ctx, query, f.Id, f.ProjectId, f.Filename, f.Extension, f.Size, f.FilePath, f.UpdateDatetime)
@@ -18,8 +18,7 @@ func (r *Repo) CreateFile(f ds.File) error {
 	return nil
 }
 
-// DeleteFile
-// Удаление информации о файле из БД
+// DeleteFile удаление информации о файле из БД
 func (r *Repo) DeleteFile(fileId string) error {
 	query := "DELETE FROM file WHERE id = $1"
 	_, err := r.pool.Exec(r.ctx, query, fileId)
@@ -30,8 +29,7 @@ func (r *Repo) DeleteFile(fileId string) error {
 	return nil
 }
 
-// UpdateFileName
-// Изменение названия файла и времени последнего изменения файла
+// UpdateFileName изменение названия файла и времени последнего изменения файла
 func (r *Repo) UpdateFileName(fileId, fileName string) error {
 	query := "UPDATE file SET filename = $1, update_datetime = $2 WHERE id = $3"
 	_, err := r.pool.Exec(r.ctx, query, fileName, time.Now(), fileId)
@@ -42,8 +40,7 @@ func (r *Repo) UpdateFileName(fileId, fileName string) error {
 	return nil
 }
 
-// GetFileById
-// Получение ифнормации о файле через БД
+// GetFileById получение ифнормации о файле через БД
 func (r *Repo) GetFileById(fileId string, f *ds.File) error {
 	query := "SELECT id, project_id, filename, extension, size, file_path, update_datetime FROM file WHERE id = $1"
 	err := r.pool.QueryRow(r.ctx, query, fileId).Scan(&f.Id, &f.ProjectId, &f.Filename, &f.Extension, &f.Size, &f.FilePath, &f.UpdateDatetime)
@@ -54,8 +51,18 @@ func (r *Repo) GetFileById(fileId string, f *ds.File) error {
 	return nil
 }
 
-// GetFiles
-// Получение всех файлов проекта
+// GetFileByName получение информации о файле по имени через БД
+func (r *Repo) GetFileByName(filename, extension, projectId string, f *ds.File) error {
+	query := "SELECT id, project_id, filename, extension, size, file_path, update_datetime FROM file WHERE filename = $1 AND extension = $2 AND project_id = $3"
+	err := r.pool.QueryRow(r.ctx, query, filename, extension, projectId).Scan(&f.Id, &f.ProjectId, &f.Filename, &f.Extension, &f.Size, &f.FilePath, &f.UpdateDatetime)
+	if err != nil {
+		return fmt.Errorf("[*pgxpool.Pool.QueryRow] Can't exec query: %w", err)
+	}
+
+	return nil
+}
+
+// GetFile получение всех файлов проекта
 func (r *Repo) GetFiles(projectId string) ([]ds.File, error) {
 	var files []ds.File
 	query := "SELECT id, project_id, filename, extension, size, file_path, update_datetime FROM file WHERE project_id = $1"
@@ -80,8 +87,7 @@ func (r *Repo) GetFiles(projectId string) ([]ds.File, error) {
 	return files, nil
 }
 
-// DeleteFiles
-// Удаляет все файлы из проекта
+// DeleteFiles удаляет все файлы из проекта
 func (r *Repo) DeleteFiles(projectId string) error {
 	query := "DELETE FROM file WHERE project_id = $1"
 
@@ -91,4 +97,15 @@ func (r *Repo) DeleteFiles(projectId string) error {
 	}
 
 	return nil
+}
+
+// CheckFileExistence проверяет на существование имя файла
+func (r *Repo) CheckFileExistence(filename, extension, projectId string) error {
+	f := ds.File{}
+	query := "SELECT id FROM file WHERE filename = $1 AND project_id = $2 AND extension = $3"
+	err := r.pool.QueryRow(r.ctx, query, filename, projectId, extension).Scan(&f.Id)
+	if err == pgx.ErrNoRows {
+		return nil
+	}
+	return fmt.Errorf("such file already in this project")
 }

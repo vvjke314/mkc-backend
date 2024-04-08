@@ -1,0 +1,2 @@
+{"level":"error","time":"2024-04-08T21:30:48+03:00","message":"[repo.GetFileByName] [*pgxpool.Pool.QueryRow] Can't exec query: no rows in result set"}
+{"level":"error","time":"2024-04-08T21:31:04+03:00","message":"[repo.CheckFileExistence] such file already in this project"}
