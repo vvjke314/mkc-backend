@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -32,7 +33,7 @@ func (a *Application) GetProjects(c *gin.Context) {
 		return
 	}
 
-	// Возвращеаем все проекты в ответ на запрос
+	// Возвращаем все проекты в ответ на запрос
 	projects, err := a.repo.GetProjects(customerId)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, "Can't handle request")
@@ -120,7 +121,7 @@ func (a *Application) CreateProject(c *gin.Context) {
 // @Tags         project
 // @Produce      json
 // @Security 	 BearerAuth
-// @Param project_id path string true "Project ID"
+// @Param project_id path string true "Project name"
 // @Param data body ds.UpdateProjectNameReq true "New project name"
 // @Success      200 {object} []ds.Project
 // @Failure 500 {object} errorResponse
@@ -137,23 +138,8 @@ func (a *Application) UpdateProjectName(c *gin.Context) {
 		return
 	}
 
-	// Получаем JWT Токен
-	tokenString := getJWT(c)
-	// Парсим токен и получаем id клиента
-	customerId, err := getJWTClaims(tokenString)
-	if err != nil {
-		newErrorResponse(c, http.StatusForbidden, "Can't parse JWT token")
-		a.Log(err.Error())
-		return
-	}
-
-	// // Проверка на доступ к работе с проектом, добавить промежуточное ПО
-	// b, err := a.repo.AccessControl(customerId, c.Param("project_id"))
-	// if !b || err != nil {
-	// 	newErrorResponse(c, http.StatusForbidden, "You don't have permission to work with that project")
-	// 	a.Log(err.Error())
-	// 	return
-	// }
+	customerId := c.GetString("customerId")
+	projectId := c.GetString("projectId")
 
 	// Проверка на уже существующее имя проекта
 	if err = a.repo.GetProjectbyName(customerId, req.Name, &ds.Project{}); err == nil {
@@ -162,7 +148,7 @@ func (a *Application) UpdateProjectName(c *gin.Context) {
 	}
 
 	// Обновляем имя проекта
-	err = a.repo.UpdateProjectName(c.Param("project_id"), req.Name)
+	err = a.repo.UpdateProjectName(projectId, req.Name)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "Can't update project name")
 		a.Log(err.Error())
@@ -203,15 +189,16 @@ func (a *Application) AddParticipant(c *gin.Context) {
 		return
 	}
 
-	// Получаем JWT Токен
-	tokenString := getJWT(c)
-	// Парсим токен и получаем id клиента
-	customerId, err := getJWTClaims(tokenString)
-	if err != nil {
-		newErrorResponse(c, http.StatusForbidden, "Can't parse JWT token")
-		a.Log(err.Error())
-		return
-	}
+	// // Получаем JWT Токен
+	// tokenString := getJWT(c)
+	// // Парсим токен и получаем id клиента
+	// customerId, err := getJWTClaims(tokenString)
+	// if err != nil {
+	// 	newErrorResponse(c, http.StatusForbidden, "Can't parse JWT token")
+	// 	a.Log(err.Error())
+	// 	return
+	// }
+	customerId, _ := c.Get("customerId")
 
 	// Проверка на доступ к работе с проектом, добавить промежуточное ПО
 	// b, err := a.repo.AccessControl(customerId, c.Param("project_id"))
@@ -410,33 +397,16 @@ func (a *Application) DeleteParticipant(c *gin.Context) {
 // @Produce      json
 // @Security 	 BearerAuth
 // @Param project_id path string true "Project ID"
-// @Param data body ds.DeleteProjectReq true "CHANGE IT"
 // @Success      200 {object} []ds.Project
 // @Failure 500 {object} errorResponse
 // @Failure 403 {object} errorResponse
 // @Failure 401 {object} errorResponse
 // @Router      /project/{project_id} [delete]
 func (a *Application) DeleteProject(c *gin.Context) {
-	req := &ds.DeleteProjectReq{}
-	// Анмаршалим тело запроса
-	err := json.NewDecoder(c.Request.Body).Decode(req)
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Can't decode body params")
-		a.Log(err.Error())
-		return
-	}
+	customerId := c.GetString("customerId")
+	projectId := c.GetString("projectId")
 
-	// Получаем JWT Токен
-	tokenString := getJWT(c)
-	// Парсим токен и получаем id клиента
-	customerId, err := getJWTClaims(tokenString)
-	if err != nil {
-		newErrorResponse(c, http.StatusForbidden, "Can't parse JWT token")
-		a.Log(err.Error())
-		return
-	}
-
-	err = a.repo.DeleteProject(c.Param("project_id"))
+	err := a.repo.DeleteProject(projectId)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, "Can't delete project")
 		a.Log(err.Error())
@@ -450,6 +420,9 @@ func (a *Application) DeleteProject(c *gin.Context) {
 		a.Log(err.Error())
 		return
 	}
+
+	// Удаляем файл из локальной директории
+	os.Remove(filehandler.Path + projectId)
 
 	c.JSON(http.StatusOK, projects)
 }

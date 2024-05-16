@@ -1,4 +1,7 @@
 {
+    "schemes": [
+        "http"
+    ],
     "swagger": "2.0",
     "info": {
         "description": "MK CLOUD backend service.",
@@ -358,6 +361,51 @@
                 }
             }
         },
+        "/project/:project_id/note": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Создание заявки в проекте",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "note"
+                ],
+                "summary": "Создание заявки в проекте",
+                "parameters": [
+                    {
+                        "description": "New project",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ds.CreateNoteReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ds.Note"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/project/{project_id}": {
             "put": {
                 "security": [
@@ -376,7 +424,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Project ID",
+                        "description": "Project name",
                         "name": "project_id",
                         "in": "path",
                         "required": true
@@ -421,59 +469,6 @@
                     }
                 }
             },
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Изменяет имя файла на сервере",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "file"
-                ],
-                "summary": "Изменяет имя файла",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Идентификатор проекта",
-                        "name": "project_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "CHANGE IT",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/ds.UpdateFileNameReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "obejct"
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "schema": {
-                            "$ref": "#/definitions/app.errorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.errorResponse"
-                        }
-                    }
-                }
-            },
             "delete": {
                 "security": [
                     {
@@ -495,15 +490,6 @@
                         "name": "project_id",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "description": "CHANGE IT",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/ds.DeleteProjectReq"
-                        }
                     }
                 ],
                 "responses": {
@@ -655,8 +641,13 @@
                 }
             }
         },
-        "/project/{project_id}/file/{file_name}": {
+        "/project/{project_id}/file/{file_id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Скачивает файл с сервера",
                 "consumes": [
                     "application/json"
@@ -665,7 +656,7 @@
                     "application/octet-stream"
                 ],
                 "tags": [
-                    "File"
+                    "file"
                 ],
                 "summary": "Скачать файл",
                 "parameters": [
@@ -678,8 +669,8 @@
                     },
                     {
                         "type": "string",
-                        "description": "Имя файла",
-                        "name": "file_name",
+                        "description": "Идентификатор файла",
+                        "name": "file_id",
                         "in": "path",
                         "required": true
                     }
@@ -694,7 +685,128 @@
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/project/{project_id}/files": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Получить все файлы проекта",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "file"
+                ],
+                "summary": "Просмотреть все файлы проекта",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Идентификатор проекта",
+                        "name": "project_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ds.File"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
                             "type": "obejct"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Загружает файлы на сервер",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "file"
+                ],
+                "summary": "Загрузить файлы",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Идентификатор проекта",
+                        "name": "project_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Файлы для загрузки",
+                        "name": "files",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ds.File"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
                         }
                     },
                     "403": {
@@ -826,6 +938,20 @@
                 }
             }
         },
+        "ds.CreateNoteReq": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "deadline": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "ds.CreateProjectReq": {
             "type": "object",
             "properties": {
@@ -879,9 +1005,6 @@
                 }
             }
         },
-        "ds.DeleteProjectReq": {
-            "type": "object"
-        },
         "ds.File": {
             "type": "object",
             "properties": {
@@ -915,6 +1038,32 @@
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "ds.Note": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "deadline": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "overdue": {
+                    "type": "integer"
+                },
+                "project_id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "update_datetime": {
                     "type": "string"
                 }
             }
@@ -958,17 +1107,6 @@
                     "type": "string"
                 },
                 "second_name": {
-                    "type": "string"
-                }
-            }
-        },
-        "ds.UpdateFileNameReq": {
-            "type": "object",
-            "properties": {
-                "extension": {
-                    "type": "string"
-                },
-                "filename": {
                     "type": "string"
                 }
             }

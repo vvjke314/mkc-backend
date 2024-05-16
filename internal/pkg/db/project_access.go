@@ -68,7 +68,7 @@ func (r *Repo) AccessControl(customerId, projectId string, access int) (bool, er
 	}
 
 	// Проверка на участника проекта
-	query := "SELECT FROM project_access WHERE customer_id = $1 AND project_id = $2 AND customer_access = $3"
+	query := "SELECT FROM project_access WHERE customer_id = $1 AND project_id = $2 AND customer_access >= $3"
 	err = r.pool.QueryRow(r.ctx, query, customerId, projectId, access).Scan()
 	if err != nil {
 		if err == pgx.ErrNoRows {

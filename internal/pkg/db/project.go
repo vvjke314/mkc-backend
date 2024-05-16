@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 )
 
@@ -109,4 +110,19 @@ func (r *Repo) GetProjectbyName(customerId, projectName string, p *ds.Project) e
 	}
 
 	return nil
+}
+
+// GetProjectIdbyName получаем айди проекта через его имя
+func (r *Repo) GetProjectIdbyName(customerId, projectName string) (string, error) {
+	var pId string
+	query := "SELECT id FROM project WHERE name = $1 AND owner_id = $2"
+	err := r.pool.QueryRow(r.ctx, query, projectName, customerId).Scan(&pId)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return "NaN", err
+		}
+		return "", fmt.Errorf("[*pgxpool.Pool.QueryRow] Can't exec query: %w", err)
+	}
+
+	return pId, err
 }

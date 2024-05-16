@@ -22,6 +22,15 @@ definitions:
       email:
         type: string
     type: object
+  ds.CreateNoteReq:
+    properties:
+      content:
+        type: string
+      deadline:
+        type: string
+      title:
+        type: string
+    type: object
   ds.CreateProjectReq:
     properties:
       name:
@@ -56,8 +65,6 @@ definitions:
       email:
         type: string
     type: object
-  ds.DeleteProjectReq:
-    type: object
   ds.File:
     properties:
       extension:
@@ -80,6 +87,23 @@ definitions:
       login:
         type: string
       password:
+        type: string
+    type: object
+  ds.Note:
+    properties:
+      content:
+        type: string
+      deadline:
+        type: string
+      id:
+        type: string
+      overdue:
+        type: integer
+      project_id:
+        type: string
+      title:
+        type: string
+      update_datetime:
         type: string
     type: object
   ds.Project:
@@ -108,13 +132,6 @@ definitions:
       password:
         type: string
       second_name:
-        type: string
-    type: object
-  ds.UpdateFileNameReq:
-    properties:
-      extension:
-        type: string
-      filename:
         type: string
     type: object
   ds.UpdateParticipantAccessReq:
@@ -358,6 +375,34 @@ paths:
       summary: Creates customer project
       tags:
       - project
+  /project/:project_id/note:
+    post:
+      description: Создание заявки в проекте
+      parameters:
+      - description: New project
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.CreateNoteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Note'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Создание заявки в проекте
+      tags:
+      - note
   /project/{project_id}:
     delete:
       description: Deletes project
@@ -367,12 +412,6 @@ paths:
         name: project_id
         required: true
         type: string
-      - description: CHANGE IT
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/ds.DeleteProjectReq'
       produces:
       - application/json
       responses:
@@ -399,44 +438,10 @@ paths:
       summary: Deletes project
       tags:
       - project
-    post:
-      description: Изменяет имя файла на сервере
-      parameters:
-      - description: Идентификатор проекта
-        in: path
-        name: project_id
-        required: true
-        type: string
-      - description: CHANGE IT
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/ds.UpdateFileNameReq'
-      produces:
-      - application/json
-      responses:
-        "401":
-          description: Unauthorized
-          schema:
-            type: obejct
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/app.errorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/app.errorResponse'
-      security:
-      - BearerAuth: []
-      summary: Изменяет имя файла
-      tags:
-      - file
     put:
       description: Updates project name
       parameters:
-      - description: Project ID
+      - description: Project name
         in: path
         name: project_id
         required: true
@@ -549,7 +554,7 @@ paths:
       summary: Загрузить файл
       tags:
       - file
-  /project/{project_id}/file/{file_name}:
+  /project/{project_id}/file/{file_id}:
     get:
       consumes:
       - application/json
@@ -560,9 +565,9 @@ paths:
         name: project_id
         required: true
         type: string
-      - description: Имя файла
+      - description: Идентификатор файла
         in: path
-        name: file_name
+        name: file_id
         required: true
         type: string
       produces:
@@ -575,6 +580,43 @@ paths:
         "401":
           description: Unauthorized
           schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Скачать файл
+      tags:
+      - file
+  /project/{project_id}/files:
+    get:
+      consumes:
+      - multipart/form-data
+      description: Получить все файлы проекта
+      parameters:
+      - description: Идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.File'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
             type: obejct
         "403":
           description: Forbidden
@@ -584,9 +626,52 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/app.errorResponse'
-      summary: Скачать файл
+      security:
+      - BearerAuth: []
+      summary: Просмотреть все файлы проекта
       tags:
-      - File
+      - file
+    post:
+      consumes:
+      - multipart/form-data
+      description: Загружает файлы на сервер
+      parameters:
+      - description: Идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
+      - description: Файлы для загрузки
+        in: formData
+        name: files
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.File'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Загрузить файлы
+      tags:
+      - file
   /projects:
     get:
       description: Gets all customer projects
@@ -636,6 +721,8 @@ paths:
       summary: Signup customer
       tags:
       - auth
+schemes:
+- http
 securityDefinitions:
   BearerAuth:
     in: header

@@ -18,12 +18,24 @@ func (a *Application) FullAccessControl() gin.HandlerFunc {
 		customerId, err := getJWTClaims(tokenString)
 		if err != nil {
 			newErrorResponse(c, http.StatusForbidden, "Can't parse JWT token")
+			a.Log(err.Error())
 			return
 		}
-		b, err := a.repo.AccessControl(customerId, c.Param("project_id"), 1)
-		if !b || err != nil {
-			newErrorResponse(c, http.StatusForbidden, "You don't have permission to work with that project")
-			return
+		projectId := c.Param("project_id")
+		c.Set("customerId", customerId)
+		c.Set("projectId", projectId)
+
+		b, err := a.repo.AccessControl(customerId, projectId, 1)
+		if !b {
+			if err == nil {
+				newErrorResponse(c, http.StatusForbidden, "You don't have permission to work with that project")
+				a.Log("Customer don't have permission to work with project")
+				return
+			} else {
+				newErrorResponse(c, http.StatusInternalServerError, "DB can't parse you query")
+				a.Log(err.Error())
+				return
+			}
 		}
 		c.Next()
 	}
@@ -40,10 +52,21 @@ func (a *Application) AccessControl() gin.HandlerFunc {
 			newErrorResponse(c, http.StatusForbidden, "Can't parse JWT token")
 			return
 		}
-		b, err := a.repo.AccessControl(customerId, c.Param("project_id"), 0)
-		if !b || err != nil {
-			newErrorResponse(c, http.StatusForbidden, "You don't have permission to work with that project")
-			return
+		projectId := c.Param("project_id")
+		c.Set("customerId", customerId)
+		c.Set("projectId", projectId)
+
+		b, err := a.repo.AccessControl(customerId, projectId, 0)
+		if !b {
+			if err == nil {
+				newErrorResponse(c, http.StatusForbidden, "You don't have permission to work with that project")
+				a.Log("Customer don't have permission to work with project")
+				return
+			} else {
+				newErrorResponse(c, http.StatusInternalServerError, "DB can't parse you query")
+				a.Log(err.Error())
+				return
+			}
 		}
 		c.Next()
 	}
