@@ -2,6 +2,7 @@ package app
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -21,12 +22,14 @@ import (
 // @Failure 500 {object} errorResponse
 // @Router      /project/:project_id/note [post]
 func (a *Application) CreateNote(c *gin.Context) {
+	customerId := c.GetString("customerId")
 	req := &ds.CreateNoteReq{}
 	// Анмаршалим тело запроса
 	err := json.NewDecoder(c.Request.Body).Decode(req)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Can't decode body params")
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "can't decode body params")
+		err = fmt.Errorf("[CreateNote][json.NewDecoder]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
@@ -43,21 +46,31 @@ func (a *Application) CreateNote(c *gin.Context) {
 		Overdue:        0,
 	}
 
+	// Проверка на существование проекта
+	if err := a.repo.GetNoteByName(note.Title, projectId); err == nil {
+		newErrorResponse(c, http.StatusBadRequest, "such note title already exists in project")
+		a.Log("[CreateNote][repo.GetNoteByName]: such note title already exists in project", customerId)
+		return
+	}
+
 	// Создаем запись о заметке в БД
 	err = a.repo.CreateNote(note)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "Can't handle request")
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[CreateNote][repo.CreateNote]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
 	// Возвращаем все заметки в проекте в ответ на запрос
 	notes, err := a.repo.GetNotes(projectId)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "Can't handle request")
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[CreateNote][repo.GetNotes]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
+	a.SuccessLog("[CreateNote]", customerId)
 	c.JSON(http.StatusOK, notes)
 }

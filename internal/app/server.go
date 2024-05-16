@@ -17,8 +17,8 @@ func (a *Application) FullAccessControl() gin.HandlerFunc {
 		// Парсим токен и получаем id клиента
 		customerId, err := getJWTClaims(tokenString)
 		if err != nil {
-			newErrorResponse(c, http.StatusForbidden, "Can't parse JWT token")
-			a.Log(err.Error())
+			newErrorResponse(c, http.StatusForbidden, "can't parse JWT token")
+			a.Log(err.Error(), customerId)
 			return
 		}
 		projectId := c.Param("project_id")
@@ -28,12 +28,12 @@ func (a *Application) FullAccessControl() gin.HandlerFunc {
 		b, err := a.repo.AccessControl(customerId, projectId, 1)
 		if !b {
 			if err == nil {
-				newErrorResponse(c, http.StatusForbidden, "You don't have permission to work with that project")
-				a.Log("Customer don't have permission to work with project")
+				newErrorResponse(c, http.StatusForbidden, "you don't have permission to work with that project")
+				a.Log("customer don't have permission to work with project", customerId)
 				return
 			} else {
-				newErrorResponse(c, http.StatusInternalServerError, "DB can't parse you query")
-				a.Log(err.Error())
+				newErrorResponse(c, http.StatusInternalServerError, "database can't parse you query")
+				a.Log(err.Error(), customerId)
 				return
 			}
 		}
@@ -49,7 +49,7 @@ func (a *Application) AccessControl() gin.HandlerFunc {
 		// Парсим токен и получаем id клиента
 		customerId, err := getJWTClaims(tokenString)
 		if err != nil {
-			newErrorResponse(c, http.StatusForbidden, "Can't parse JWT token")
+			newErrorResponse(c, http.StatusForbidden, "can't parse JWT token")
 			return
 		}
 		projectId := c.Param("project_id")
@@ -59,12 +59,12 @@ func (a *Application) AccessControl() gin.HandlerFunc {
 		b, err := a.repo.AccessControl(customerId, projectId, 0)
 		if !b {
 			if err == nil {
-				newErrorResponse(c, http.StatusForbidden, "You don't have permission to work with that project")
-				a.Log("Customer don't have permission to work with project")
+				newErrorResponse(c, http.StatusForbidden, "you don't have permission to work with that project")
+				a.Log("customer don't have permission to work with project", customerId)
 				return
 			} else {
-				newErrorResponse(c, http.StatusInternalServerError, "DB can't parse you query")
-				a.Log(err.Error())
+				newErrorResponse(c, http.StatusInternalServerError, "database can't parse you query")
+				a.Log(err.Error(), customerId)
 				return
 			}
 		}
@@ -140,7 +140,7 @@ func getJWTClaims(tokenString string) (string, error) {
 	}
 
 	if claims, ok := parsedToken.Claims.(jwt.MapClaims); ok && parsedToken.Valid {
-		// Получаем значение поля "login" из токена
+		// Получаем значение поля "id" из токена
 		id := claims["id"].(string)
 		return id, nil
 	}

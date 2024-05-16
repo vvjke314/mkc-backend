@@ -40,8 +40,14 @@ func (app *Application) Init() error {
 	return nil
 }
 
-func (app *Application) Log(message string) {
-	app.logger.Error().Msg(message)
+func (app *Application) Log(message, customerId string) {
+	msg := fmt.Sprintf("$s:error:$s", customerId, message)
+	app.logger.Error().Msg(msg)
+}
+
+func (app *Application) SuccessLog(message, customerId string) {
+	msg := fmt.Sprintf("$s:success_request:$s", customerId, message)
+	app.logger.Log().Msg(msg)
 }
 
 // Run запускает сервис
@@ -49,7 +55,7 @@ func (app *Application) Run() error {
 	// Подключение к бд
 	err := app.repo.Connect()
 	if err != nil {
-		return fmt.Errorf("[db.Connect]: Can't connect to database: %w", err)
+		return fmt.Errorf("[db.Connect]: can't connect to database: %w", err)
 	}
 	defer app.repo.Close()
 

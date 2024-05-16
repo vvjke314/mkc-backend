@@ -23,24 +23,18 @@ import (
 // @Failure 500 {object} errorResponse
 // @Router      /projects [get]
 func (a *Application) GetProjects(c *gin.Context) {
-	// Получаем JWT Токен
-	tokenString := getJWT(c)
-	// Парсим токен и получаем id клиента
-	customerId, err := getJWTClaims(tokenString)
-	if err != nil {
-		newErrorResponse(c, http.StatusForbidden, "Can't parse JWT token")
-		a.Log(err.Error())
-		return
-	}
+	customerId := c.GetString("customerId")
 
 	// Возвращаем все проекты в ответ на запрос
 	projects, err := a.repo.GetProjects(customerId)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, "Can't handle request")
-		a.Log(err.Error())
+		err = fmt.Errorf("[GetProjects][repo.GetProjects]:%w")
+		a.Log(err.Error(), customerId)
 		return
 	}
 
+	a.SuccessLog("[GetProjects]", customerId)
 	c.JSON(http.StatusOK, projects)
 }
 
@@ -55,27 +49,20 @@ func (a *Application) GetProjects(c *gin.Context) {
 // @Failure 500 {object} errorResponse
 // @Router      /project [post]
 func (a *Application) CreateProject(c *gin.Context) {
+	customerId := c.GetString("customerId")
 	req := &ds.CreateProjectReq{}
 	// Анмаршалим тело запроса
 	err := json.NewDecoder(c.Request.Body).Decode(req)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "Can't decode body params")
-		a.Log(err.Error())
-		return
-	}
-
-	// Получаем JWT Токен
-	tokenString := getJWT(c)
-	// Парсим токен и получаем id клиента
-	customerId, err := getJWTClaims(tokenString)
-	if err != nil {
-		newErrorResponse(c, http.StatusForbidden, "Can't parse JWT token")
-		a.Log(err.Error())
+		err = fmt.Errorf("[CreateProject][json.NewDecoder]:%w")
+		a.Log(err.Error(), customerId)
 		return
 	}
 
 	if err = a.repo.GetProjectbyName(customerId, req.Name, &ds.Project{}); err == nil {
 		newErrorResponse(c, http.StatusBadRequest, "Such project name already exists")
+		a.Log("[CreateProject]:such project already exists", customerId)
 		return
 	}
 
@@ -92,7 +79,8 @@ func (a *Application) CreateProject(c *gin.Context) {
 	err = filehandler.CreateDir(project.Id.String())
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, "Can't handle request")
-		a.Log(err.Error())
+		err = fmt.Errorf("[CreateProject][filehandler.CreateDir]:%w")
+		a.Log(err.Error(), customerId)
 		return
 	}
 
@@ -100,7 +88,8 @@ func (a *Application) CreateProject(c *gin.Context) {
 	err = a.repo.CreateProject(project)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, "Can't handle request")
-		a.Log(err.Error())
+		err = fmt.Errorf("[CreateProject][repo.CreateProject]:%w")
+		a.Log(err.Error(), customerId)
 		return
 	}
 
@@ -108,10 +97,12 @@ func (a *Application) CreateProject(c *gin.Context) {
 	projects, err := a.repo.GetProjects(project.OwnerId.String())
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, "Can't handle request")
-		a.Log(err.Error())
+		err = fmt.Errorf("[CreateProject][repo.GetProjects]:%w")
+		a.Log(err.Error(), customerId)
 		return
 	}
 
+	a.SuccessLog("[CreateProject]", customerId)
 	c.JSON(http.StatusOK, projects)
 }
 
@@ -129,21 +120,24 @@ func (a *Application) CreateProject(c *gin.Context) {
 // @Failure 403 {object} errorResponse
 // @Router      /project/{project_id} [put]
 func (a *Application) UpdateProjectName(c *gin.Context) {
+	customerId := c.GetString("customerId")
+	projectId := c.GetString("projectId")
+
 	req := &ds.UpdateProjectNameReq{}
 	// Анмаршалим тело запроса
 	err := json.NewDecoder(c.Request.Body).Decode(req)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "Can't decode body params")
-		a.Log(err.Error())
+		err = fmt.Errorf("[UpdateProjectName][json.NewDecoder]:%w")
+		a.Log(err.Error(), customerId)
 		return
 	}
-
-	customerId := c.GetString("customerId")
-	projectId := c.GetString("projectId")
 
 	// Проверка на уже существующее имя проекта
 	if err = a.repo.GetProjectbyName(customerId, req.Name, &ds.Project{}); err == nil {
 		newErrorResponse(c, http.StatusBadRequest, "Such project already exists")
+		err = fmt.Errorf("[UpdateProjectName][repo.GetProjectByName]:such project alredy exist")
+		a.Log(err.Error(), customerId)
 		return
 	}
 
@@ -151,7 +145,8 @@ func (a *Application) UpdateProjectName(c *gin.Context) {
 	err = a.repo.UpdateProjectName(projectId, req.Name)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "Can't update project name")
-		a.Log(err.Error())
+		err = fmt.Errorf("[UpdateProjectName][repo.UpdateProjectName]:%w")
+		a.Log(err.Error(), customerId)
 		return
 	}
 
@@ -159,10 +154,12 @@ func (a *Application) UpdateProjectName(c *gin.Context) {
 	projects, err := a.repo.GetProjects(customerId)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, "Can't handle request")
-		a.Log(err.Error())
+		err = fmt.Errorf("[UpdateProjectName][repo.GetProjects]:%w")
+		a.Log(err.Error(), customerId)
 		return
 	}
 
+	a.SuccessLog("[UpdateProjectName]", customerId)
 	c.JSON(http.StatusOK, projects)
 }
 
@@ -180,45 +177,30 @@ func (a *Application) UpdateProjectName(c *gin.Context) {
 // @Failure 401 {object} errorResponse
 // @Router      /participants/{project_id} [post]
 func (a *Application) AddParticipant(c *gin.Context) {
+	customerId := c.GetString("customerId")
 	req := &ds.AddParticipantReq{}
 	// Анмаршалим тело запроса
 	err := json.NewDecoder(c.Request.Body).Decode(req)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "Can't decode body params")
-		a.Log(err.Error())
+		err = fmt.Errorf("[AddParticipant][json.NewDecoder]:%w")
+		a.Log(err.Error(), customerId)
 		return
 	}
-
-	// // Получаем JWT Токен
-	// tokenString := getJWT(c)
-	// // Парсим токен и получаем id клиента
-	// customerId, err := getJWTClaims(tokenString)
-	// if err != nil {
-	// 	newErrorResponse(c, http.StatusForbidden, "Can't parse JWT token")
-	// 	a.Log(err.Error())
-	// 	return
-	// }
-	customerId, _ := c.Get("customerId")
-
-	// Проверка на доступ к работе с проектом, добавить промежуточное ПО
-	// b, err := a.repo.AccessControl(customerId, c.Param("project_id"))
-	// if !b || err != nil {
-	// 	newErrorResponse(c, http.StatusForbidden, "You don't have permission to work with that project")
-	// 	a.Log(err.Error())
-	// 	return
-	// }
 
 	// Получение пользователя и проверка на существования пользователя
 	customer := &ds.Customer{}
 	if err = a.repo.GetCustomerByEmail(req.ParticipantEmail, customer); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "No customer with such email")
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "no customer with such email")
+		err = fmt.Errorf("[AddParticipant][repo.GetCustomerByEmail]:%w")
+		a.Log(err.Error(), customerId)
 		return
 	}
 
 	if customer.Id.String() == customerId {
-		newErrorResponse(c, http.StatusBadRequest, "You owner of this project")
-		a.Log("You owner of this project")
+		newErrorResponse(c, http.StatusBadRequest, "you owner of this project")
+		err = fmt.Errorf("[AddParticipant]:you owner of this project")
+		a.Log(err.Error(), customerId)
 		return
 	}
 
@@ -236,29 +218,30 @@ func (a *Application) AddParticipant(c *gin.Context) {
 	err = a.repo.CheckParticipant(customer.Id.String(), c.Param("project_id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
-		err = fmt.Errorf("[CheckParticipant] %w", err)
-		a.Log(err.Error())
+		err = fmt.Errorf("[AddParticipant][repo.CheckParticipants]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
 	// Добавляем участника в проект
 	err = a.repo.CreateParticipant(pa)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "No such customer. Check your data")
-		err = fmt.Errorf("[CreateParticipant] %w", err)
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "no such customer. Check your data")
+		err = fmt.Errorf("[AddParticipant][repo.CreateParticipant]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
 	// Получаем всех участников проекта
 	customers, err := a.repo.GetParticipants(c.Param("project_id"))
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "Can't get all project participants")
-		err = fmt.Errorf("[GetParticipant] %w", err)
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, "can't get all project participants")
+		err = fmt.Errorf("[AddParticipant][repo.GetParticipant]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
+	a.SuccessLog("[AddParticipant]", customerId)
 	c.JSON(http.StatusOK, customers)
 }
 
@@ -276,12 +259,14 @@ func (a *Application) AddParticipant(c *gin.Context) {
 // @Failure 401 {object} errorResponse
 // @Router      /participants/{project_id} [put]
 func (a *Application) UpdateParticipantAccess(c *gin.Context) {
+	customerId := c.GetString("customerId")
 	req := &ds.UpdateParticipantAccessReq{}
 	// Анмаршалим тело запроса
 	err := json.NewDecoder(c.Request.Body).Decode(req)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "Can't decode body params")
-		a.Log(err.Error())
+		err = fmt.Errorf("[UpdateParticipantAccess][json.NewDecoder]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
@@ -291,8 +276,9 @@ func (a *Application) UpdateParticipantAccess(c *gin.Context) {
 	// Получение пользователя и проверка на существования пользователя
 	customer := &ds.Customer{}
 	if err = a.repo.GetCustomerByEmail(req.ParticipantEmail, customer); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "No customer with such email")
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "no customer with such email")
+		err = fmt.Errorf("[UpdateParticipantAccess][repo.GetCustomerByEmail]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
@@ -302,8 +288,8 @@ func (a *Application) UpdateParticipantAccess(c *gin.Context) {
 		err = a.repo.UpdateParticipantAccess(customer.Id.String(), customer_access[req.CustomerAccess])
 		if err != nil {
 			newErrorResponse(c, http.StatusInternalServerError, "Can't update customer access")
-			err = fmt.Errorf("[UpdateParticipantAccess] %w", err)
-			a.Log(err.Error())
+			err = fmt.Errorf("[UpdateParticipantAccess][repo.UpdateParticipantAccess]: %w", err)
+			a.Log(err.Error(), customerId)
 			return
 		}
 
@@ -311,17 +297,17 @@ func (a *Application) UpdateParticipantAccess(c *gin.Context) {
 		customers, err := a.repo.GetParticipants(c.Param("project_id"))
 		if err != nil {
 			newErrorResponse(c, http.StatusBadRequest, "Can't add participant")
-			err = fmt.Errorf("[GetParticipant] %w", err)
-			a.Log(err.Error())
+			err = fmt.Errorf("[UpdateParticipantAccess][GetParticipant]: %w", err)
+			a.Log(err.Error(), customerId)
 			return
 		}
-
+		a.SuccessLog("[UpdateParticipantAccess]", customerId)
 		c.JSON(http.StatusOK, customers)
 	}
 
 	newErrorResponse(c, http.StatusBadRequest, err.Error())
-	err = fmt.Errorf("[CheckParticipant] %w", err)
-	a.Log(err.Error())
+	err = fmt.Errorf("[UpdateParticipantAccess][CheckParticipant]: %w", err)
+	a.Log(err.Error(), customerId)
 }
 
 // DeleteParticipant godoc
@@ -338,55 +324,51 @@ func (a *Application) UpdateParticipantAccess(c *gin.Context) {
 // @Failure 401 {object} errorResponse
 // @Router      /participants/{project_id} [delete]
 func (a *Application) DeleteParticipant(c *gin.Context) {
+	customerId := c.GetString("customerId")
+
 	req := &ds.DeleteParticipantReq{}
 	// Анмаршалим тело запроса
 	err := json.NewDecoder(c.Request.Body).Decode(req)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Can't decode body params")
-		a.Log(err.Error())
-		return
-	}
-
-	// Получаем JWT Токен
-	tokenString := getJWT(c)
-	// Парсим токен и получаем id клиента
-	customerId, err := getJWTClaims(tokenString)
-	if err != nil {
-		newErrorResponse(c, http.StatusForbidden, "Can't parse JWT token")
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "can't decode body params")
+		err = fmt.Errorf("[DeleteParticipant][json.NewDecoder]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
 	// Получение пользователя и проверка на существования пользователя
 	customer := &ds.Customer{}
 	if err = a.repo.GetCustomerByEmail(req.ParticipantEmail, customer); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "No customer with such email")
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "no customer with such email")
+		err = fmt.Errorf("[DeleteParticipant][repo.GetCustomerByEmail]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
 	// Проверка не ввел ли клиент свой email
 	if customer.Id.String() == customerId {
-		newErrorResponse(c, http.StatusBadRequest, "You can't remove yourself project")
-		a.Log("You can't remove yourself project")
+		newErrorResponse(c, http.StatusBadRequest, "you can't remove yourself project")
+		a.Log("[DeleteParticipant]: you can't remove yourself project", customerId)
 		return
 	}
 
 	// Удаляем участника из проекта
 	if err = a.repo.DeleteParticipant(customer.Id.String(), c.Param("project_id")); err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, "Can't delete participant")
-		err = fmt.Errorf("[DeleteParticipant] %w", err)
-		a.Log(err.Error())
+		err = fmt.Errorf("[DeleteParticipant][repo.DeleteParticipant]: %w", err)
+		a.Log(err.Error(), customerId)
 	}
 
 	// Получаем всех участников проекта
 	customers, err := a.repo.GetParticipants(c.Param("project_id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "Can't add participant")
-		err = fmt.Errorf("[GetParticipant] %w", err)
-		a.Log(err.Error())
+		err = fmt.Errorf("[DeleteParticipant][repo.GetParticipant]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
+
+	a.SuccessLog("[DeleteParticipant]", customerId)
 	c.JSON(http.StatusOK, customers)
 }
 
@@ -408,21 +390,24 @@ func (a *Application) DeleteProject(c *gin.Context) {
 
 	err := a.repo.DeleteProject(projectId)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "Can't delete project")
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, "can't delete project")
+		err = fmt.Errorf("[DeleteProject][repo.DeleteProject]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
 	// Возвращеаем все проекты в ответ на запрос
 	projects, err := a.repo.GetProjects(customerId)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "Can't handle request")
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[DeleteProject][repo.GetProjects]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
 	// Удаляем файл из локальной директории
 	os.Remove(filehandler.Path + projectId)
 
+	a.SuccessLog("[DeleteProject]", customerId)
 	c.JSON(http.StatusOK, projects)
 }

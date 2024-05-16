@@ -27,12 +27,10 @@ func main() {
 	app := app.NewApplication()
 	err := app.Init()
 	if err != nil {
-		// switch to logger here
-		app.Log(fmt.Sprintf("[app.Init]: Can't initialize application: %s\n", err))
+		app.Log(fmt.Sprintf("[app.Init]: can't initialize application: %s\n", err), "service")
 	}
 	err = app.Run()
 	if err != nil {
-		// switch to logger here
-		app.Log(fmt.Sprintf("[app.Run] Error occured: %s\n", err))
+		app.Log(fmt.Sprintf("[app.Run] error occured: %s\n", err), "service")
 	}
 }

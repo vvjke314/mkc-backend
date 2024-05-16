@@ -34,11 +34,14 @@ import (
 func (a *Application) UploadFile(c *gin.Context) {
 	// Получаем проект ID из запроса
 	projectId := c.GetString("projectId")
+	customerId := c.GetString("customerId")
 
 	// Получаем файл из запроса
 	file, err := c.FormFile("file")
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "No file uploaded")
+		newErrorResponse(c, http.StatusBadRequest, "no file uploaded")
+		err = fmt.Errorf("[UploadFile][gin.Context.FormFile]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
@@ -47,15 +50,17 @@ func (a *Application) UploadFile(c *gin.Context) {
 	fileNames := strings.Split(filename, ".")
 	// Проверяем файл на существование
 	if err := a.repo.CheckFileExistence(fileNames[0], "."+fileNames[1], projectId); err != nil {
-		err = fmt.Errorf("[repo.CheckFileExistence] %w", err)
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
-		a.Log(err.Error())
+		err = fmt.Errorf("[UploadFile][repo.CheckFileExistence]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
 	// Сохраняем файл на сервере
 	if err := c.SaveUploadedFile(file, filehandler.Path+projectId+"/"+filename); err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "No file uploaded")
+		newErrorResponse(c, http.StatusInternalServerError, "no file uploaded")
+		err = fmt.Errorf("[UploadFile][gin.Context.SaveUploadedFile]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
@@ -73,9 +78,9 @@ func (a *Application) UploadFile(c *gin.Context) {
 	// Добавляем информацию о файле
 	err = a.repo.CreateFile(newFile)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "No file added")
-		err = fmt.Errorf("[repo.CreateFile] %w", err)
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, "no file added")
+		err = fmt.Errorf("[UploadFile][repo.CreateFile]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
@@ -83,11 +88,12 @@ func (a *Application) UploadFile(c *gin.Context) {
 	files, err := a.repo.GetFiles(projectId)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, "Can't get files")
-		err = fmt.Errorf("[repo.GetFiles] %w", err)
-		a.Log(err.Error())
+		err = fmt.Errorf("[UploadFile][repo.GetFiles]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
+	a.SuccessLog("[UploadFile]", customerId)
 	c.JSON(http.StatusOK, files)
 }
 
@@ -107,11 +113,14 @@ func (a *Application) UploadFile(c *gin.Context) {
 // @Router /project/{project_id}/files [post]
 func (a *Application) UploadFiles(c *gin.Context) {
 	projectId := c.GetString("projectId")
+	customerId := c.GetString("customerId")
 
 	// Парсим форму с несколькими файлами
 	err := c.Request.ParseMultipartForm(5 << 22) // Размер до 5 GB
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Error parsing form")
+		newErrorResponse(c, http.StatusBadRequest, "error parsing form")
+		err = fmt.Errorf("[UploadFiles][gin.Context.Request.ParseMultipartForm]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
@@ -126,7 +135,9 @@ func (a *Application) UploadFiles(c *gin.Context) {
 
 		// Сохраняем файл на сервере
 		if err := c.SaveUploadedFile(file, filehandler.Path+projectId+"/"+filename); err != nil {
-			newErrorResponse(c, http.StatusInternalServerError, "Error saving file")
+			newErrorResponse(c, http.StatusInternalServerError, "error saving file")
+			err = fmt.Errorf("[UploadFiles][gin.Context.SaveUploadedFile]: %w", err)
+			a.Log(err.Error(), customerId)
 			return
 		}
 
@@ -144,7 +155,9 @@ func (a *Application) UploadFiles(c *gin.Context) {
 		// Добавляем информацию о файле
 		err = a.repo.CreateFile(newFile)
 		if err != nil {
-			newErrorResponse(c, http.StatusInternalServerError, "Error adding file to database")
+			newErrorResponse(c, http.StatusInternalServerError, "error adding file to database")
+			err = fmt.Errorf("[UploadFiles][repo.CreateFile]: %w", err)
+			a.Log(err.Error(), customerId)
 			return
 		}
 	}
@@ -152,10 +165,13 @@ func (a *Application) UploadFiles(c *gin.Context) {
 	// Получаем все файлы из проекта
 	fs, err := a.repo.GetFiles(projectId)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "Can't get files")
+		newErrorResponse(c, http.StatusInternalServerError, "can't get files")
+		err = fmt.Errorf("[UploadFiles][repo.GetFiles]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
+	a.SuccessLog("[UploadFile]", customerId)
 	c.JSON(http.StatusOK, fs)
 }
 
@@ -172,13 +188,15 @@ func (a *Application) UploadFiles(c *gin.Context) {
 // @Failure 403 {object} errorResponse
 // @Router /project/{project_id}/file [delete]
 func (a *Application) DeleteFile(c *gin.Context) {
-	projectId := c.Param("project_id")
+	projectId := c.Param("projectId")
+	customerId := c.GetString("customerId")
 	req := &ds.DeleteFileReq{}
 	// Анмаршалим тело запроса
 	err := json.NewDecoder(c.Request.Body).Decode(req)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Can't decode body params")
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "can't decode body params")
+		err = fmt.Errorf("[DeleteFile][json.NewDecoder]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
@@ -187,44 +205,45 @@ func (a *Application) DeleteFile(c *gin.Context) {
 	err = a.repo.GetFileByName(req.Filename, req.Extension, projectId, file)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			err = fmt.Errorf("[repo.GetFileByName] %w", err)
 			newErrorResponse(c, http.StatusBadRequest, err.Error())
-			a.Log(err.Error())
+			err = fmt.Errorf("[DeleteFile][repo.GetFileByName]: %w", err)
+			a.Log(err.Error(), customerId)
 			return
 		}
-		err = fmt.Errorf("[repo.GetFileByName] %w", err)
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		a.Log(err.Error())
+		err = fmt.Errorf("[DeleteFile][repo.GetFileByName]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
 	// Удаляем файл из БД
 	err = a.repo.DeleteFile(file.Id.String())
 	if err != nil {
-		err = fmt.Errorf("[repo.DeleteFile] %w", err)
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, "can't delete file")
+		err = fmt.Errorf("[DeleteFile][repo.GetFileByName]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
 	// Удаляем файл из хранилища
 	err = os.Remove(file.FilePath)
 	if err != nil {
-		err = fmt.Errorf("[os.Remove] %w", err)
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, "can't remove file from storage")
+		err = fmt.Errorf("[DeleteFile][os.Remove]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
 	// Получаем массив из оставшихся файлов в проекте
 	files, err := a.repo.GetFiles(file.ProjectId.String())
 	if err != nil {
-		err = fmt.Errorf("[repo.GetFiles] %w", err)
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, "can't scan all files from project")
+		err = fmt.Errorf("[DeleteFile][repo.GetFiles]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
+	a.SuccessLog("[DeleteFile]", customerId)
 	c.JSON(http.StatusOK, files)
 }
 
@@ -243,12 +262,15 @@ func (a *Application) DeleteFile(c *gin.Context) {
 // @Failure 403 {object} errorResponse
 // @Router /project/{project_id}/file/{file_id} [get]
 func (a *Application) DownloadFile(c *gin.Context) {
-	projectId := c.Param("project_id")
+	customerId := c.GetString("customerId")
+	projectId := c.GetString("projectId")
 	fileId := c.Param("file_id")
 	file := &ds.File{}
 	err := a.repo.GetFileById(fileId, file)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
+		newErrorResponse(c, http.StatusNotFound, "file not found")
+		err = fmt.Errorf("[DownloadFile][repo.GetFileById]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
@@ -259,14 +281,18 @@ func (a *Application) DownloadFile(c *gin.Context) {
 	_, err = os.Stat(filePath)
 	if os.IsNotExist(err) {
 		// Если файл не найден, возвращаем ошибку
-		c.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
+		newErrorResponse(c, http.StatusNotFound, "file not found")
+		err = fmt.Errorf("[DownloadFile][os.IsNotExist]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
 	// Открываем файл для чтения
 	f, err := os.Open(filePath)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to open file"})
+		newErrorResponse(c, http.StatusNotFound, "file not found")
+		err = fmt.Errorf("[DownloadFile][os.Open]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 	defer f.Close()
@@ -298,7 +324,9 @@ func (a *Application) DownloadFile(c *gin.Context) {
 
 	// Копируем содержимое файла в ответ HTTP
 	if _, err := io.Copy(c.Writer, f); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to copy file content to response"})
+		newErrorResponse(c, http.StatusNotFound, "failed to copy file content to response")
+		err = fmt.Errorf("[DownloadFile][io.Copy]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 }
@@ -318,15 +346,16 @@ func (a *Application) DownloadFile(c *gin.Context) {
 // @Router /project/{project_id}/files [get]
 func (a *Application) GetFiles(c *gin.Context) {
 	projectId := c.Param("project_id")
+	customerId := c.GetString("customerId")
 	// Получаем все файлы из проекта
 	files, err := a.repo.GetFiles(projectId)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "Can't get files")
-		err = fmt.Errorf("[repo.GetFiles] %w", err)
-		a.Log(err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, "can't get files")
+		err = fmt.Errorf("[GetFiles][repo.GetFiles]: %w", err)
+		a.Log(err.Error(), customerId)
 		return
 	}
 
-	// Успешное завершение запроса
+	a.SuccessLog("GetFiles", customerId)
 	c.JSON(http.StatusOK, files)
 }
