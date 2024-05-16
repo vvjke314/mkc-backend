@@ -1,0 +1,32 @@
+{"level":"error","time":"2024-05-16T19:10:00+03:00","message":"Error notifying upcoming deadlines: [pgxpool.Pool.Query] can't exec query: ERROR: relation \"notes\" does not exist (SQLSTATE 42P01)"}
+{"level":"error","time":"2024-05-16T19:11:00+03:00","message":"Error notifying upcoming deadlines: [pgxpool.Pool.Query] can't exec query: ERROR: relation \"notes\" does not exist (SQLSTATE 42P01)"}
+{"level":"error","time":"2024-05-16T19:12:00+03:00","message":"Error notifying upcoming deadlines: [pgxpool.Pool.Query] can't exec query: ERROR: relation \"notes\" does not exist (SQLSTATE 42P01)"}
+{"level":"error","time":"2024-05-16T19:13:00+03:00","message":"Error notifying upcoming deadlines: [pgxpool.Pool.Query] can't exec query: ERROR: relation \"notes\" does not exist (SQLSTATE 42P01)"}
+{"level":"error","time":"2024-05-16T19:34:00+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 2adb3069b0e04-521f38d368fsm3031719e87.151 - gsmtp"}
+{"level":"error","time":"2024-05-16T19:35:00+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 2adb3069b0e04-521f38d8bafsm3011645e87.235 - gsmtp"}
+{"level":"error","time":"2024-05-16T19:37:00+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 38308e7fff4ca-2e4d0bbc708sm24410961fa.5 - gsmtp"}
+{"level":"error","time":"2024-05-16T19:38:00+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 2adb3069b0e04-521f35ad499sm3038287e87.20 - gsmtp"}
+{"level":"error","time":"2024-05-16T19:39:00+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 2adb3069b0e04-521f38d3a78sm3038516e87.177 - gsmtp"}
+{"level":"error","time":"2024-05-16T19:40:00+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 2adb3069b0e04-521f38d338bsm3036838e87.166 - gsmtp"}
+{"level":"error","time":"2024-05-16T19:43:00+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 38308e7fff4ca-2e4d151566fsm23855791fa.91 - gsmtp"}
+{"level":"error","time":"2024-05-16T19:46:00+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 38308e7fff4ca-2e4d1515580sm23788831fa.79 - gsmtp"}
+{"level":"error","time":"2024-05-16T19:47:00+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 2adb3069b0e04-521f39dcb4bsm3123777e87.308 - gsmtp"}
+{"level":"error","time":"2024-05-16T19:48:00+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 38308e7fff4ca-2e4d0ce387csm25164891fa.49 - gsmtp"}
+{"level":"error","time":"2024-05-16T19:53:00+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 Authentication failed"}
+{"level":"error","time":"2024-05-16T19:58:01+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 Authentication failed"}
+{"level":"error","time":"2024-05-16T19:59:01+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 Authentication failed"}
+{"level":"error","time":"2024-05-16T20:00:01+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 Authentication failed"}
+{"level":"error","time":"2024-05-16T20:00:01+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 Authentication failed"}
+{"level":"error","time":"2024-05-16T20:01:01+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 Authentication failed"}
+{"level":"error","time":"2024-05-16T20:02:01+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 Authentication failed"}
+{"level":"error","time":"2024-05-16T20:05:01+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 5.7.0 Invalid credentials"}
+{"level":"error","time":"2024-05-16T20:07:01+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: 535 5.7.0 Invalid credentials"}
+{"level":"error","time":"2024-05-16T20:17:10+03:00","message":"Error notifying upcoming deadlines: [sendEmailNotification]: EOF"}
+{"time":"2024-05-16T20:55:01+03:00","message":"message sent"}
+{"time":"2024-05-16T21:00:00+03:00","message":"message sent"}
+{"time":"2024-05-16T21:00:00+03:00","message":"message sent"}
+{"time":"2024-05-16T21:05:00+03:00","message":"message sent"}
+{"time":"2024-05-16T21:10:00+03:00","message":"message sent"}
+{"time":"2024-05-16T21:15:00+03:00","message":"message sent"}
+{"time":"2024-05-16T21:20:00+03:00","message":"message sent"}
+{"time":"2024-05-16T21:25:00+03:00","message":"message sent"}

@@ -12,6 +12,7 @@ require (
 
 require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/robfig/cron/v3 v3.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
 )
 

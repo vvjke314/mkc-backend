@@ -9,19 +9,17 @@ import (
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 )
 
-// CreateNote
-// Добавление информации о заметке в БД
+// CreateNote добавление информации о заметке в БД
 func (r *Repo) CreateNote(n ds.Note) error {
-	query := "INSERT INTO note (id, project_id, title, content, update_datetime, deadline) VALUES ($1, $2, $3, $4, $5, $6)"
-	_, err := r.pool.Exec(r.ctx, query, n.Id, n.ProjectId, n.Title, n.Content, n.UpdateDatetime, n.Deadline)
+	query := "INSERT INTO note (id, project_id, title, content, update_datetime, deadline, overdue) VALUES ($1, $2, $3, $4, $5, $6, $7)"
+	_, err := r.pool.Exec(r.ctx, query, n.Id, n.ProjectId, n.Title, n.Content, n.UpdateDatetime, n.Deadline, n.Overdue)
 	if err != nil {
 		return fmt.Errorf("[pgxpool.Pool.Exec] can't exec query %w", err)
 	}
 	return nil
 }
 
-// DeleteNote
-// Удаление информации о заметке из БД
+// DeleteNote удаление информации о заметке из БД
 func (r *Repo) DeleteNote(noteId string) error {
 	query := "DELETE FROM note WHERE id = $1"
 	_, err := r.pool.Exec(r.ctx, query, noteId)
@@ -56,11 +54,22 @@ func (r *Repo) UpdateNoteDeadLine(noteId string, deadline time.Time) error {
 	return nil
 }
 
+// NoteOverdue изменение поля отвечающего за просрочку заметки на 1 (просрочено)
+func (r *Repo) NoteOverdue(noteId string) error {
+	query := "UPDATE note SET overdue = 1, update_datetime = $1 WHERE id = $2"
+	_, err := r.pool.Exec(r.ctx, query, time.Now(), noteId)
+	if err != nil {
+		return fmt.Errorf("[pgxpool.Pool.Exec] can't exec query %w", err)
+	}
+
+	return nil
+}
+
 // GetNoteById
 // Получение ифнормации о заметке через БД
 func (r *Repo) GetNoteById(noteId string, n *ds.Note) error {
-	query := "SELECT id, project_id, title, content, update_datetime, deadline FROM note WHERE id = $1"
-	err := r.pool.QueryRow(r.ctx, query, noteId).Scan(&n.Id, &n.ProjectId, &n.Title, &n.Content, &n.UpdateDatetime, &n.Deadline)
+	query := "SELECT id, project_id, title, content, update_datetime, deadline, overdue FROM note WHERE id = $1"
+	err := r.pool.QueryRow(r.ctx, query, noteId).Scan(&n.Id, &n.ProjectId, &n.Title, &n.Content, &n.UpdateDatetime, &n.Deadline, &n.Overdue)
 	if err != nil {
 		if err == pgx.ErrNoRows {
 			return err
@@ -91,7 +100,7 @@ func (r *Repo) GetNoteByName(noteTitle, projectId string) error {
 // Получение всех файлов проекта
 func (r *Repo) GetNotes(projectId string) ([]ds.Note, error) {
 	var notes []ds.Note
-	query := "SELECT id, project_id, title, content, update_datetime, deadline FROM note WHERE project_id = $1"
+	query := "SELECT id, project_id, title, content, update_datetime, deadline, overdue FROM note WHERE project_id = $1"
 
 	rows, err := r.pool.Query(r.ctx, query, projectId)
 	if err != nil {
@@ -101,7 +110,7 @@ func (r *Repo) GetNotes(projectId string) ([]ds.Note, error) {
 
 	for rows.Next() {
 		var n ds.Note
-		if err := rows.Scan(&n.Id, &n.ProjectId, &n.Title, &n.Content, &n.UpdateDatetime, &n.Deadline); err != nil {
+		if err := rows.Scan(&n.Id, &n.ProjectId, &n.Title, &n.Content, &n.UpdateDatetime, &n.Deadline, &n.Overdue); err != nil {
 			return notes, fmt.Errorf("[pgx.Rows.Scan] can't scan data: %w", err)
 		}
 		notes = append(notes, n)

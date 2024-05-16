@@ -24,7 +24,7 @@ func NewApplication() *Application {
 func (app *Application) Init() error {
 	app.ctx = context.Background()
 	logFile, err := os.OpenFile(
-		"application.log",
+		"logs/application.log",
 		os.O_APPEND|os.O_CREATE|os.O_WRONLY,
 		0664,
 	)

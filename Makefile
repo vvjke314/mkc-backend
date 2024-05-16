@@ -18,6 +18,6 @@ test-repo:
 	make build
 	make run
 nc-build:
-	go build -o bin/note-checker cmd/notechecker.go
+	go build -o bin/notechecker cmd/notechecker/notechecker.go
 nc-run:
-	go run ./bin/note-checker
+	./bin/notechecker

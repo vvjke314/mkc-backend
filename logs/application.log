@@ -1,0 +1,34 @@
+{"level":"error","time":"2024-05-16T15:37:14+03:00","message":"$s:error:$s%!(EXTRA string=88be8e64-a148-4b86-ae92-6e37853989c7, string=[CreateNote][repo.GetNoteByName]: such note title already exists in project)"}
+{"time":"2024-05-16T15:38:40+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[CreateNote]"}
+{"time":"2024-05-16T15:39:28+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[DeleteProject]"}
+{"level":"error","time":"2024-05-16T16:15:31+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:error:[db.GetProjectById] [*pgxpool.Pool.QueryRow] Can't exec query: ERROR: invalid input syntax for type uuid: \":project_id\" (SQLSTATE 22P02)"}
+{"level":"error","time":"2024-05-16T16:16:03+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:error:[DeleteFile][repo.GetFileByName]: [*pgxpool.Pool.QueryRow] Can't exec query: ERROR: invalid input syntax for type uuid: \"\" (SQLSTATE 22P02)"}
+{"time":"2024-05-16T16:17:28+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[DeleteFile]"}
+{"level":"error","time":"2024-05-16T16:22:33+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:error:[DeleteFile][os.Remove]: remove /home/vvjkee/Workspace/university/diplom/storage/a2769063-41a6-480f-88dd-82fa18313468/diff-calculus.pdf: no such file or directory"}
+{"level":"error","time":"2024-05-16T16:22:39+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:error:[DeleteFile][repo.GetFileByName]: [*pgxpool.Pool.QueryRow] Can't exec query: no rows in result set"}
+{"time":"2024-05-16T16:23:28+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[DeleteFile]"}
+{"time":"2024-05-16T16:24:08+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[DeleteFile]"}
+{"time":"2024-05-16T16:24:43+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[DeleteProject]"}
+{"time":"2024-05-16T16:28:39+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-16T16:29:16+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:error:[CreateProject]:such project already exists"}
+{"time":"2024-05-16T16:30:38+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[CreateNote]"}
+{"level":"error","time":"2024-05-16T16:31:13+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:error:[UploadFile][gin.Context.FormFile]: request Content-Type isn't multipart/form-data"}
+{"time":"2024-05-16T16:31:27+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[UploadFile]"}
+{"time":"2024-05-16T16:32:56+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[DeleteProject]"}
+{"time":"2024-05-16T16:36:37+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[CreateProject]"}
+{"time":"2024-05-16T16:37:19+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[UploadFile]"}
+{"time":"2024-05-16T16:37:54+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[CreateNote]"}
+{"time":"2024-05-16T16:38:23+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[DeleteProject]"}
+{"time":"2024-05-16T17:11:02+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[CreateProject]"}
+{"time":"2024-05-16T17:11:34+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[CreateNote]"}
+{"time":"2024-05-16T17:13:08+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[UpdateNoteDeadline]"}
+{"level":"error","time":"2024-05-16T17:14:05+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:error:[UpdateNoteDeadline][repo.GetNoteById]: [pgxpool.Pool.Exec] can't exec query ERROR: invalid input syntax for type uuid: \"6bf28bac-0e01-4c49-99d6-3f0cc0e7e4fs\" (SQLSTATE 22P02)"}
+{"level":"error","time":"2024-05-16T17:14:58+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:error:[UpdateNoteDeadline][repo.GetNoteById]: no rows in result set"}
+{"time":"2024-05-16T17:15:35+03:00","message":"88be8e64-a148-4b86-ae92-6e37853989c7:success_request:[DeleteNote]"}
+{"time":"2024-05-16T19:11:24+03:00","message":"21901ffe-99b5-4761-a740-947b4d2d8e78:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-16T19:12:00+03:00","message":"21901ffe-99b5-4761-a740-947b4d2d8e78:error:[CreateNote][repo.GetNotes]: [pgx.Rows.Scan] can't scan data: can't scan into dest[6]: cannot scan NULL into *int"}
+{"level":"error","time":"2024-05-16T19:16:05+03:00","message":"21901ffe-99b5-4761-a740-947b4d2d8e78:error:[CreateNote][repo.GetNoteByName]: such note title already exists in project"}
+{"time":"2024-05-16T19:17:23+03:00","message":"21901ffe-99b5-4761-a740-947b4d2d8e78:success_request:[CreateNote]"}
+{"time":"2024-05-16T20:45:28+03:00","message":"21901ffe-99b5-4761-a740-947b4d2d8e78:success_request:[AddParticipant]"}
+{"time":"2024-05-16T20:46:23+03:00","message":"21901ffe-99b5-4761-a740-947b4d2d8e78:success_request:[CreateNote]"}
+{"time":"2024-05-16T20:51:38+03:00","message":"21901ffe-99b5-4761-a740-947b4d2d8e78:success_request:[AddParticipant]"}
