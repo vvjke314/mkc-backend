@@ -368,7 +368,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Создание заявки в проекте",
+                "description": "Создание заявки в проекте и добавление записи в БД",
                 "produces": [
                     "application/json"
                 ],
@@ -593,7 +593,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Удаляет файл с сервера",
+                "description": "Удаляет файл с сервера и из БД",
                 "produces": [
                     "application/json"
                 ],
@@ -610,7 +610,7 @@
                         "required": true
                     },
                     {
-                        "description": "CHANGE IT",
+                        "description": "Структура хранящая тело запроса для удаления файла",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -807,6 +807,122 @@
                         "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/project/{project_id}/note/{note_id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Обновляет дедлайн заметки в БД",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "note"
+                ],
+                "summary": "Обновить дедлайн заметки",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Идентификатор проекта",
+                        "name": "project_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Идентификатор заметки",
+                        "name": "note_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ds.Note"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "obejct"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Удаляет заметки из проекта и БД",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "note"
+                ],
+                "summary": "Удалить заметку",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Идентификатор проекта",
+                        "name": "project_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Идентификатор заметки",
+                        "name": "note_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ds.Note"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "obejct"
                         }
                     },
                     "403": {

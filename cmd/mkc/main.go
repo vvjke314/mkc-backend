@@ -23,7 +23,6 @@ type Application interface {
 // @in							header
 // @name						Authorization
 func main() {
-	// Поменять на app.NewApplication()
 	app := app.NewApplication()
 	err := app.Init()
 	if err != nil {

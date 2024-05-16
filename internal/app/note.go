@@ -8,12 +8,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 )
 
-// CreateNote godoc
+// CreateNote создает заметку
 // @Summary      Создание заявки в проекте
-// @Description  Создание заявки в проекте
+// @Description  Создание заявки в проекте и добавление записи в БД
 // @Tags         note
 // @Produce      json
 // @Security 	 BearerAuth
@@ -72,5 +73,122 @@ func (a *Application) CreateNote(c *gin.Context) {
 	}
 
 	a.SuccessLog("[CreateNote]", customerId)
+	c.JSON(http.StatusOK, notes)
+}
+
+// DeleteNote удаляет заметку из проекта
+// @Summary Удалить заметку
+// @Description Удаляет заметки из проекта и БД
+// @Tags note
+// @Security 	 BearerAuth
+// @Produce json
+// @Param project_id path string true "Идентификатор проекта"
+// @Param note_id path string true "Идентификатор заметки"
+// @Success 200 {object} []ds.Note
+// @Failure 500 {object} errorResponse
+// @Failure 401 {obejct} errorResponse
+// @Failure 403 {object} errorResponse
+// @Router /project/{project_id}/note/{note_id} [delete]
+func (a *Application) DeleteNote(c *gin.Context) {
+	projectId := c.GetString("projectId")
+	customerId := c.GetString("customerId")
+	noteId := c.Param("note_id")
+
+	n := &ds.Note{}
+	// Получаем искомую заметку
+	if err := a.repo.GetNoteById(noteId, n); err != nil {
+		if err == pgx.ErrNoRows {
+			newErrorResponse(c, http.StatusBadRequest, "no such note in this project")
+			err = fmt.Errorf("[DeleteNote][repo.GetNoteById]: %w", err)
+			a.Log(err.Error(), customerId)
+			return
+		}
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[DeleteNote][repo.GetNoteById]: %w", err)
+		a.Log(err.Error(), customerId)
+		return
+	}
+
+	// Удаляем заметку из БД
+	if err := a.repo.DeleteNote(noteId); err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[DeleteNote][repo.DeleteNote]: %w", err)
+		a.Log(err.Error(), customerId)
+		return
+	}
+
+	// Получаем массив из оставшихся заметок в проекте
+	notes, err := a.repo.GetNotes(projectId)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[DeleteNote][repo.GetNotes]: %w", err)
+		a.Log(err.Error(), customerId)
+		return
+	}
+
+	a.SuccessLog("[DeleteNote]", customerId)
+	c.JSON(http.StatusOK, notes)
+}
+
+// UpdateNoteDeadline обновляем дедлайн заметки
+// @Summary Обновить дедлайн заметки
+// @Description Обновляет дедлайн заметки в БД
+// @Tags note
+// @Security 	 BearerAuth
+// @Produce json
+// @Param project_id path string true "Идентификатор проекта"
+// @Param note_id path string true "Идентификатор заметки"
+// @Success 200 {object} []ds.Note
+// @Failure 500 {object} errorResponse
+// @Failure 400 {obejct} errorResponse
+// @Router /project/{project_id}/note/{note_id} [put]
+func (a *Application) UpdateNoteDeadline(c *gin.Context) {
+	projectId := c.GetString("projectId")
+	customerId := c.GetString("customerId")
+	noteId := c.Param("note_id")
+
+	req := &ds.UpdateNoteDeadlineReq{}
+	// Анмаршалим тело запроса
+	err := json.NewDecoder(c.Request.Body).Decode(req)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "can't decode body params")
+		err = fmt.Errorf("[UpdateNoteDeadline][json.NewDecoder]: %w", err)
+		a.Log(err.Error(), customerId)
+		return
+	}
+
+	n := &ds.Note{}
+	// Получаем искомую заметку
+	if err := a.repo.GetNoteById(noteId, n); err != nil {
+		if err == pgx.ErrNoRows {
+			newErrorResponse(c, http.StatusBadRequest, "no such note in this project")
+			err = fmt.Errorf("[UpdateNoteDeadline][repo.GetNoteById]: %w", err)
+			a.Log(err.Error(), customerId)
+			return
+		}
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[UpdateNoteDeadline][repo.GetNoteById]: %w", err)
+		a.Log(err.Error(), customerId)
+		return
+	}
+
+	// Обновляем значение дедлайна заметки
+	if err := a.repo.UpdateNoteDeadLine(noteId, req.Deadline); err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[UpdateNoteDeadline][repo.UpdateNoteDeadLine]: %w", err)
+		a.Log(err.Error(), customerId)
+		return
+	}
+
+	// Получаем массив из заметок в проекте
+	notes, err := a.repo.GetNotes(projectId)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[UpdateNoteDeadline][repo.GetNotes]: %w", err)
+		a.Log(err.Error(), customerId)
+		return
+	}
+
+	a.SuccessLog("[UpdateNoteDeadline]", customerId)
 	c.JSON(http.StatusOK, notes)
 }

@@ -29,7 +29,7 @@ func (a *Application) GetProjects(c *gin.Context) {
 	projects, err := a.repo.GetProjects(customerId)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, "Can't handle request")
-		err = fmt.Errorf("[GetProjects][repo.GetProjects]:%w")
+		err = fmt.Errorf("[GetProjects][repo.GetProjects]:%w", err)
 		a.Log(err.Error(), customerId)
 		return
 	}
@@ -49,19 +49,27 @@ func (a *Application) GetProjects(c *gin.Context) {
 // @Failure 500 {object} errorResponse
 // @Router      /project [post]
 func (a *Application) CreateProject(c *gin.Context) {
-	customerId := c.GetString("customerId")
+	// Получаем JWT Токен
+	tokenString := getJWT(c)
+	// Парсим токен и получаем id клиента
+	customerId, err := getJWTClaims(tokenString)
+	if err != nil {
+		newErrorResponse(c, http.StatusForbidden, "can't parse JWT token")
+		a.Log(err.Error(), customerId)
+		return
+	}
 	req := &ds.CreateProjectReq{}
 	// Анмаршалим тело запроса
-	err := json.NewDecoder(c.Request.Body).Decode(req)
+	err = json.NewDecoder(c.Request.Body).Decode(req)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Can't decode body params")
-		err = fmt.Errorf("[CreateProject][json.NewDecoder]:%w")
+		newErrorResponse(c, http.StatusBadRequest, "can't decode body params")
+		err = fmt.Errorf("[CreateProject][json.NewDecoder]:%w", err)
 		a.Log(err.Error(), customerId)
 		return
 	}
 
 	if err = a.repo.GetProjectbyName(customerId, req.Name, &ds.Project{}); err == nil {
-		newErrorResponse(c, http.StatusBadRequest, "Such project name already exists")
+		newErrorResponse(c, http.StatusBadRequest, "such project name already exists")
 		a.Log("[CreateProject]:such project already exists", customerId)
 		return
 	}
@@ -78,8 +86,8 @@ func (a *Application) CreateProject(c *gin.Context) {
 	// Создаем папку проекта в нашем хранилище
 	err = filehandler.CreateDir(project.Id.String())
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "Can't handle request")
-		err = fmt.Errorf("[CreateProject][filehandler.CreateDir]:%w")
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[CreateProject][filehandler.CreateDir]:%w", err)
 		a.Log(err.Error(), customerId)
 		return
 	}
@@ -87,8 +95,8 @@ func (a *Application) CreateProject(c *gin.Context) {
 	// Создаем запись о проекте в БД
 	err = a.repo.CreateProject(project)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "Can't handle request")
-		err = fmt.Errorf("[CreateProject][repo.CreateProject]:%w")
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[CreateProject][repo.CreateProject]:%w", err)
 		a.Log(err.Error(), customerId)
 		return
 	}
@@ -96,8 +104,8 @@ func (a *Application) CreateProject(c *gin.Context) {
 	// Возвращеаем все проекты в ответ на запрос
 	projects, err := a.repo.GetProjects(project.OwnerId.String())
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "Can't handle request")
-		err = fmt.Errorf("[CreateProject][repo.GetProjects]:%w")
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[CreateProject][repo.GetProjects]:%w", err)
 		a.Log(err.Error(), customerId)
 		return
 	}
@@ -127,15 +135,15 @@ func (a *Application) UpdateProjectName(c *gin.Context) {
 	// Анмаршалим тело запроса
 	err := json.NewDecoder(c.Request.Body).Decode(req)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Can't decode body params")
-		err = fmt.Errorf("[UpdateProjectName][json.NewDecoder]:%w")
+		newErrorResponse(c, http.StatusBadRequest, "can't decode body params")
+		err = fmt.Errorf("[UpdateProjectName][json.NewDecoder]:%w", err)
 		a.Log(err.Error(), customerId)
 		return
 	}
 
 	// Проверка на уже существующее имя проекта
 	if err = a.repo.GetProjectbyName(customerId, req.Name, &ds.Project{}); err == nil {
-		newErrorResponse(c, http.StatusBadRequest, "Such project already exists")
+		newErrorResponse(c, http.StatusBadRequest, "such project already exists")
 		err = fmt.Errorf("[UpdateProjectName][repo.GetProjectByName]:such project alredy exist")
 		a.Log(err.Error(), customerId)
 		return
@@ -144,8 +152,8 @@ func (a *Application) UpdateProjectName(c *gin.Context) {
 	// Обновляем имя проекта
 	err = a.repo.UpdateProjectName(projectId, req.Name)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Can't update project name")
-		err = fmt.Errorf("[UpdateProjectName][repo.UpdateProjectName]:%w")
+		newErrorResponse(c, http.StatusBadRequest, "can't update project name")
+		err = fmt.Errorf("[UpdateProjectName][repo.UpdateProjectName]:%w", err)
 		a.Log(err.Error(), customerId)
 		return
 	}
@@ -153,8 +161,8 @@ func (a *Application) UpdateProjectName(c *gin.Context) {
 	// Возвращеаем все проекты в ответ на запрос
 	projects, err := a.repo.GetProjects(customerId)
 	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, "Can't handle request")
-		err = fmt.Errorf("[UpdateProjectName][repo.GetProjects]:%w")
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[UpdateProjectName][repo.GetProjects]:%w", err)
 		a.Log(err.Error(), customerId)
 		return
 	}
@@ -182,8 +190,8 @@ func (a *Application) AddParticipant(c *gin.Context) {
 	// Анмаршалим тело запроса
 	err := json.NewDecoder(c.Request.Body).Decode(req)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Can't decode body params")
-		err = fmt.Errorf("[AddParticipant][json.NewDecoder]:%w")
+		newErrorResponse(c, http.StatusBadRequest, "can't decode body params")
+		err = fmt.Errorf("[AddParticipant][json.NewDecoder]:%w", err)
 		a.Log(err.Error(), customerId)
 		return
 	}
@@ -192,7 +200,7 @@ func (a *Application) AddParticipant(c *gin.Context) {
 	customer := &ds.Customer{}
 	if err = a.repo.GetCustomerByEmail(req.ParticipantEmail, customer); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "no customer with such email")
-		err = fmt.Errorf("[AddParticipant][repo.GetCustomerByEmail]:%w")
+		err = fmt.Errorf("[AddParticipant][repo.GetCustomerByEmail]:%w", err)
 		a.Log(err.Error(), customerId)
 		return
 	}
@@ -264,7 +272,7 @@ func (a *Application) UpdateParticipantAccess(c *gin.Context) {
 	// Анмаршалим тело запроса
 	err := json.NewDecoder(c.Request.Body).Decode(req)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Can't decode body params")
+		newErrorResponse(c, http.StatusBadRequest, "can't decode body params")
 		err = fmt.Errorf("[UpdateParticipantAccess][json.NewDecoder]: %w", err)
 		a.Log(err.Error(), customerId)
 		return
@@ -406,7 +414,7 @@ func (a *Application) DeleteProject(c *gin.Context) {
 	}
 
 	// Удаляем файл из локальной директории
-	os.Remove(filehandler.Path + projectId)
+	os.RemoveAll(filehandler.Path + projectId)
 
 	a.SuccessLog("[DeleteProject]", customerId)
 	c.JSON(http.StatusOK, projects)

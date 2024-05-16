@@ -62,6 +62,9 @@ func (r *Repo) GetNoteById(noteId string, n *ds.Note) error {
 	query := "SELECT id, project_id, title, content, update_datetime, deadline FROM note WHERE id = $1"
 	err := r.pool.QueryRow(r.ctx, query, noteId).Scan(&n.Id, &n.ProjectId, &n.Title, &n.Content, &n.UpdateDatetime, &n.Deadline)
 	if err != nil {
+		if err == pgx.ErrNoRows {
+			return err
+		}
 		return fmt.Errorf("[pgxpool.Pool.Exec] can't exec query %w", err)
 	}
 

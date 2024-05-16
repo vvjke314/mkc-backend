@@ -17,3 +17,7 @@ test-repo:
 	make migrate
 	make build
 	make run
+nc-build:
+	go build -o bin/note-checker cmd/notechecker.go
+nc-run:
+	go run ./bin/note-checker

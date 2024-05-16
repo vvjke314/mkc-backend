@@ -27,12 +27,12 @@ func NewRepo() *Repo {
 func (r *Repo) Init() error {
 	url, err := dsn.GetDSN()
 	if err != nil {
-		return fmt.Errorf("[dsn.GetDSN]: Can't get data string name: %w", err)
+		return fmt.Errorf("[dsn.GetDSN]: can't get data string name: %w", err)
 	}
 
 	pgxConfig, err := pgxpool.ParseConfig(url)
 	if err != nil {
-		return fmt.Errorf("[pgxpool.ParseConfig]: Can't parse config: %w", err)
+		return fmt.Errorf("[pgxpool.ParseConfig]: can't parse config: %w", err)
 	}
 
 	pgxConfig.AfterConnect = func(ctx context.Context, conn *pgx.Conn) error {

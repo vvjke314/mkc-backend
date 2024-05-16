@@ -41,12 +41,12 @@ func (app *Application) Init() error {
 }
 
 func (app *Application) Log(message, customerId string) {
-	msg := fmt.Sprintf("$s:error:$s", customerId, message)
+	msg := fmt.Sprintf("%s:error:%s", customerId, message)
 	app.logger.Error().Msg(msg)
 }
 
 func (app *Application) SuccessLog(message, customerId string) {
-	msg := fmt.Sprintf("$s:success_request:$s", customerId, message)
+	msg := fmt.Sprintf("%s:success_request:%s", customerId, message)
 	app.logger.Log().Msg(msg)
 }
 
@@ -55,7 +55,7 @@ func (app *Application) Run() error {
 	// Подключение к бд
 	err := app.repo.Connect()
 	if err != nil {
-		return fmt.Errorf("[db.Connect]: can't connect to database: %w", err)
+		return fmt.Errorf("[repo.Connect]: can't connect to database: %w", err)
 	}
 	defer app.repo.Close()
 
@@ -96,8 +96,8 @@ func (app *Application) Run() error {
 
 		// note
 		authorized.Use(app.FullAccessControl()).POST("/project/:project_id/note", app.CreateNote)
-		//authorized.Use(app.FullAccessControl()).PUT("/project/:project_id/note/:note_id", app.UpdateNoteDeadline)
-		//authorized.Use(app.FullAccessControl()).DELETE("/project/:project_id/note/:note_id", app.DelteNote)
+		authorized.Use(app.FullAccessControl()).PUT("/project/:project_id/note/:note_id", app.UpdateNoteDeadline)
+		authorized.Use(app.FullAccessControl()).DELETE("/project/:project_id/note/:note_id", app.DeleteNote)
 
 		// participants
 		authorized.Use(app.FullAccessControl()).POST("/participants/:project_id", app.AddParticipant)

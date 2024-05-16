@@ -17,7 +17,7 @@ import (
 	"github.com/vvjke314/mkc-backend/internal/pkg/filehandler"
 )
 
-// UploadFile загружает файл на сервер
+// UploadFile godoc
 // @Summary Загрузить файл
 // @Description Загружает файл на сервер
 // @Tags file
@@ -97,7 +97,7 @@ func (a *Application) UploadFile(c *gin.Context) {
 	c.JSON(http.StatusOK, files)
 }
 
-// UploadFiles загружает несколько файлов на сервер
+// UploadFiles godoc
 // @Summary Загрузить файлы
 // @Description Загружает файлы на сервер
 // @Tags file
@@ -175,20 +175,20 @@ func (a *Application) UploadFiles(c *gin.Context) {
 	c.JSON(http.StatusOK, fs)
 }
 
-// DeleteFile удаляет файл с сервера
+// DeleteFile godoc
 // @Summary Удалить файл
-// @Description Удаляет файл с сервера
+// @Description Удаляет файл с сервера и из БД
 // @Tags file
 // @Security 	 BearerAuth
 // @Produce json
 // @Param project_id path string true "Идентификатор проекта"
-// @Param  data body ds.DeleteFileReq true "CHANGE IT"
+// @Param  data body ds.DeleteFileReq true "Структура хранящая тело запроса для удаления файла"
 // @Failure 500 {object} errorResponse
 // @Failure 401 {obejct} errorResponse
 // @Failure 403 {object} errorResponse
 // @Router /project/{project_id}/file [delete]
 func (a *Application) DeleteFile(c *gin.Context) {
-	projectId := c.Param("projectId")
+	projectId := c.GetString("projectId")
 	customerId := c.GetString("customerId")
 	req := &ds.DeleteFileReq{}
 	// Анмаршалим тело запроса
