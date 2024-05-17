@@ -83,7 +83,7 @@ func (r *Repo) GetProjects(customerId string) ([]ds.Project, error) {
 
 	rows, err := r.pool.Query(r.ctx, query, customerId, customerId)
 	if err != nil {
-		return projects, fmt.Errorf("[*pgxpool.Pool.Query] Can't exec query: %w", err)
+		return projects, fmt.Errorf("[pgxpool.Pool.Query] Can't exec query: %w", err)
 	}
 	defer rows.Close()
 

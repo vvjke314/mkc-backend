@@ -69,10 +69,10 @@ func (app *Application) Run() error {
 	/*
 		administrator := r.Group("/admin")
 		administrator.Use(AdminMiddleware())
-		administrator.GET("/admin/unattached", app.GetAllUnattachedProjects)
-		administrator.GET("/admin/attached", app.GetAllAttachedProjects)
-		administrator.POST("/admin/attach/:project_id", app.AttachAdmin)
-		administrator.POST("/admin/:project_id/discussion", app.SumbitEmail)
+		administrator.GET("/unattached", app.GetAllUnattachedProjects)
+		administrator.GET("/attached", app.GetAllAttachedProjects)
+		administrator.POST("/attach/:project_id", app.AttachAdmin)
+		administrator.POST("/:project_id/send", app.SumbitEmail)
 	*/
 
 	authorized := r.Group("/")

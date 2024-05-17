@@ -95,5 +95,4 @@ func (nc *NoteChecker) Run() error {
 
 	// Ожидание завершения работы
 	select {}
-	return nil
 }

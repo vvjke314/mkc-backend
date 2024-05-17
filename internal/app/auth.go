@@ -134,7 +134,7 @@ func (a *Application) Signup(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, "Failed with signing up. Customer with entered data alredy exist")
 		return
 	}
-	// Здесь следует выполнить регистрацию пользователя и, в случае успеха, создать JWT-токен
+	// Выполняем регистрацию пользователя и, в случае успеха, создать JWT-токен
 	token, err := createToken(customer.Login, customer.Id.String())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create token"})

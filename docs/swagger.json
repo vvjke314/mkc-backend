@@ -14,21 +14,123 @@
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
-        "/admin/project": {
+        "/admin/:project_id/send": {
             "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Attachs admin to project",
+                "description": "Отправляет сообщение пользователю на почту",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "auth"
                 ],
-                "summary": "Attachs admin to project",
+                "summary": "Отправляет сообщение пользователю на почту",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ds.Project"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/attached": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Возравщает все проекты которые прикреплены к администратору",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Все проекты которые прикреплены к администратору",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ds.Project"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/project/{project_id}": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Прикрепляет администратора к выбраному проекту",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Прикрепляет администратора к проекту",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ds.Project"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/unattached": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Возвращает все проекты которые еще не прикреплены",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Все проекты которые еще не прикреплены",
                 "responses": {
                     "200": {
                         "description": "OK",

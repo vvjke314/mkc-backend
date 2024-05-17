@@ -154,9 +154,9 @@ info:
   title: MKC API
   version: "1.0"
 paths:
-  /admin/project:
+  /admin/:project_id/send:
     post:
-      description: Attachs admin to project
+      description: Отправляет сообщение пользователю на почту
       produces:
       - application/json
       responses:
@@ -172,7 +172,70 @@ paths:
             $ref: '#/definitions/app.errorResponse'
       security:
       - BearerAuth: []
-      summary: Attachs admin to project
+      summary: Отправляет сообщение пользователю на почту
+      tags:
+      - auth
+  /admin/attached:
+    get:
+      description: Возравщает все проекты которые прикреплены к администратору
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Project'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Все проекты которые прикреплены к администратору
+      tags:
+      - auth
+  /admin/project/{project_id}:
+    post:
+      description: Прикрепляет администратора к выбраному проекту
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Project'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Прикрепляет администратора к проекту
+      tags:
+      - auth
+  /admin/unattached:
+    get:
+      description: Возвращает все проекты которые еще не прикреплены
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Project'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Все проекты которые еще не прикреплены
       tags:
       - auth
   /login:
