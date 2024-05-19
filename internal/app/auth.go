@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+	"github.com/vvjke314/mkc-backend/internal/pkg/crypt"
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 )
 
@@ -59,12 +60,17 @@ func (a *Application) Login(c *gin.Context) {
 	customer := ds.Customer{}
 	if err := a.repo.GetCustomerByCredentials(creds, &customer); err != nil {
 		if err == pgx.ErrNoRows {
-			newErrorResponse(c, http.StatusBadRequest, "No such customer")
+			newErrorResponse(c, http.StatusBadRequest, "no such customer")
+			err = fmt.Errorf("[Login][repo.GetCustomerByCredentials]: %w", err)
+			a.Log(err.Error(), "[Authentification]")
 			return
 		}
+		newErrorResponse(c, http.StatusBadRequest, "invalid password")
+		err = fmt.Errorf("[Login][repo.GetCustomerByCredentials]: %w", err)
+		a.Log(err.Error(), "[Authentification]")
+		return
 	}
 
-	// Здесь следует выполнить проверку учетных данных пользователя и, в случае успеха, создать JWT-токен
 	token, err := createToken(customer.Login, customer.Id.String())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create token"})
@@ -74,6 +80,7 @@ func (a *Application) Login(c *gin.Context) {
 	activeTokens[token] = true
 
 	// Возврат JWT-токена клиенту
+	a.SuccessLog("successfuly signed up", customer.Id.String())
 	c.JSON(http.StatusOK, AuthToken{Token: token})
 }
 
@@ -113,10 +120,17 @@ func (a *Application) Signup(c *gin.Context) {
 
 	if req.Login == "" {
 		newErrorResponse(c, http.StatusBadRequest, "Login is empty")
+		return
 	}
 
 	if req.Email == "" {
 		newErrorResponse(c, http.StatusBadRequest, "Email is empty")
+		return
+	}
+
+	password, err := crypt.HashPassword(req.Password)
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "Bad password entered")
 		return
 	}
 
@@ -126,7 +140,7 @@ func (a *Application) Signup(c *gin.Context) {
 		SecondName: req.SecondName,
 		Login:      req.Login,
 		Email:      req.Email,
-		Password:   req.Password,
+		Password:   password,
 		Type:       0,
 	}
 	err = a.repo.SignUpCustomer(customer)

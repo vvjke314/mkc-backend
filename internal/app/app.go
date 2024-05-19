@@ -66,14 +66,14 @@ func (app *Application) Run() error {
 	r.POST("/login", app.Login)
 	r.POST("/signup", app.Signup)
 
-	/*
-		administrator := r.Group("/admin")
-		administrator.Use(AdminMiddleware())
-		administrator.GET("/unattached", app.GetAllUnattachedProjects)
-		administrator.GET("/attached", app.GetAllAttachedProjects)
-		administrator.POST("/attach/:project_id", app.AttachAdmin)
-		administrator.POST("/:project_id/send", app.SumbitEmail)
-	*/
+	// administrator
+	administrator := r.Group("/admin")
+	administrator.POST("/signup", app.SignUpAdmin)
+	administrator.Use(app.BasicAuthMiddleware())
+	administrator.GET("/unattached", app.GetAllUnattachedProjects)
+	administrator.GET("/attached", app.GetAllAttachedProjects)
+	administrator.GET("/attach/:project_id", app.AttachAdmin)
+	administrator.POST("/:project_id/send", app.GetCustomerEmail)
 
 	authorized := r.Group("/")
 
@@ -83,8 +83,8 @@ func (app *Application) Run() error {
 
 		// project
 		authorized.GET("/projects", app.GetProjects)
-		//authorized.GET("/project/:project_id", app.GetProjectInfo)
 		authorized.POST("/project", app.CreateProject)
+		authorized.Use(app.AccessControl()).GET("/project/:project_id", app.GetProjectInfo)
 		authorized.Use(app.FullAccessControl()).PUT("/project/:project_id", app.UpdateProjectName)
 		authorized.Use(app.FullAccessControl()).DELETE("/project/:project_id", app.DeleteProject)
 

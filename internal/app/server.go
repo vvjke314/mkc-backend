@@ -1,13 +1,77 @@
 package app
 
 import (
+	"encoding/base64"
 	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
+
+// BasicAuthMiddleware промежуточное ПО для проверки является ли отправитель администратором
+func (a *Application) BasicAuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Получаем заголовок авторизации
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			c.Header("WWW-Authenticate", `Basic realm="Authorization Required"`)
+			newErrorResponse(c, http.StatusUnauthorized, "you must authorized to do this action")
+			a.Log("must authorized", "BasicAuthMiddleware")
+			return
+		}
+
+		// Проверяем формат авторизации
+		if !strings.HasPrefix(authHeader, "Basic ") {
+			newErrorResponse(c, http.StatusUnauthorized, "you must authorized to do this action")
+			a.Log("must authorized", "BasicAuthMiddleware")
+			return
+		}
+
+		// Декодируем пароль
+		decoded, err := base64.StdEncoding.DecodeString(authHeader[6:])
+		if err != nil {
+			newErrorResponse(c, http.StatusUnauthorized, "you must authorized to do this action")
+			a.Log("must authorized", "BasicAuthMiddleware")
+			return
+		}
+
+		// Разделяем пароль и имя администратора
+		creds := strings.SplitN(string(decoded), ":", 2)
+		if len(creds) != 2 {
+			newErrorResponse(c, http.StatusUnauthorized, "you must authorized to do this action")
+			a.Log("must authorized", "BasicAuthMiddleware")
+			return
+		}
+
+		// Получаем валидные данные
+		hashedPassword, err := a.repo.GetValidCredentials(creds[0])
+		if err != nil {
+			newErrorResponse(c, http.StatusInternalServerError, "can't get valid data")
+			a.Log(fmt.Errorf("[GetValidCredentials]: can't get valid data %w", err).Error(), "BasicAuthMiddleware")
+			return
+		}
+
+		if err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(creds[1])); err != nil {
+			newErrorResponse(c, http.StatusUnauthorized, "bad authorize password")
+			a.Log(fmt.Errorf("[crypt.HashPassword]: bad authorize password %w", err).Error(), "BasicAuthMiddleware")
+			return
+		}
+
+		adminId, err := a.repo.GetAdminId(creds[0], hashedPassword)
+		if err != nil {
+			newErrorResponse(c, http.StatusUnauthorized, "can't get administrator ID")
+			a.Log("[GetAdminId] can't get administrator ID", "BasicAuthMiddleware")
+			return
+		}
+
+		c.Set("adminId", adminId)
+
+		c.Next()
+	}
+}
 
 // FullAccessControl промежуточное ПО для проверки доступа к работе с проектом
 func (a *Application) FullAccessControl() gin.HandlerFunc {

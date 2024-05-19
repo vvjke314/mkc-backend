@@ -275,7 +275,7 @@ func (a *Application) DownloadFile(c *gin.Context) {
 	}
 
 	// Формируем путь к файлу на сервере
-	filePath := filehandler.Path + projectId + "/" + file.Filename
+	filePath := filehandler.Path + projectId + "/" + file.Filename + file.Extension
 
 	// Проверяем существование файла
 	_, err = os.Stat(filePath)

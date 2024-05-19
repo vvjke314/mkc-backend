@@ -32,3 +32,59 @@
 {"time":"2024-05-16T20:45:28+03:00","message":"21901ffe-99b5-4761-a740-947b4d2d8e78:success_request:[AddParticipant]"}
 {"time":"2024-05-16T20:46:23+03:00","message":"21901ffe-99b5-4761-a740-947b4d2d8e78:success_request:[CreateNote]"}
 {"time":"2024-05-16T20:51:38+03:00","message":"21901ffe-99b5-4761-a740-947b4d2d8e78:success_request:[AddParticipant]"}
+{"time":"2024-05-18T21:39:10+03:00","message":"1f2d690a-fbab-4524-a433-cfe1e84f37d1:success_request:[CreateProject]"}
+{"time":"2024-05-18T21:39:28+03:00","message":"1f2d690a-fbab-4524-a433-cfe1e84f37d1:success_request:[CreateProject]"}
+{"time":"2024-05-18T21:39:34+03:00","message":"1f2d690a-fbab-4524-a433-cfe1e84f37d1:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-18T21:39:58+03:00","message":"BasicAuthMiddleware:error:bad authorize password"}
+{"level":"error","time":"2024-05-18T21:40:02+03:00","message":"BasicAuthMiddleware:error:bad authorize password"}
+{"level":"error","time":"2024-05-18T21:43:47+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-18T21:44:35+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedSecret too short to be a bcrypted password"}
+{"level":"error","time":"2024-05-18T21:44:36+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedSecret too short to be a bcrypted password"}
+{"level":"error","time":"2024-05-18T21:46:08+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-18T21:46:10+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-18T21:46:29+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-18T21:54:46+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-18T21:56:51+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password"}
+{"level":"error","time":"2024-05-18T21:57:42+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-18T21:57:51+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-18T21:57:54+03:00","message":"BasicAuthMiddleware:error:[GetValidCredentials]: can't get valid data no rows in result set"}
+{"level":"error","time":"2024-05-18T21:57:57+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-18T22:01:51+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-18T22:02:15+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-18T22:03:34+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-18T22:06:51+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-18T22:07:05+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-18T22:07:07+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-18T22:07:35+03:00","message":"4bca6d2e-014a-4323-bac8-707e4b2e9ca1:error:[GetAllUnattachedProjects]"}
+{"level":"error","time":"2024-05-18T22:10:19+03:00","message":"4bca6d2e-014a-4323-bac8-707e4b2e9ca1:error:[GetAllUnattachedProjects]"}
+{"level":"error","time":"2024-05-18T22:14:10+03:00","message":"4bca6d2e-014a-4323-bac8-707e4b2e9ca1:error:[AttachAdmin]"}
+{"level":"error","time":"2024-05-18T22:15:10+03:00","message":"4bca6d2e-014a-4323-bac8-707e4b2e9ca1:error:[GetAllAttachedProjects]"}
+{"level":"error","time":"2024-05-18T22:16:23+03:00","message":"BasicAuthMiddleware:error:must authorized"}
+{"level":"error","time":"2024-05-18T22:16:28+03:00","message":"4bca6d2e-014a-4323-bac8-707e4b2e9ca1:error:[GetCustomerEmail]"}
+{"time":"2024-05-19T19:08:03+03:00","message":"00000000-0000-0000-0000-000000000000:success_request:successfuly signed up"}
+{"time":"2024-05-19T19:08:08+03:00","message":"00000000-0000-0000-0000-000000000000:success_request:successfuly signed up"}
+{"time":"2024-05-19T19:08:18+03:00","message":"00000000-0000-0000-0000-000000000000:success_request:successfuly signed up"}
+{"time":"2024-05-19T19:08:19+03:00","message":"00000000-0000-0000-0000-000000000000:success_request:successfuly signed up"}
+{"time":"2024-05-19T19:08:31+03:00","message":"00000000-0000-0000-0000-000000000000:success_request:successfuly signed up"}
+{"time":"2024-05-19T19:08:32+03:00","message":"00000000-0000-0000-0000-000000000000:success_request:successfuly signed up"}
+{"time":"2024-05-19T19:08:33+03:00","message":"00000000-0000-0000-0000-000000000000:success_request:successfuly signed up"}
+{"time":"2024-05-19T19:08:37+03:00","message":"00000000-0000-0000-0000-000000000000:success_request:successfuly signed up"}
+{"time":"2024-05-19T19:08:40+03:00","message":"00000000-0000-0000-0000-000000000000:success_request:successfuly signed up"}
+{"time":"2024-05-19T19:08:41+03:00","message":"00000000-0000-0000-0000-000000000000:success_request:successfuly signed up"}
+{"time":"2024-05-19T19:08:43+03:00","message":"00000000-0000-0000-0000-000000000000:success_request:successfuly signed up"}
+{"time":"2024-05-19T19:09:30+03:00","message":"00000000-0000-0000-0000-000000000000:success_request:successfuly signed up"}
+{"time":"2024-05-19T19:09:36+03:00","message":"00000000-0000-0000-0000-000000000000:success_request:successfuly signed up"}
+{"time":"2024-05-19T23:35:00+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:success_request:successfuly signed up"}
+{"level":"error","time":"2024-05-19T23:38:53+03:00","message":"[Authentification]:error:[Login][repo.GetCustomerByCredentials]: [CompareHashAndPassword] mismatch hash and password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"time":"2024-05-19T23:38:56+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:success_request:successfuly signed up"}
+{"time":"2024-05-19T23:41:52+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:success_request:successfuly signed up"}
+{"time":"2024-05-19T23:42:04+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:success_request:[CreateProject]"}
+{"time":"2024-05-19T23:42:59+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:success_request:[UploadFile]"}
+{"level":"error","time":"2024-05-19T23:43:52+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:error:[DownloadFile][repo.GetFileById]: [*pgxpool.Pool.QueryRow] Can't exec query: ERROR: invalid input syntax for type uuid: \"linear algebra.pdf\" (SQLSTATE 22P02)"}
+{"level":"error","time":"2024-05-19T23:44:24+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:error:[DownloadFile][repo.GetFileById]: [*pgxpool.Pool.QueryRow] Can't exec query: ERROR: invalid input syntax for type uuid: \"linear algebra.pdf\" (SQLSTATE 22P02)"}
+{"level":"error","time":"2024-05-19T23:44:36+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:error:[DownloadFile][repo.GetFileById]: [*pgxpool.Pool.QueryRow] Can't exec query: ERROR: invalid input syntax for type uuid: \"mkc-backend-db.png\" (SQLSTATE 22P02)"}
+{"level":"error","time":"2024-05-19T23:45:06+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:error:[DownloadFile][os.IsNotExist]: stat /home/vvjkee/Workspace/university/diplom/storage/8a9ca019-f0c1-4e98-8070-0741eb436ceb/linear algebra: no such file or directory"}
+{"level":"error","time":"2024-05-19T23:45:20+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:error:[DownloadFile][repo.GetFileById]: [*pgxpool.Pool.QueryRow] Can't exec query: ERROR: invalid input syntax for type uuid: \"linear algebra\" (SQLSTATE 22P02)"}
+{"level":"error","time":"2024-05-19T23:47:53+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:error:[DownloadFile][os.IsNotExist]: stat /home/vvjkee/Workspace/university/diplom/storage/8a9ca019-f0c1-4e98-8070-0741eb436ceb/linear algebra: no such file or directory"}
+{"level":"error","time":"2024-05-19T23:48:32+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:error:[DownloadFile][os.IsNotExist]: stat /home/vvjkee/Workspace/university/diplom/storage/8a9ca019-f0c1-4e98-8070-0741eb436ceb/linear algebra: no such file or directory"}
+{"time":"2024-05-19T23:49:26+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:success_request:successfuly signed up"}

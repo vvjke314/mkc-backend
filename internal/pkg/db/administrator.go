@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 )
 
@@ -27,10 +28,44 @@ func (r *Repo) SetAdministrator(adminId, projectId string) error {
 	return nil
 }
 
+// GetAdminId получаем id администратора через его имя и пароль
+func (r *Repo) GetAdminId(adminName, adminPass string) (string, error) {
+	var id string
+	query := "SELECT id FROM administrator WHERE name = $1 AND password = $2"
+	row := r.pool.QueryRow(r.ctx, query, adminName, adminPass)
+	err := row.Scan(&id)
+	if err != nil {
+		return "", fmt.Errorf("[pgxpool.Pool.Exec] Can't exec query: %w", err)
+	}
+
+	return id, nil
+}
+
+// GetCustomerEmail получает почту создателя проекта
+func (r *Repo) GetCustomerEmail(projectId string) (string, error) {
+	var email string
+	query := `
+		SELECT c.email
+		FROM Project p
+		JOIN Customer c ON p.owner_id = c.id
+		WHERE p.id = $1;
+	`
+
+	err := r.pool.QueryRow(r.ctx, query, projectId).Scan(&email)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return "", fmt.Errorf("no customer found for project ID: %s", projectId)
+		}
+		return "", fmt.Errorf("query row failed: %w", err)
+	}
+
+	return email, nil
+}
+
 // GetAllUnattachedProjects возращает массив проектов, у которых значение admin_id = 0
 func (r *Repo) GetAllUnattachedProjects() ([]ds.Project, error) {
 	var projects []ds.Project
-	query := "SELECT id, owner_id, capacity, name, creation_date, admin_id FROM project WHERE admin_id IS NOT NULL"
+	query := "SELECT id, owner_id, capacity, name, creation_date, admin_id FROM project WHERE admin_id IS NULL"
 	rows, err := r.pool.Query(r.ctx, query)
 	if err != nil {
 		return nil, fmt.Errorf("[pgxpool.Pool.Exec] Can't exec query: %w", err)
@@ -73,4 +108,14 @@ func (r *Repo) GetAllAttachedProjects(adminId string) ([]ds.Project, error) {
 	}
 
 	return projects, nil
+}
+
+// GetValidCredentials получаем корректные данные
+func (r *Repo) GetValidCredentials(name string) (string, error) {
+	var hashedPassword string
+	err := r.pool.QueryRow(r.ctx, "SELECT password FROM administrator WHERE name=$1", name).Scan(&hashedPassword)
+	if err != nil {
+		return "", err
+	}
+	return hashedPassword, nil
 }

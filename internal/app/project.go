@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 	"github.com/vvjke314/mkc-backend/internal/pkg/filehandler"
 )
@@ -418,4 +419,45 @@ func (a *Application) DeleteProject(c *gin.Context) {
 
 	a.SuccessLog("[DeleteProject]", customerId)
 	c.JSON(http.StatusOK, projects)
+}
+
+// GetProjectInfo получить информацию о проекте
+// @Summary      Получаем информацию о содержании проекта
+// @Description  Получаем массив всех файлов и заметок
+// @Tags         project
+// @Produce      json
+// @Security 	 BearerAuth
+// @Param project_id path string true "Идентификатор проекта"
+// @Success      200 {object} ds.ProjectData
+// @Failure 500 {object} errorResponse
+// @Failure 403 {object} errorResponse
+// @Failure 401 {object} errorResponse
+// @Router      /project/{project_id} [get]
+func (a *Application) GetProjectInfo(c *gin.Context) {
+	projectId := c.Param("project_id")
+	customerId := c.GetString("customerId")
+
+	files, err := a.repo.GetFiles(projectId)
+	if err != nil && err != pgx.ErrNoRows {
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[DeleteProject][repo.GetProjects]: %w", err)
+		a.Log(err.Error(), customerId)
+		return
+	}
+
+	notes, err := a.repo.GetNotes(projectId)
+	if err != nil && err != pgx.ErrNoRows {
+		newErrorResponse(c, http.StatusInternalServerError, "can't handle request")
+		err = fmt.Errorf("[DeleteProject][repo.GetProjects]: %w", err)
+		a.Log(err.Error(), customerId)
+		return
+	}
+
+	projectData := ds.ProjectData{
+		Notes: notes,
+		Files: files,
+	}
+
+	a.SuccessLog("[GetProjectInfo]", customerId)
+	c.JSON(200, projectData)
 }

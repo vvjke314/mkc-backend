@@ -82,6 +82,11 @@ definitions:
       update_datetime:
         type: string
     type: object
+  ds.GetCustomerEmailResponse:
+    properties:
+      email:
+        type: string
+    type: object
   ds.LoginCustomerReq:
     properties:
       login:
@@ -121,6 +126,26 @@ definitions:
       owner_id:
         type: string
     type: object
+  ds.ProjectData:
+    properties:
+      files:
+        items:
+          $ref: '#/definitions/ds.File'
+        type: array
+      notes:
+        items:
+          $ref: '#/definitions/ds.Note'
+        type: array
+    type: object
+  ds.SignUpAdmin:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
   ds.SignUpCustomerReq:
     properties:
       email:
@@ -154,27 +179,25 @@ info:
   title: MKC API
   version: "1.0"
 paths:
-  /admin/:project_id/send:
+  /admin/{project_id}/send:
     post:
-      description: Отправляет сообщение пользователю на почту
+      description: Получает электронную почту пользователя, владеющего проектом
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/ds.Project'
-            type: array
+            $ref: '#/definitions/ds.GetCustomerEmailResponse'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/app.errorResponse'
       security:
-      - BearerAuth: []
-      summary: Отправляет сообщение пользователю на почту
+      - BasicAuth: []
+      summary: Получает электронную почту пользователя, владеющего проектом
       tags:
-      - auth
+      - administrator
   /admin/attached:
     get:
       description: Возравщает все проекты которые прикреплены к администратору
@@ -192,12 +215,12 @@ paths:
           schema:
             $ref: '#/definitions/app.errorResponse'
       security:
-      - BearerAuth: []
+      - BasicAuth: []
       summary: Все проекты которые прикреплены к администратору
       tags:
-      - auth
+      - administrator
   /admin/project/{project_id}:
-    post:
+    get:
       description: Прикрепляет администратора к выбраному проекту
       produces:
       - application/json
@@ -205,18 +228,43 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/ds.Project'
-            type: array
+            $ref: '#/definitions/app.successResponse'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/app.errorResponse'
       security:
-      - BearerAuth: []
+      - BasicAuth: []
       summary: Прикрепляет администратора к проекту
       tags:
-      - auth
+      - administrator
+    post:
+      description: Добавляет администратора на сервис
+      parameters:
+      - description: Информация о администраторе
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.SignUpAdmin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.successResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      summary: Добавляет администратора на сервис
+      tags:
+      - administrator
   /admin/unattached:
     get:
       description: Возвращает все проекты которые еще не прикреплены
@@ -234,10 +282,10 @@ paths:
           schema:
             $ref: '#/definitions/app.errorResponse'
       security:
-      - BearerAuth: []
+      - BasicAuth: []
       summary: Все проекты которые еще не прикреплены
       tags:
-      - auth
+      - administrator
   /login:
     post:
       description: Login customer
@@ -499,6 +547,38 @@ paths:
       security:
       - BearerAuth: []
       summary: Deletes project
+      tags:
+      - project
+    get:
+      description: Получаем массив всех файлов и заметок
+      parameters:
+      - description: Идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ds.ProjectData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Получаем информацию о содержании проекта
       tags:
       - project
     put:

@@ -21,7 +21,7 @@ import (
 // @Param data body ds.CreateNoteReq true "New project"
 // @Success      200 {object} []ds.Note
 // @Failure 500 {object} errorResponse
-// @Router      /project/:project_id/note [post]
+// @Router      /project/{project_id}/note [post]
 func (a *Application) CreateNote(c *gin.Context) {
 	customerId := c.GetString("customerId")
 	req := &ds.CreateNoteReq{}

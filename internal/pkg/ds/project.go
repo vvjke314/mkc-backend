@@ -25,3 +25,8 @@ type UpdateProjectNameReq struct {
 
 type DeleteProjectReq struct {
 }
+
+type ProjectData struct {
+	Notes []Note `json:"notes"`
+	Files []File `json:"files"`
+}

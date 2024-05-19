@@ -17,45 +17,11 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin/:project_id/send": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Отправляет сообщение пользователю на почту",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "auth"
-                ],
-                "summary": "Отправляет сообщение пользователю на почту",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/ds.Project"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.errorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/admin/attached": {
             "get": {
                 "security": [
                     {
-                        "BearerAuth": []
+                        "BasicAuth": []
                     }
                 ],
                 "description": "Возравщает все проекты которые прикреплены к администратору",
@@ -63,7 +29,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "administrator"
                 ],
                 "summary": "Все проекты которые прикреплены к администратору",
                 "responses": {
@@ -86,10 +52,10 @@ const docTemplate = `{
             }
         },
         "/admin/project/{project_id}": {
-            "post": {
+            "get": {
                 "security": [
                     {
-                        "BearerAuth": []
+                        "BasicAuth": []
                     }
                 ],
                 "description": "Прикрепляет администратора к выбраному проекту",
@@ -97,9 +63,81 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "administrator"
                 ],
                 "summary": "Прикрепляет администратора к проекту",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.successResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Добавляет администратора на сервис",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "administrator"
+                ],
+                "summary": "Добавляет администратора на сервис",
+                "parameters": [
+                    {
+                        "description": "Информация о администраторе",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ds.SignUpAdmin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.successResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/unattached": {
+            "get": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "description": "Возвращает все проекты которые еще не прикреплены",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "administrator"
+                ],
+                "summary": "Все проекты которые еще не прикреплены",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -119,29 +157,26 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/unattached": {
-            "get": {
+        "/admin/{project_id}/send": {
+            "post": {
                 "security": [
                     {
-                        "BearerAuth": []
+                        "BasicAuth": []
                     }
                 ],
-                "description": "Возвращает все проекты которые еще не прикреплены",
+                "description": "Получает электронную почту пользователя, владеющего проектом",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "administrator"
                 ],
-                "summary": "Все проекты которые еще не прикреплены",
+                "summary": "Получает электронную почту пользователя, владеющего проектом",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/ds.Project"
-                            }
+                            "$ref": "#/definitions/ds.GetCustomerEmailResponse"
                         }
                     },
                     "500": {
@@ -512,6 +547,56 @@ const docTemplate = `{
             }
         },
         "/project/{project_id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Получаем массив всех файлов и заметок",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "project"
+                ],
+                "summary": "Получаем информацию о содержании проекта",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Идентификатор проекта",
+                        "name": "project_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.ProjectData"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            },
             "put": {
                 "security": [
                     {
@@ -1252,6 +1337,14 @@ const docTemplate = `{
                 }
             }
         },
+        "ds.GetCustomerEmailResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
         "ds.LoginCustomerReq": {
             "type": "object",
             "properties": {
@@ -1308,6 +1401,37 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "owner_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "ds.ProjectData": {
+            "type": "object",
+            "properties": {
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ds.File"
+                    }
+                },
+                "notes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ds.Note"
+                    }
+                }
+            }
+        },
+        "ds.SignUpAdmin": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 }
             }

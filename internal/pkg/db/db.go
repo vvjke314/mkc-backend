@@ -45,8 +45,7 @@ func (r *Repo) Init() error {
 	return nil
 }
 
-// Connect
-// метод для создания pool'a
+// Connect создание pool'a для подключения к БД
 func (r *Repo) Connect() error {
 	pgxConnPool, err := pgxpool.NewWithConfig(context.TODO(), r.config)
 	if err != nil {
@@ -57,8 +56,7 @@ func (r *Repo) Connect() error {
 	return nil
 }
 
-// Close
-// метод для закрытия pgxPool
+// Close закрытие pgxPool
 func (r *Repo) Close() {
 	r.pool.Close()
 }
