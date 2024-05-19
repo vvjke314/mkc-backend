@@ -8,12 +8,11 @@ import (
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 )
 
-func (r *Repo) ProccessNotes(durationBefore time.Duration) error {
+func (r *Repo) ProccessNotes(durationBefore time.Duration, query string) error {
 	// Определение временной метки для сравнения
 	compareTime := time.Now().Add(durationBefore)
 	// Запрос данных из базы данных
 	notes := []ds.Note{}
-	query := "SELECT id, project_id, title, content, update_datetime, deadline, overdue FROM note WHERE deadline <= $1 AND overdue = 0"
 	rows, err := r.pool.Query(r.ctx, query, compareTime)
 	if err != nil {
 		return fmt.Errorf("[pgxpool.Pool.Query] can't exec query: %w", err)
