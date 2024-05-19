@@ -41,8 +41,8 @@ func createToken(login, id string) (string, error) {
 }
 
 // Login godoc
-// @Summary      Login customer
-// @Description  Login customer
+// @Summary      Логинит пользователя
+// @Description  Логинит пользователя
 // @Tags         auth
 // @Produce      json
 // @Param data body ds.LoginCustomerReq true "Customer data"
@@ -85,8 +85,8 @@ func (a *Application) Login(c *gin.Context) {
 }
 
 // SignUp godoc
-// @Summary      Signup customer
-// @Description  Signup customer
+// @Summary      Регистрирует пользователя
+// @Description  Регистрирует пользователя
 // @Tags         auth
 // @Produce      json
 // @Param data body ds.SignUpCustomerReq true "Customer data"
@@ -161,8 +161,8 @@ func (a *Application) Signup(c *gin.Context) {
 }
 
 // Logout godoc
-// @Summary      Logout user
-// @Description  Logout user
+// @Summary      Разлогинивает пользователя
+// @Description  Разлогинивает пользователя
 // @Tags         auth
 // @Produce      json
 // @Security 	 BearerAuth

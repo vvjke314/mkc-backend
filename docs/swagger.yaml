@@ -288,7 +288,7 @@ paths:
       - administrator
   /login:
     post:
-      description: Login customer
+      description: Логинит пользователя
       parameters:
       - description: Customer data
         in: body
@@ -311,12 +311,12 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/app.errorResponse'
-      summary: Login customer
+      summary: Логинит пользователя
       tags:
       - auth
   /logout:
     get:
-      description: Logout user
+      description: Разлогинивает пользователя
       produces:
       - application/json
       responses:
@@ -334,12 +334,12 @@ paths:
             $ref: '#/definitions/app.errorResponse'
       security:
       - BearerAuth: []
-      summary: Logout user
+      summary: Разлогинивает пользователя
       tags:
       - auth
   /participants/{project_id}:
     delete:
-      description: Removes participant from project
+      description: Убрать участника из проекта
       parameters:
       - description: Project ID
         in: path
@@ -375,11 +375,11 @@ paths:
             $ref: '#/definitions/app.errorResponse'
       security:
       - BearerAuth: []
-      summary: Removes participant from project
+      summary: Убрать участника из проекта
       tags:
       - participants
     post:
-      description: Adds participant to project
+      description: Добавляет участника в проект
       parameters:
       - description: Project ID
         in: path
@@ -415,11 +415,11 @@ paths:
             $ref: '#/definitions/app.errorResponse'
       security:
       - BearerAuth: []
-      summary: Adds participant to project
+      summary: Добавляет участника в проект
       tags:
       - participants
     put:
-      description: Updates participant access in project
+      description: Обновить доступ участнику проекта
       parameters:
       - description: Project ID
         in: path
@@ -455,12 +455,12 @@ paths:
             $ref: '#/definitions/app.errorResponse'
       security:
       - BearerAuth: []
-      summary: Updates participant access in project
+      summary: Обновить доступ участнику проекта
       tags:
       - participants
   /project:
     post:
-      description: Creates customer project in storage
+      description: Создает проект пользователю
       parameters:
       - description: New project
         in: body
@@ -483,40 +483,12 @@ paths:
             $ref: '#/definitions/app.errorResponse'
       security:
       - BearerAuth: []
-      summary: Creates customer project
+      summary: Создает проект пользователю
       tags:
       - project
-  /project/:project_id/note:
-    post:
-      description: Создание заявки в проекте и добавление записи в БД
-      parameters:
-      - description: New project
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/ds.CreateNoteReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/ds.Note'
-            type: array
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/app.errorResponse'
-      security:
-      - BearerAuth: []
-      summary: Создание заявки в проекте
-      tags:
-      - note
   /project/{project_id}:
     delete:
-      description: Deletes project
+      description: Удаляет проект
       parameters:
       - description: Project ID
         in: path
@@ -546,7 +518,7 @@ paths:
             $ref: '#/definitions/app.errorResponse'
       security:
       - BearerAuth: []
-      summary: Deletes project
+      summary: Удаляет проект
       tags:
       - project
     get:
@@ -582,7 +554,7 @@ paths:
       tags:
       - project
     put:
-      description: Updates project name
+      description: Обновляет имя проекта
       parameters:
       - description: Project name
         in: path
@@ -618,7 +590,7 @@ paths:
             $ref: '#/definitions/app.errorResponse'
       security:
       - BearerAuth: []
-      summary: Updates project name
+      summary: Обновляет имя проекта
       tags:
       - project
   /project/{project_id}/file:
@@ -815,6 +787,34 @@ paths:
       summary: Загрузить файлы
       tags:
       - file
+  /project/{project_id}/note:
+    post:
+      description: Создание заявки в проекте и добавление записи в БД
+      parameters:
+      - description: New project
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.CreateNoteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Note'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Создание заявки в проекте
+      tags:
+      - note
   /project/{project_id}/note/{note_id}:
     delete:
       description: Удаляет заметки из проекта и БД
@@ -892,7 +892,7 @@ paths:
       - note
   /projects:
     get:
-      description: Gets all customer projects
+      description: Возращает все проекты пользователя
       produces:
       - application/json
       responses:
@@ -908,12 +908,12 @@ paths:
             $ref: '#/definitions/app.errorResponse'
       security:
       - BearerAuth: []
-      summary: Gets all customer projects
+      summary: Возвращаем все проекты пользователя
       tags:
       - project
   /signup:
     post:
-      description: Signup customer
+      description: Регистрирует пользователя
       parameters:
       - description: Customer data
         in: body
@@ -936,7 +936,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/app.errorResponse'
-      summary: Signup customer
+      summary: Регистрирует пользователя
       tags:
       - auth
 schemes:

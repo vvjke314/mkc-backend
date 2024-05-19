@@ -187,14 +187,14 @@
         },
         "/login": {
             "post": {
-                "description": "Login customer",
+                "description": "Логинит пользователя",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "auth"
                 ],
-                "summary": "Login customer",
+                "summary": "Логинит пользователя",
                 "parameters": [
                     {
                         "description": "Customer data",
@@ -235,14 +235,14 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Logout user",
+                "description": "Разлогинивает пользователя",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "auth"
                 ],
-                "summary": "Logout user",
+                "summary": "Разлогинивает пользователя",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -272,14 +272,14 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Updates participant access in project",
+                "description": "Обновить доступ участнику проекта",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "participants"
                 ],
-                "summary": "Updates participant access in project",
+                "summary": "Обновить доступ участнику проекта",
                 "parameters": [
                     {
                         "type": "string",
@@ -334,14 +334,14 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Adds participant to project",
+                "description": "Добавляет участника в проект",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "participants"
                 ],
-                "summary": "Adds participant to project",
+                "summary": "Добавляет участника в проект",
                 "parameters": [
                     {
                         "type": "string",
@@ -396,14 +396,14 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Removes participant from project",
+                "description": "Убрать участника из проекта",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "participants"
                 ],
-                "summary": "Removes participant from project",
+                "summary": "Убрать участника из проекта",
                 "parameters": [
                     {
                         "type": "string",
@@ -460,14 +460,14 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Creates customer project in storage",
+                "description": "Создает проект пользователю",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "project"
                 ],
-                "summary": "Creates customer project",
+                "summary": "Создает проект пользователю",
                 "parameters": [
                     {
                         "description": "New project",
@@ -486,51 +486,6 @@
                             "type": "array",
                             "items": {
                                 "$ref": "#/definitions/ds.Project"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.errorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/project/:project_id/note": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Создание заявки в проекте и добавление записи в БД",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "note"
-                ],
-                "summary": "Создание заявки в проекте",
-                "parameters": [
-                    {
-                        "description": "New project",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/ds.CreateNoteReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/ds.Note"
                             }
                         }
                     },
@@ -600,14 +555,14 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Updates project name",
+                "description": "Обновляет имя проекта",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "project"
                 ],
-                "summary": "Updates project name",
+                "summary": "Обновляет имя проекта",
                 "parameters": [
                     {
                         "type": "string",
@@ -662,14 +617,14 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Deletes project",
+                "description": "Удаляет проект",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "project"
                 ],
-                "summary": "Deletes project",
+                "summary": "Удаляет проект",
                 "parameters": [
                     {
                         "type": "string",
@@ -1011,6 +966,51 @@
                 }
             }
         },
+        "/project/{project_id}/note": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Создание заявки в проекте и добавление записи в БД",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "note"
+                ],
+                "summary": "Создание заявки в проекте",
+                "parameters": [
+                    {
+                        "description": "New project",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ds.CreateNoteReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ds.Note"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/project/{project_id}/note/{note_id}": {
             "put": {
                 "security": [
@@ -1134,14 +1134,14 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Gets all customer projects",
+                "description": "Возращает все проекты пользователя",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "project"
                 ],
-                "summary": "Gets all customer projects",
+                "summary": "Возвращаем все проекты пользователя",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1163,14 +1163,14 @@
         },
         "/signup": {
             "post": {
-                "description": "Signup customer",
+                "description": "Регистрирует пользователя",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "auth"
                 ],
-                "summary": "Signup customer",
+                "summary": "Регистрирует пользователя",
                 "parameters": [
                     {
                         "description": "Customer data",

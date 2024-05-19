@@ -15,8 +15,8 @@ import (
 )
 
 // GetProjects godoc
-// @Summary      Gets all customer projects
-// @Description  Gets all customer projects
+// @Summary      Возвращаем все проекты пользователя
+// @Description  Возращает все проекты пользователя
 // @Tags         project
 // @Produce      json
 // @Security 	 BearerAuth
@@ -40,8 +40,8 @@ func (a *Application) GetProjects(c *gin.Context) {
 }
 
 // CreateProject godoc
-// @Summary      Creates customer project
-// @Description  Creates customer project in storage
+// @Summary      Создает проект пользователю
+// @Description  Создает проект пользователю
 // @Tags         project
 // @Produce      json
 // @Security 	 BearerAuth
@@ -116,8 +116,8 @@ func (a *Application) CreateProject(c *gin.Context) {
 }
 
 // UpdateProjectName godoc
-// @Summary      Updates project name
-// @Description  Updates project name
+// @Summary      Обновляет имя проекта
+// @Description  Обновляет имя проекта
 // @Tags         project
 // @Produce      json
 // @Security 	 BearerAuth
@@ -173,8 +173,8 @@ func (a *Application) UpdateProjectName(c *gin.Context) {
 }
 
 // AddParticipant godoc
-// @Summary      Adds participant to project
-// @Description  Adds participant to project
+// @Summary      Добавляет участника в проект
+// @Description  Добавляет участника в проект
 // @Tags         participants
 // @Produce      json
 // @Security 	 BearerAuth
@@ -255,8 +255,8 @@ func (a *Application) AddParticipant(c *gin.Context) {
 }
 
 // UpdateParticipantAccess godoc
-// @Summary      Updates participant access in project
-// @Description  Updates participant access in project
+// @Summary      Обновить доступ участнику проекта
+// @Description  Обновить доступ участнику проекта
 // @Tags         participants
 // @Produce      json
 // @Security 	 BearerAuth
@@ -320,8 +320,8 @@ func (a *Application) UpdateParticipantAccess(c *gin.Context) {
 }
 
 // DeleteParticipant godoc
-// @Summary      Removes participant from project
-// @Description  Removes participant from project
+// @Summary      Убрать участника из проекта
+// @Description  Убрать участника из проекта
 // @Tags         participants
 // @Produce      json
 // @Security 	 BearerAuth
@@ -382,8 +382,8 @@ func (a *Application) DeleteParticipant(c *gin.Context) {
 }
 
 // DeleteProject godoc
-// @Summary      Deletes project
-// @Description  Deletes project
+// @Summary      Удаляет проект
+// @Description  Удаляет проект
 // @Tags         project
 // @Produce      json
 // @Security 	 BearerAuth
