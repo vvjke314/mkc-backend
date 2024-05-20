@@ -22,8 +22,7 @@ func NewRepo() *Repo {
 	return &Repo{}
 }
 
-// Init
-// медот для инициализации конфига
+// Init медот для инициализации конфига
 func (r *Repo) Init() error {
 	url, err := dsn.GetDSN()
 	if err != nil {
