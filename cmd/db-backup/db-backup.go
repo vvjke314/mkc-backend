@@ -13,37 +13,46 @@ import (
 func main() {
 	config.GetConfig()
 	// Параметры подключения к базе данных
-	dbHost := "localhost"
+	dbHost := "db"
 	dbPort := viper.GetString("DATABASE_PORT")
 	dbUser := viper.GetString("DATABASE_USERNAME")
 	dbName := viper.GetString("DATABASE_NAME")
 	dbPassword := viper.GetString("DATABASE_PASSWORD")
 
-	// Путь к файлу бэкапа
-	backupPath := fmt.Sprintf("./%s_backup_%s.sql", dbName, time.Now().Format("20060102_150405"))
+	// Циклическое выполнение создания бэкапа каждые 10 минут
+	ticker := time.NewTicker(10 * time.Minute)
+	defer ticker.Stop()
 
-	// Формирование команды pg_dump
-	cmd := exec.Command("pg_dump",
-		"-h", dbHost,
-		"-p", dbPort,
-		"-U", dbUser,
-		"-d", dbName,
-		"-F", "c",
-		"-b",
-		"-v",
-		"-f", backupPath,
-	)
+	for {
+		select {
+		case <-ticker.C:
+			// Формирование имени файла бэкапа
+			backupPath := fmt.Sprintf("./backups/%s_backup_%s.sql", dbName, time.Now().Format("20060102_150405"))
 
-	// Установка переменной окружения для пароля
-	cmd.Env = append(os.Environ(), fmt.Sprintf("PGPASSWORD=%s", dbPassword))
+			// Формирование команды pg_dump
+			cmd := exec.Command("pg_dump",
+				"-h", dbHost,
+				"-p", dbPort,
+				"-U", dbUser,
+				"-d", dbName,
+				"-F", "c",
+				"-b",
+				"-v",
+				"-f", backupPath,
+			)
 
-	// Выполнение команды
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		fmt.Printf("Error: %s\n", err)
-		fmt.Printf("Output: %s\n", output)
-		return
+			// Установка переменной окружения для пароля
+			cmd.Env = append(os.Environ(), fmt.Sprintf("PGPASSWORD=%s", dbPassword))
+
+			// Выполнение команды
+			output, err := cmd.CombinedOutput()
+			if err != nil {
+				fmt.Printf("Error: %s\n", err)
+				fmt.Printf("Output: %s\n", output)
+				continue
+			}
+
+			fmt.Printf("Backup successful! File saved to: %s\n", backupPath)
+		}
 	}
-
-	fmt.Printf("Backup successful! File saved to: %s\n", backupPath)
 }

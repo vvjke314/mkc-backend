@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-const Path = "/home/vvjkee/Workspace/university/diplom/storage/"
+const Path = "./storage/"
 
 // type Filehandler struct {
 // }

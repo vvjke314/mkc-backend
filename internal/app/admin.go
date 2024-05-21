@@ -20,7 +20,7 @@ import (
 // @Success      200 {object} successResponse
 // @Failure 500 {object} errorResponse
 // @Failure 400 {object} errorResponse
-// @Router      /admin/project/{project_id} [post]
+// @Router      /admin/signup [post]
 func (a *Application) SignUpAdmin(c *gin.Context) {
 	req := &ds.SignUpAdmin{}
 

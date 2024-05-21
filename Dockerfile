@@ -3,10 +3,12 @@ FROM golang
 
 RUN go version 
 
-WORKDIR /home/mkc-backend/
+WORKDIR /mkc-backend/
 COPY . .
 RUN go mod download
-RUN go build -o ./bin/main ./cmd/mkc/main.go
+RUN go build -o ./bin/mkc ./cmd/mkc/main.go
+RUN mkdir storage
+ENV TZ=Europe/Moscow
 
 EXPOSE 8080
 

@@ -63,13 +63,13 @@ func (nc *NoteChecker) Run() error {
 	// Создание и запуск планировщика задач
 	c := cron.New()
 	// Задача на отправку уведомления за час до дедлайна
-	c.AddFunc("*/5 * * * *", func() {
-		err := nc.repo.ProccessNotes(5*time.Minute, "SELECT id, project_id, title, content, update_datetime, deadline, overdue FROM note WHERE deadline <= $1 AND overdue = 0")
+	c.AddFunc("*/1 * * * *", func() {
+		err := nc.repo.ProccessNotes(1*time.Minute, "SELECT id, project_id, title, content, update_datetime, deadline, overdue FROM note WHERE deadline <= $1 AND overdue = 0")
 		if err != nil {
 			msg := fmt.Sprintf("Error notifying upcoming deadlines: %v", err)
 			nc.Log(msg)
 		}
-		nc.SuccessLog("[5min]messages sent")
+		nc.SuccessLog("[1min]messages sent")
 	})
 	// Задача на отправку уведомления за день до дедлайна
 	c.AddFunc("@daily", func() {

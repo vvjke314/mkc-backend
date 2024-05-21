@@ -238,6 +238,7 @@ paths:
       summary: Прикрепляет администратора к проекту
       tags:
       - administrator
+  /admin/signup:
     post:
       description: Добавляет администратора на сервис
       parameters:

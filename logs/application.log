@@ -88,3 +88,17 @@
 {"level":"error","time":"2024-05-19T23:47:53+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:error:[DownloadFile][os.IsNotExist]: stat /home/vvjkee/Workspace/university/diplom/storage/8a9ca019-f0c1-4e98-8070-0741eb436ceb/linear algebra: no such file or directory"}
 {"level":"error","time":"2024-05-19T23:48:32+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:error:[DownloadFile][os.IsNotExist]: stat /home/vvjkee/Workspace/university/diplom/storage/8a9ca019-f0c1-4e98-8070-0741eb436ceb/linear algebra: no such file or directory"}
 {"time":"2024-05-19T23:49:26+03:00","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:success_request:successfuly signed up"}
+{"time":"2024-05-20T17:04:07Z","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:success_request:successfuly signed up"}
+{"time":"2024-05-20T17:04:14Z","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-20T17:06:40Z","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:error:[db.GetProjectById] [*pgxpool.Pool.QueryRow] Can't exec query: no rows in result set"}
+{"level":"error","time":"2024-05-20T17:07:11Z","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:error:[db.GetProjectById] [*pgxpool.Pool.QueryRow] Can't exec query: no rows in result set"}
+{"time":"2024-05-20T17:07:25Z","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:success_request:[AddParticipant]"}
+{"time":"2024-05-20T17:07:51Z","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:success_request:[CreateNote]"}
+{"level":"error","time":"2024-05-20T18:22:21Z","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:error:[CreateNote][repo.GetNoteByName]: such note title already exists in project"}
+{"time":"2024-05-20T18:22:24Z","message":"3ef873d6-c56a-4a5a-87d5-9ae2d2d01e7e:success_request:[CreateNote]"}
+{"time":"2024-05-20T18:26:32Z","message":"89db65d0-b022-4485-a2a6-f5aa7a6a3b42:success_request:[CreateProject]"}
+{"time":"2024-05-20T18:26:58Z","message":"89db65d0-b022-4485-a2a6-f5aa7a6a3b42:success_request:[CreateNote]"}
+{"time":"2024-05-20T18:27:44Z","message":"89db65d0-b022-4485-a2a6-f5aa7a6a3b42:success_request:[AddParticipant]"}
+{"time":"2024-05-20T18:28:05Z","message":"89db65d0-b022-4485-a2a6-f5aa7a6a3b42:success_request:[CreateNote]"}
+{"level":"error","time":"2024-05-20T18:29:45Z","message":"89db65d0-b022-4485-a2a6-f5aa7a6a3b42:error:[CreateNote][repo.GetNoteByName]: such note title already exists in project"}
+{"time":"2024-05-20T18:29:47Z","message":"89db65d0-b022-4485-a2a6-f5aa7a6a3b42:success_request:[CreateNote]"}
