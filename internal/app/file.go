@@ -28,13 +28,14 @@ import (
 // @Param file formData file true "Файл для загрузки"
 // @Success 200 {object} []ds.File
 // @Failure 500 {object} errorResponse
-// @Failure 401 {obejct} errorResponse
+// @Failure 401 {object} errorResponse
 // @Failure 403 {object} errorResponse
 // @Router /project/{project_id}/file [post]
 func (a *Application) UploadFile(c *gin.Context) {
 	// Получаем проект ID из запроса
 	projectId := c.GetString("projectId")
 	customerId := c.GetString("customerId")
+	isSub := c.GetBool("isSubcritption")
 
 	// Получаем файл из запроса
 	file, err := c.FormFile("file")
@@ -56,6 +57,23 @@ func (a *Application) UploadFile(c *gin.Context) {
 		return
 	}
 
+	if isSub {
+		// Проверка на получаемый размер проекта
+		if conf, err := a.repo.CheckProjectSize(projectId, int64(int64(file.Size)/1024)); !conf {
+			if err != nil {
+				newErrorResponse(c, http.StatusInternalServerError, err.Error())
+				err = fmt.Errorf("[UploadFile][repo.CheckProjectSize]: %w", err)
+				a.Log(err.Error(), customerId)
+				return
+			} else {
+				newErrorResponse(c, http.StatusBadRequest, "file too big upgrade your account status")
+				err = fmt.Errorf("[UploadFile][repo.CheckProjectSize]: %w", err)
+				a.Log(err.Error(), customerId)
+				return
+			}
+		}
+	}
+
 	// Сохраняем файл на сервере
 	if err := c.SaveUploadedFile(file, filehandler.Path+projectId+"/"+filename); err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, "no file uploaded")
@@ -70,7 +88,7 @@ func (a *Application) UploadFile(c *gin.Context) {
 		ProjectId:      uuid.MustParse(projectId),
 		Filename:       fileNames[0],
 		Extension:      filepath.Ext(file.Filename),
-		Size:           int(int(file.Size) / 1000), //размер в КБ
+		Size:           int64(int64(file.Size) / 1024), //размер в КБ
 		FilePath:       filehandler.Path + projectId + "/" + filename,
 		UpdateDatetime: time.Now(),
 	}
@@ -114,6 +132,7 @@ func (a *Application) UploadFile(c *gin.Context) {
 func (a *Application) UploadFiles(c *gin.Context) {
 	projectId := c.GetString("projectId")
 	customerId := c.GetString("customerId")
+	isSub := c.GetBool("isSubcritption")
 
 	// Парсим форму с несколькими файлами
 	err := c.Request.ParseMultipartForm(5 << 22) // Размер до 5 GB
@@ -133,6 +152,30 @@ func (a *Application) UploadFiles(c *gin.Context) {
 		filename := file.Filename
 		fileNames := strings.Split(filename, ".")
 
+		if !isSub {
+			if conf, err := a.repo.CheckProjectSize(projectId, int64(int64(file.Size)/1024)); !conf {
+				if err != nil {
+					newErrorResponse(c, http.StatusInternalServerError, err.Error())
+					err = fmt.Errorf("[UploadFile][repo.CheckProjectSize]: %w", err)
+					a.Log(err.Error(), customerId)
+					return
+				} else {
+					// Получаем все файлы из проекта которые смогли загрузиться
+					fs, err := a.repo.GetFiles(projectId)
+					if err != nil {
+						newErrorResponse(c, http.StatusInternalServerError, "can't get files")
+						err = fmt.Errorf("[UploadFiles][repo.GetFiles]: %w", err)
+						a.Log(err.Error(), customerId)
+						return
+					}
+
+					a.SuccessLog(fmt.Sprintf("[UploadFile] not all data imported. file %s too big upgrade your account status", filename), customerId)
+					c.JSON(http.StatusOK, fs)
+					break
+				}
+			}
+		}
+
 		// Сохраняем файл на сервере
 		if err := c.SaveUploadedFile(file, filehandler.Path+projectId+"/"+filename); err != nil {
 			newErrorResponse(c, http.StatusInternalServerError, "error saving file")
@@ -147,7 +190,7 @@ func (a *Application) UploadFiles(c *gin.Context) {
 			ProjectId:      uuid.MustParse(projectId),
 			Filename:       fileNames[0],
 			Extension:      filepath.Ext(file.Filename),
-			Size:           int(int(file.Size) / 1000), //размер в КБ
+			Size:           int64(int64(file.Size) / 1000), //размер в КБ
 			FilePath:       filehandler.Path + projectId + "/" + filename,
 			UpdateDatetime: time.Now(),
 		}
@@ -184,7 +227,7 @@ func (a *Application) UploadFiles(c *gin.Context) {
 // @Param project_id path string true "Идентификатор проекта"
 // @Param  data body ds.DeleteFileReq true "Структура хранящая тело запроса для удаления файла"
 // @Failure 500 {object} errorResponse
-// @Failure 401 {obejct} errorResponse
+// @Failure 401 {object} errorResponse
 // @Failure 403 {object} errorResponse
 // @Router /project/{project_id}/file [delete]
 func (a *Application) DeleteFile(c *gin.Context) {
@@ -341,7 +384,7 @@ func (a *Application) DownloadFile(c *gin.Context) {
 // @Param project_id path string true "Идентификатор проекта"
 // @Success 200 {object} []ds.File
 // @Failure 500 {object} errorResponse
-// @Failure 401 {obejct} errorResponse
+// @Failure 401 {object} errorResponse
 // @Failure 403 {object} errorResponse
 // @Router /project/{project_id}/files [get]
 func (a *Application) GetFiles(c *gin.Context) {

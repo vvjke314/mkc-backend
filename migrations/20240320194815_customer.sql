@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS customer (
 	"password" varchar(255) NOT NULL DEFAULT '',
 	"email" varchar(255) NOT NULL UNIQUE DEFAULT '',
 	"type" int NOT NULL DEFAULT 0,
+	"subscription_end" TIMESTAMP,
 	PRIMARY KEY ("id")
 );
 

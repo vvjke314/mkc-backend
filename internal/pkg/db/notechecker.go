@@ -34,12 +34,12 @@ func (r *Repo) ProccessNotes(durationBefore time.Duration, query string) error {
 		if time.Now().Add(+3*time.Hour).After(note.Deadline) && note.Overdue == 0 {
 			err = r.NoteOverdue(note.Id.String())
 			if err != nil {
-				return fmt.Errorf("[NoteOverdue]: %w", err)
+				return fmt.Errorf("[repo.NoteOverdue]: %w", err)
 			}
 		}
 		customers, err := r.GetParticipants(note.ProjectId.String())
 		if err != nil {
-			return fmt.Errorf("[NoteOverdue]: %w", err)
+			return fmt.Errorf("[repo.Getparticipants]: %w", err)
 		}
 		var emails []string
 		for _, cust := range customers {

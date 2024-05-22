@@ -20,6 +20,7 @@ services:
       - DATABASE_URL=db
     depends_on:
       - db
+      - redis
     volumes:
       - ./logs:/mkc-backend/logs
       - ../storage/:/mkc-backend/storage
@@ -39,6 +40,10 @@ services:
       - ./logs:/app/logs
     depends_on:
       - db
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
 
 
 volumes:

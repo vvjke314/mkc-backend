@@ -9,7 +9,7 @@ import (
 type Project struct {
 	Id           uuid.UUID `json:"id"`
 	OwnerId      uuid.UUID `json:"owner_id"`
-	Capacity     int       `json:"capacity"`
+	Capacity     int64     `json:"capacity"`
 	Name         string    `json:"name"`
 	CreationDate time.Time `json:"creation_date"`
 	AdminId      uuid.UUID `json:"admin_id"`

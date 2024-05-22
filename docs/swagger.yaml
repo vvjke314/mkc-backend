@@ -50,6 +50,8 @@ definitions:
         type: string
       second_name:
         type: string
+      subscription_end:
+        type: string
       type:
         type: integer
     type: object
@@ -182,6 +184,12 @@ paths:
   /admin/{project_id}/send:
     post:
       description: Получает электронную почту пользователя, владеющего проектом
+      parameters:
+      - description: Уникальный идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -200,7 +208,7 @@ paths:
       - administrator
   /admin/attached:
     get:
-      description: Возравщает все проекты которые прикреплены к администратору
+      description: Возвращает все проекты которые прикреплены к администратору
       produces:
       - application/json
       responses:
@@ -222,6 +230,12 @@ paths:
   /admin/project/{project_id}:
     get:
       description: Прикрепляет администратора к выбраному проекту
+      parameters:
+      - description: Уникальный идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -459,6 +473,25 @@ paths:
       summary: Обновить доступ участнику проекта
       tags:
       - participants
+  /payment_url:
+    get:
+      description: Возрващает Url для оплаты подписки
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Возрващает Url для оплаты подписки
+      tags:
+      - subscription
   /project:
     post:
       description: Создает проект пользователю
@@ -478,6 +511,14 @@ paths:
             items:
               $ref: '#/definitions/ds.Project'
             type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
         "500":
           description: Internal Server Error
           schema:
@@ -580,7 +621,7 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            type: obejct
+            $ref: '#/definitions/app.errorResponse'
         "403":
           description: Forbidden
           schema:
@@ -615,7 +656,7 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            type: obejct
+            $ref: '#/definitions/app.errorResponse'
         "403":
           description: Forbidden
           schema:
@@ -656,7 +697,7 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            type: obejct
+            $ref: '#/definitions/app.errorResponse'
         "403":
           description: Forbidden
           schema:
@@ -733,7 +774,7 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            type: obejct
+            $ref: '#/definitions/app.errorResponse'
         "403":
           description: Forbidden
           schema:
@@ -790,7 +831,7 @@ paths:
       - file
   /project/{project_id}/note:
     post:
-      description: Создание заявки в проекте и добавление записи в БД
+      description: Создание заметки в проекте и добавление записи в БД
       parameters:
       - description: New project
         in: body
@@ -798,6 +839,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/ds.CreateNoteReq'
+      - description: Идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -807,13 +853,21 @@ paths:
             items:
               $ref: '#/definitions/ds.Note'
             type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/app.errorResponse'
       security:
       - BearerAuth: []
-      summary: Создание заявки в проекте
+      summary: Создание заметки в проекте
       tags:
       - note
   /project/{project_id}/note/{note_id}:
@@ -842,7 +896,7 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            type: obejct
+            $ref: '#/definitions/app.errorResponse'
         "403":
           description: Forbidden
           schema:
@@ -878,10 +932,14 @@ paths:
             items:
               $ref: '#/definitions/ds.Note'
             type: array
-        "400":
-          description: Bad Request
+        "401":
+          description: Unauthorized
           schema:
-            type: obejct
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
         "500":
           description: Internal Server Error
           schema:
@@ -903,6 +961,14 @@ paths:
             items:
               $ref: '#/definitions/ds.Project'
             type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
         "500":
           description: Internal Server Error
           schema:
@@ -940,9 +1006,34 @@ paths:
       summary: Регистрирует пользователя
       tags:
       - auth
+  /subscription/{customer_id}:
+    get:
+      description: Успешная оплата подписки и повышение статуса его личного аккаунта
+      parameters:
+      - description: Уникальный идентификатор клиента
+        in: path
+        name: customer_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ds.Customer'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      summary: Получение подписки пользователем
+      tags:
+      - subscription
 schemes:
 - http
 securityDefinitions:
+  BasicAuth:
+    type: basic
   BearerAuth:
     in: header
     name: Authorization

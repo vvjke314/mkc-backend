@@ -69,7 +69,7 @@ func (nc *NoteChecker) Run() error {
 			msg := fmt.Sprintf("Error notifying upcoming deadlines: %v", err)
 			nc.Log(msg)
 		}
-		nc.SuccessLog("[1min]messages sent")
+		nc.SuccessLog("[1min]checked")
 	})
 	// Задача на отправку уведомления за день до дедлайна
 	c.AddFunc("@daily", func() {
@@ -78,7 +78,7 @@ func (nc *NoteChecker) Run() error {
 			msg := fmt.Sprintf("Error notifying upcoming deadlines: %v", err)
 			nc.Log(msg)
 		}
-		nc.SuccessLog("[daily]messages sent")
+		nc.SuccessLog("[daily]checked")
 	})
 
 	// Задача на отправку уведомления за час до дедлайна
@@ -88,7 +88,7 @@ func (nc *NoteChecker) Run() error {
 			msg := fmt.Sprintf("Error notifying upcoming deadlines: %v", err)
 			nc.Log(msg)
 		}
-		nc.SuccessLog("[hourly]messages sent")
+		nc.SuccessLog("[hourly]checked")
 	})
 
 	c.Start()

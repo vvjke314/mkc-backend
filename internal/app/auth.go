@@ -41,8 +41,8 @@ func createToken(login, id string) (string, error) {
 }
 
 // Login godoc
-// @Summary      Логинит пользователя
-// @Description  Логинит пользователя
+// @Summary      Аутентификация пользователя
+// @Description  Аутентификация пользователя
 // @Tags         auth
 // @Produce      json
 // @Param data body ds.LoginCustomerReq true "Customer data"
@@ -53,7 +53,9 @@ func createToken(login, id string) (string, error) {
 func (a *Application) Login(c *gin.Context) {
 	var creds ds.LoginCustomerReq
 	if err := c.ShouldBindJSON(&creds); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Invalid request payload")
+		newErrorResponse(c, http.StatusBadRequest, "invalid request payload")
+		err = fmt.Errorf("[Login][gin.Context.ShouldBindJSON]: %w", err)
+		a.Log(err.Error(), "[Authentification]")
 		return
 	}
 
@@ -135,13 +137,14 @@ func (a *Application) Signup(c *gin.Context) {
 	}
 
 	customer := ds.Customer{
-		Id:         uuid.New(),
-		FirstName:  req.FirstName,
-		SecondName: req.SecondName,
-		Login:      req.Login,
-		Email:      req.Email,
-		Password:   password,
-		Type:       0,
+		Id:              uuid.New(),
+		FirstName:       req.FirstName,
+		SecondName:      req.SecondName,
+		Login:           req.Login,
+		Email:           req.Email,
+		Password:        password,
+		Type:            0,
+		SubscriptionEnd: time.Now(),
 	}
 	err = a.repo.SignUpCustomer(customer)
 	if err != nil {
@@ -157,12 +160,13 @@ func (a *Application) Signup(c *gin.Context) {
 	activeTokens[token] = true
 
 	// Возврат JWT-токена клиенту
+	a.SuccessLog("signed up", "[Authentification]")
 	c.JSON(http.StatusOK, AuthToken{Token: token})
 }
 
 // Logout godoc
-// @Summary      Разлогинивает пользователя
-// @Description  Разлогинивает пользователя
+// @Summary      Выход из аккаунта пользователя
+// @Description  Выход из аккаунта пользователя и удаление его токена
 // @Tags         auth
 // @Produce      json
 // @Security 	 BearerAuth
@@ -185,5 +189,6 @@ func (a *Application) Logout(c *gin.Context) {
 	delete(activeTokens, tokenString)
 
 	// Отдаем сообщение об успешном выходе.
+	a.SuccessLog("logout successfully", "[Authentification]")
 	newSuccessResponse(c, http.StatusOK, "Logout successful")
 }

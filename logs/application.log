@@ -102,3 +102,219 @@
 {"time":"2024-05-20T18:28:05Z","message":"89db65d0-b022-4485-a2a6-f5aa7a6a3b42:success_request:[CreateNote]"}
 {"level":"error","time":"2024-05-20T18:29:45Z","message":"89db65d0-b022-4485-a2a6-f5aa7a6a3b42:error:[CreateNote][repo.GetNoteByName]: such note title already exists in project"}
 {"time":"2024-05-20T18:29:47Z","message":"89db65d0-b022-4485-a2a6-f5aa7a6a3b42:success_request:[CreateNote]"}
+{"time":"2024-05-22T17:51:56+03:00","message":"31f94770-c23b-45cc-9c7e-8eb64d5c230c:success_request:[CreateProject]"}
+{"time":"2024-05-22T17:52:03+03:00","message":"31f94770-c23b-45cc-9c7e-8eb64d5c230c:success_request:[CreateProject]"}
+{"time":"2024-05-22T17:52:06+03:00","message":"31f94770-c23b-45cc-9c7e-8eb64d5c230c:success_request:[CreateProject]"}
+{"time":"2024-05-22T17:52:09+03:00","message":"31f94770-c23b-45cc-9c7e-8eb64d5c230c:success_request:[CreateProject]"}
+{"time":"2024-05-22T17:52:12+03:00","message":"31f94770-c23b-45cc-9c7e-8eb64d5c230c:success_request:[CreateProject]"}
+{"time":"2024-05-22T17:52:17+03:00","message":"31f94770-c23b-45cc-9c7e-8eb64d5c230c:success_request:[CreateProject]"}
+{"time":"2024-05-22T17:52:28+03:00","message":"31f94770-c23b-45cc-9c7e-8eb64d5c230c:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-22T18:03:42+03:00","message":"service:error:[app.Init]: can't initialize application: [redis.Init] dial tcp 127.0.0.1:6379: connect: connection refused\n"}
+{"level":"error","time":"2024-05-22T18:05:53+03:00","message":"service:error:[app.Init]: can't initialize application: [redis.Init] dial tcp [::1]:6379: connect: connection refused\n"}
+{"level":"error","time":"2024-05-22T18:06:49+03:00","message":"CheckSubscription:error:can't get key from redis"}
+{"level":"error","time":"2024-05-22T18:09:06+03:00","message":"service:error:[app.Init]: can't initialize application: [redis.Init] dial tcp 127.0.0.1:6379: connect: connection refused\n"}
+{"level":"error","time":"2024-05-22T18:12:55+03:00","message":"service:error:[app.Init]: can't initialize application: [redis.Init] dial tcp 127.0.0.1:6379: connect: connection refused\n"}
+{"level":"error","time":"2024-05-22T18:13:40+03:00","message":"service:error:[app.Init]: can't initialize application: [redis.Init] dial tcp [::1]:6379: connect: connection refused\n"}
+{"time":"2024-05-22T18:14:36+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:success_request:successfuly signed up"}
+{"level":"error","time":"2024-05-22T18:14:46+03:00","message":"CheckSubscription:error:can't get key from redis"}
+{"level":"error","time":"2024-05-22T18:17:49+03:00","message":"service:error:[app.Init]: can't initialize application: [redis.Init] dial tcp [::1]:6379: connect: connection refused\n"}
+{"time":"2024-05-22T18:17:53+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:success_request:successfuly signed up"}
+{"time":"2024-05-22T18:18:01+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-22T18:18:01+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-22T18:18:07+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-22T18:18:07+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-22T18:18:12+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-22T18:18:12+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-22T18:18:15+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-22T18:18:15+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-22T18:18:18+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-22T18:18:18+03:00","message":"CheckSubscription:error:subscription expired"}
+{"level":"error","time":"2024-05-22T18:18:23+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:error:[CreateProject]:you already in 5 projects you need to upgrade your account status"}
+{"level":"error","time":"2024-05-22T18:18:23+03:00","message":"CheckSubscription:error:subscription expired"}
+{"level":"error","time":"2024-05-22T18:19:16+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:error:[db.GetProjectById] [*pgxpool.Pool.QueryRow] Can't exec query: ERROR: invalid input syntax for type uuid: \"\" (SQLSTATE 22P02)"}
+{"level":"error","time":"2024-05-22T18:19:16+03:00","message":"CheckSubscription:error:subscription expired"}
+{"level":"error","time":"2024-05-22T18:21:11+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:error:[db.GetProjectById] [*pgxpool.Pool.QueryRow] Can't exec query: ERROR: invalid input syntax for type uuid: \"\" (SQLSTATE 22P02)"}
+{"level":"error","time":"2024-05-22T18:21:11+03:00","message":"CheckSubscription:error:subscription expired"}
+{"level":"error","time":"2024-05-22T18:29:25+03:00","message":"service:error:[app.Init]: can't initialize application: [redis.Init] dial tcp 127.0.0.1:6379: connect: connection refused\n"}
+{"level":"error","time":"2024-05-22T18:31:07+03:00","message":"service:error:[app.Init]: can't initialize application: [redis.Init] dial tcp 127.0.0.1:6379: connect: connection refused\n"}
+{"level":"error","time":"2024-05-22T18:32:08+03:00","message":"service:error:[app.Init]: can't initialize application: [redis.Init] dial tcp [::1]:6379: connect: connection refused\n"}
+{"time":"2024-05-22T18:32:16+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:success_request:successfuly signed up"}
+{"level":"error","time":"2024-05-22T18:32:23+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:error:[GetSubscription][repo.GetCustomerStatus]: [pgxpool.Pool.QueryRow] no such customer no rows in result set"}
+{"level":"error","time":"2024-05-22T18:32:34+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:error:[GetSubscription][repo.GetCustomerStatus]: [pgxpool.Pool.QueryRow] no such customer no rows in result set"}
+{"level":"error","time":"2024-05-22T18:34:01+03:00","message":"service:error:[app.Init]: can't initialize application: [redis.Init] dial tcp [::1]:6379: connect: connection refused\n"}
+{"time":"2024-05-22T18:34:06+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:success_request:successfuly signed up"}
+{"level":"error","time":"2024-05-22T18:34:12+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:error:[GetSubscription][repo.GetCustomerStatus]: [pgxpool.Pool.QueryRow]can't exec query can't scan into dest[7]: cannot scan NULL into *time.Time"}
+{"level":"error","time":"2024-05-22T18:36:55+03:00","message":"service:error:[app.Init]: can't initialize application: [redis.Init] dial tcp [::1]:6379: connect: connection refused\n"}
+{"time":"2024-05-22T18:38:33+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:success_request:successfuly signed up"}
+{"time":"2024-05-22T18:40:55+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:success_request:successfuly signed up"}
+{"level":"error","time":"2024-05-22T18:41:29+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-22T18:41:29+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-22T18:41:51+03:00","message":"CheckSubscription:error:subscription expired"}
+{"level":"error","time":"2024-05-22T18:41:51+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:error:[CreateProject]:such project already exists"}
+{"level":"error","time":"2024-05-22T18:41:58+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-22T18:41:58+03:00","message":"fe33c20d-405f-4920-909c-4bd84edff817:success_request:[CreateProject]"}
+{"time":"2024-05-22T21:47:54+03:00","message":"[Authentification]:success_request:signed up"}
+{"time":"2024-05-22T21:49:26+03:00","message":"[Authentification]:success_request:logout successfully"}
+{"time":"2024-05-22T21:50:39+03:00","message":"107b141c-4f51-4292-8362-826ef184db97:success_request:successfuly signed up"}
+{"level":"error","time":"2024-05-22T21:50:44+03:00","message":"[Authentification]:error:[Login][repo.GetCustomerByCredentials]: [CompareHashAndPassword] mismatch hash and password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"time":"2024-05-22T21:50:49+03:00","message":"107b141c-4f51-4292-8362-826ef184db97:success_request:successfuly signed up"}
+{"level":"error","time":"2024-05-22T21:51:27+03:00","message":"CheckSubscription:error:can't get cumtomer data"}
+{"time":"2024-05-22T21:56:11+03:00","message":"107b141c-4f51-4292-8362-826ef184db97:success_request:successfuly signed up"}
+{"level":"error","time":"2024-05-22T21:56:25+03:00","message":"CheckSubscription:error:can't get cumtomer data"}
+{"level":"error","time":"2024-05-22T21:56:27+03:00","message":"CheckSubscription:error:can't get cumtomer data"}
+{"level":"error","time":"2024-05-22T21:56:28+03:00","message":"CheckSubscription:error:can't get cumtomer data"}
+{"time":"2024-05-22T21:58:57+03:00","message":"[Authentification]:success_request:signed up"}
+{"level":"error","time":"2024-05-22T21:59:06+03:00","message":"CheckSubscription:error:can't get customer data [pgxpool.Pool.QueryRow]can't exec query can't scan into dest[7]: cannot scan NULL into *time.Time"}
+{"time":"2024-05-22T22:10:44+03:00","message":"d6ee92eb-f684-4111-ae64-d49c21dcc348:success_request:successfuly signed up"}
+{"level":"error","time":"2024-05-22T22:10:57+03:00","message":"CheckSubscription:error:can't get customer data [pgxpool.Pool.QueryRow]can't exec query can't scan into dest[7]: cannot scan NULL into *time.Time"}
+{"time":"2024-05-22T22:11:24+03:00","message":"[Authentification]:success_request:signed up"}
+{"level":"error","time":"2024-05-22T22:11:31+03:00","message":"CheckSubscription:error:can't get customer data [pgxpool.Pool.QueryRow]can't exec query can't scan into dest[7]: cannot scan NULL into *time.Time"}
+{"time":"2024-05-22T22:31:42+03:00","message":"[Authentification]:success_request:signed up"}
+{"time":"2024-05-22T22:32:02+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:subscription active"}
+{"time":"2024-05-22T22:32:02+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:32:08+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:subscription active"}
+{"time":"2024-05-22T22:32:08+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:32:11+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:subscription active"}
+{"time":"2024-05-22T22:32:11+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:32:13+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:subscription active"}
+{"time":"2024-05-22T22:32:13+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:32:16+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:subscription active"}
+{"level":"error","time":"2024-05-22T22:32:16+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:error:[CreateProject]:such project already exists"}
+{"time":"2024-05-22T22:32:20+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:subscription active"}
+{"time":"2024-05-22T22:32:20+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:32:27+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:subscription active"}
+{"time":"2024-05-22T22:32:27+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:32:33+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:subscription active"}
+{"time":"2024-05-22T22:32:33+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:32:41+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:subscription active"}
+{"time":"2024-05-22T22:32:41+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:34:20+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:subscription active"}
+{"level":"error","time":"2024-05-22T22:34:20+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:error:[CreateProject]:such project already exists"}
+{"time":"2024-05-22T22:34:24+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:subscription active"}
+{"time":"2024-05-22T22:34:24+03:00","message":"474e2c6c-04c7-4955-9a70-cafbceb5171d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:37:53+03:00","message":"[Authentification]:success_request:signed up"}
+{"time":"2024-05-22T22:38:07+03:00","message":"9922e764-c28c-4bde-a91c-736f9e24891d:success_request:subscription active"}
+{"time":"2024-05-22T22:38:07+03:00","message":"9922e764-c28c-4bde-a91c-736f9e24891d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:40:27+03:00","message":"[Authentification]:success_request:signed up"}
+{"time":"2024-05-22T22:40:49+03:00","message":"2d4cc333-1c23-469c-a71c-0416a5ca357d:success_request:subscription active"}
+{"time":"2024-05-22T22:40:49+03:00","message":"2d4cc333-1c23-469c-a71c-0416a5ca357d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:44:30+03:00","message":"2d4cc333-1c23-469c-a71c-0416a5ca357d:success_request:successfuly signed up"}
+{"time":"2024-05-22T22:44:40+03:00","message":"CheckSubscription:success_request:subscription status for customer 2d4cc333-1c23-469c-a71c-0416a5ca357d: true"}
+{"level":"error","time":"2024-05-22T22:44:40+03:00","message":"2d4cc333-1c23-469c-a71c-0416a5ca357d:error:[CreateProject]:such project already exists"}
+{"time":"2024-05-22T22:44:47+03:00","message":"2d4cc333-1c23-469c-a71c-0416a5ca357d:success_request:subscription status from redis: active"}
+{"time":"2024-05-22T22:44:47+03:00","message":"CheckSubscription:success_request:subscription status for customer 2d4cc333-1c23-469c-a71c-0416a5ca357d: true"}
+{"time":"2024-05-22T22:44:47+03:00","message":"2d4cc333-1c23-469c-a71c-0416a5ca357d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:44:56+03:00","message":"2d4cc333-1c23-469c-a71c-0416a5ca357d:success_request:subscription status from redis: active"}
+{"time":"2024-05-22T22:44:56+03:00","message":"CheckSubscription:success_request:subscription status for customer 2d4cc333-1c23-469c-a71c-0416a5ca357d: true"}
+{"time":"2024-05-22T22:44:56+03:00","message":"2d4cc333-1c23-469c-a71c-0416a5ca357d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:45:02+03:00","message":"2d4cc333-1c23-469c-a71c-0416a5ca357d:success_request:subscription status from redis: active"}
+{"time":"2024-05-22T22:45:02+03:00","message":"CheckSubscription:success_request:subscription status for customer 2d4cc333-1c23-469c-a71c-0416a5ca357d: true"}
+{"time":"2024-05-22T22:45:02+03:00","message":"2d4cc333-1c23-469c-a71c-0416a5ca357d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:45:05+03:00","message":"2d4cc333-1c23-469c-a71c-0416a5ca357d:success_request:subscription status from redis: active"}
+{"time":"2024-05-22T22:45:05+03:00","message":"CheckSubscription:success_request:subscription status for customer 2d4cc333-1c23-469c-a71c-0416a5ca357d: true"}
+{"time":"2024-05-22T22:45:05+03:00","message":"2d4cc333-1c23-469c-a71c-0416a5ca357d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:45:08+03:00","message":"2d4cc333-1c23-469c-a71c-0416a5ca357d:success_request:subscription status from redis: active"}
+{"time":"2024-05-22T22:45:08+03:00","message":"CheckSubscription:success_request:subscription status for customer 2d4cc333-1c23-469c-a71c-0416a5ca357d: true"}
+{"time":"2024-05-22T22:45:08+03:00","message":"2d4cc333-1c23-469c-a71c-0416a5ca357d:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:46:08+03:00","message":"[Authentification]:success_request:signed up"}
+{"time":"2024-05-22T22:46:20+03:00","message":"CheckSubscription:success_request:subscription status for customer 5b243233-3187-473a-82b9-2065a669ad6f: true"}
+{"time":"2024-05-22T22:46:20+03:00","message":"5b243233-3187-473a-82b9-2065a669ad6f:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:46:25+03:00","message":"5b243233-3187-473a-82b9-2065a669ad6f:success_request:subscription status from redis: active"}
+{"time":"2024-05-22T22:46:25+03:00","message":"CheckSubscription:success_request:subscription status for customer 5b243233-3187-473a-82b9-2065a669ad6f: true"}
+{"time":"2024-05-22T22:46:25+03:00","message":"5b243233-3187-473a-82b9-2065a669ad6f:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:46:29+03:00","message":"5b243233-3187-473a-82b9-2065a669ad6f:success_request:subscription status from redis: active"}
+{"time":"2024-05-22T22:46:29+03:00","message":"CheckSubscription:success_request:subscription status for customer 5b243233-3187-473a-82b9-2065a669ad6f: true"}
+{"time":"2024-05-22T22:46:29+03:00","message":"5b243233-3187-473a-82b9-2065a669ad6f:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:46:32+03:00","message":"5b243233-3187-473a-82b9-2065a669ad6f:success_request:subscription status from redis: active"}
+{"time":"2024-05-22T22:46:32+03:00","message":"CheckSubscription:success_request:subscription status for customer 5b243233-3187-473a-82b9-2065a669ad6f: true"}
+{"time":"2024-05-22T22:46:32+03:00","message":"5b243233-3187-473a-82b9-2065a669ad6f:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:46:35+03:00","message":"5b243233-3187-473a-82b9-2065a669ad6f:success_request:subscription status from redis: active"}
+{"time":"2024-05-22T22:46:35+03:00","message":"CheckSubscription:success_request:subscription status for customer 5b243233-3187-473a-82b9-2065a669ad6f: true"}
+{"time":"2024-05-22T22:46:35+03:00","message":"5b243233-3187-473a-82b9-2065a669ad6f:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:46:37+03:00","message":"5b243233-3187-473a-82b9-2065a669ad6f:success_request:subscription status from redis: active"}
+{"time":"2024-05-22T22:46:37+03:00","message":"CheckSubscription:success_request:subscription status for customer 5b243233-3187-473a-82b9-2065a669ad6f: true"}
+{"time":"2024-05-22T22:46:37+03:00","message":"5b243233-3187-473a-82b9-2065a669ad6f:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:49:25+03:00","message":"[Authentification]:success_request:signed up"}
+{"time":"2024-05-22T22:49:38+03:00","message":"CheckSubscription:success_request:subscription status for customer b0bf1096-1afd-4d59-8513-4fbf94f2eb23: true"}
+{"time":"2024-05-22T22:49:38+03:00","message":"b0bf1096-1afd-4d59-8513-4fbf94f2eb23:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:52:55+03:00","message":"[Authentification]:success_request:signed up"}
+{"time":"2024-05-22T22:53:05+03:00","message":"CheckSubscription:success_request:subscription status for customer fc99c510-9844-4a9b-b66f-d59e04b1cd9a: true"}
+{"time":"2024-05-22T22:53:05+03:00","message":"fc99c510-9844-4a9b-b66f-d59e04b1cd9a:success_request:[CreateProject]"}
+{"time":"2024-05-22T22:56:51+03:00","message":"[Authentification]:success_request:signed up"}
+{"level":"error","time":"2024-05-22T22:56:59+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-22T22:56:59+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-22T22:57:22+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-22T22:57:22+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-22T22:57:27+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-22T22:57:27+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-22T22:57:30+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-22T22:57:30+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-22T22:57:32+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-22T22:57:32+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-22T22:57:36+03:00","message":"CheckSubscription:error:subscription expired"}
+{"level":"error","time":"2024-05-22T22:57:36+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:error:[CreateProject]:you already in 5 projects you need to upgrade your account status"}
+{"level":"error","time":"2024-05-22T22:58:42+03:00","message":":error:[GetProjects][repo.GetProjects]:[pgx.Rows.Err] Error occured when iterating data: ERROR: invalid input syntax for type uuid: \"\" (SQLSTATE 22P02)"}
+{"level":"error","time":"2024-05-22T22:58:55+03:00","message":":error:[GetProjects][repo.GetProjects]:[pgx.Rows.Err] Error occured when iterating data: ERROR: invalid input syntax for type uuid: \"\" (SQLSTATE 22P02)"}
+{"time":"2024-05-22T23:01:33+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:successfuly signed up"}
+{"time":"2024-05-22T23:01:43+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[GetProjects]"}
+{"time":"2024-05-22T23:04:41+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[GetProjectInfo]"}
+{"time":"2024-05-22T23:13:11+03:00","message":"[Authentification]:success_request:signed up"}
+{"level":"error","time":"2024-05-22T23:16:36+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:error:[db.GetProjectById] [*pgxpool.Pool.QueryRow] Can't exec query: no rows in result set"}
+{"level":"error","time":"2024-05-22T23:16:55+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:error:[AddParticipant][repo.GetParticipant]: [pgxpool.Pool.QueryRow] Can't exec query number of field descriptions must equal number of destinations, got 8 and 7"}
+{"time":"2024-05-22T23:20:27+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:successfuly signed up"}
+{"level":"error","time":"2024-05-22T23:20:40+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:error:[AddParticipant][repo.CheckParticipants]: such participant already in this project"}
+{"level":"error","time":"2024-05-22T23:20:50+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:error:[AddParticipant][repo.CreateParticipant]: [pgxpool.Pool.Exec] Can't exec query ERROR: insert or update on table \"project_access\" violates foreign key constraint \"project_access_customer_id_fkey\" (SQLSTATE 23503)"}
+{"level":"error","time":"2024-05-22T23:24:34+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:error:[DeleteParticipant][json.NewDecoder]: EOF"}
+{"time":"2024-05-22T23:25:27+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[DeleteParticipant]"}
+{"time":"2024-05-22T23:25:39+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[AddParticipant]"}
+{"time":"2024-05-22T23:31:28+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[UpdateParticipantAccess]"}
+{"time":"2024-05-22T23:34:20+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[UpdateParticipantAccess]"}
+{"time":"2024-05-22T23:40:12+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:successfuly signed up"}
+{"time":"2024-05-22T23:40:24+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[UpdateParticipantAccess]"}
+{"time":"2024-05-22T23:40:33+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[UpdateParticipantAccess]"}
+{"time":"2024-05-22T23:40:43+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[UpdateParticipantAccess]"}
+{"level":"error","time":"2024-05-22T23:41:02+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:error:[UpdateParticipantAccess][CheckParticipant]: %!w(<nil>)"}
+{"time":"2024-05-22T23:41:44+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[DeleteParticipant]"}
+{"time":"2024-05-22T23:51:36+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[UpdateParticipantAccess]"}
+{"time":"2024-05-22T23:51:46+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[UpdateParticipantAccess]"}
+{"time":"2024-05-22T23:56:43+03:00","message":"d0a48727-45ed-4002-aaec-7894320575a1:success_request:successfuly signed up"}
+{"time":"2024-05-22T23:56:57+03:00","message":"d0a48727-45ed-4002-aaec-7894320575a1:success_request:[GetProjectInfo]"}
+{"level":"error","time":"2024-05-22T23:57:09+03:00","message":"d0a48727-45ed-4002-aaec-7894320575a1:error:[db.GetProjectById] [*pgxpool.Pool.QueryRow] Can't exec query: no rows in result set"}
+{"time":"2024-05-22T23:57:17+03:00","message":"d0a48727-45ed-4002-aaec-7894320575a1:success_request:[GetProjectInfo]"}
+{"level":"error","time":"2024-05-22T23:57:35+03:00","message":"d0a48727-45ed-4002-aaec-7894320575a1:error:customer don't have permission to work with project"}
+{"time":"2024-05-22T23:57:49+03:00","message":"d0a48727-45ed-4002-aaec-7894320575a1:success_request:[GetProjectInfo]"}
+{"time":"2024-05-23T00:00:13+03:00","message":"d0a48727-45ed-4002-aaec-7894320575a1:success_request:[GetProjects]"}
+{"level":"error","time":"2024-05-23T00:01:09+03:00","message":"d0a48727-45ed-4002-aaec-7894320575a1:error:customer don't have permission to work with project"}
+{"time":"2024-05-23T00:02:14+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:successfuly signed up"}
+{"time":"2024-05-23T00:02:24+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[UpdateProjectName]"}
+{"time":"2024-05-23T00:02:41+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[UpdateProjectName]"}
+{"level":"error","time":"2024-05-23T00:02:48+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:error:[UpdateProjectName][repo.GetProjectByName]:such project alredy exist"}
+{"time":"2024-05-23T00:02:52+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[UpdateProjectName]"}
+{"time":"2024-05-23T00:03:07+03:00","message":"d0a48727-45ed-4002-aaec-7894320575a1:success_request:successfuly signed up"}
+{"level":"error","time":"2024-05-23T00:03:46+03:00","message":"d0a48727-45ed-4002-aaec-7894320575a1:error:customer don't have permission to work with project"}
+{"time":"2024-05-23T00:04:06+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:successfuly signed up"}
+{"time":"2024-05-23T00:04:12+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[DeleteProject]"}
+{"level":"error","time":"2024-05-23T00:06:43+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-23T00:06:43+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[UploadFile]"}
+{"time":"2024-05-23T00:07:36+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[AddParticipant]"}
+{"time":"2024-05-23T00:08:20+03:00","message":"d0a48727-45ed-4002-aaec-7894320575a1:success_request:successfuly signed up"}
+{"time":"2024-05-23T00:09:21+03:00","message":"d0a48727-45ed-4002-aaec-7894320575a1:success_request:[GetProjectInfo]"}
+{"level":"error","time":"2024-05-23T00:11:29+03:00","message":"d0a48727-45ed-4002-aaec-7894320575a1:error:customer don't have permission to work with project"}
+{"time":"2024-05-23T00:11:36+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:successfuly signed up"}
+{"time":"2024-05-23T00:11:51+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[DeleteFile]"}
+{"level":"error","time":"2024-05-23T00:14:15+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-23T00:14:15+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[UploadFile]"}
+{"time":"2024-05-23T00:16:01+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:successfuly signed up"}
+{"time":"2024-05-23T00:16:39+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[CreateNote]"}
+{"time":"2024-05-23T00:35:42+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:successfuly signed up"}
+{"time":"2024-05-23T00:36:44+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[UpdateNoteDeadline]"}
+{"time":"2024-05-23T00:39:04+03:00","message":"cefdafb2-b511-4640-9460-562fbb6e6723:success_request:[DeleteNote]"}
+{"level":"error","time":"2024-05-23T00:41:18+03:00","message":"620ec85c-baab-4569-a0a2-e1171f54f641:error:[GetAllUnattachedProjects]"}
+{"level":"error","time":"2024-05-23T00:41:33+03:00","message":"620ec85c-baab-4569-a0a2-e1171f54f641:error:[AttachAdmin]"}
+{"level":"error","time":"2024-05-23T00:41:40+03:00","message":"620ec85c-baab-4569-a0a2-e1171f54f641:error:[GetAllAttachedProjects]"}
+{"level":"error","time":"2024-05-23T00:41:52+03:00","message":"620ec85c-baab-4569-a0a2-e1171f54f641:error:[AttachAdmin]"}
+{"level":"error","time":"2024-05-23T00:42:48+03:00","message":"BasicAuthMiddleware:error:[crypt.HashPassword]: bad authorize password crypto/bcrypt: hashedPassword is not the hash of the given password"}
+{"level":"error","time":"2024-05-23T00:44:06+03:00","message":"620ec85c-baab-4569-a0a2-e1171f54f641:error:[GetCustomerEmail]"}
+{"level":"error","time":"2024-05-23T00:44:12+03:00","message":"620ec85c-baab-4569-a0a2-e1171f54f641:error:[GetAllUnattachedProjects]"}
+{"level":"error","time":"2024-05-23T00:44:22+03:00","message":"620ec85c-baab-4569-a0a2-e1171f54f641:error:[GetAllAttachedProjects]"}
+{"level":"error","time":"2024-05-23T00:44:27+03:00","message":"620ec85c-baab-4569-a0a2-e1171f54f641:error:[GetCustomerEmail]"}

@@ -5,11 +5,68 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v8"
+	"github.com/jackc/pgx/v5"
+	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 	"golang.org/x/crypto/bcrypt"
 )
+
+// CheckSubscription промежуточное ПО для проверки есть ли у клиента подписка
+func (a *Application) CheckSubscription() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		customerId := c.GetString("customer_id")
+		redisKey := fmt.Sprintf("subscription:%s", customerId)
+		var isSubscription bool
+
+		subscriptionStatus, err := a.redis.Get(a.ctx, redisKey).Result()
+		if err == redis.Nil {
+			var customer ds.Customer
+			customer, err = a.repo.GetCustomerById(customerId)
+			if err != nil {
+				if err == pgx.ErrNoRows {
+					newErrorResponse(c, http.StatusBadRequest, "no such customer")
+					a.Log("no such customer", "CheckSubscription")
+					return
+				} else {
+					newErrorResponse(c, http.StatusInternalServerError, "can't parse your query")
+					a.Log(fmt.Sprintf("can't get customer data %s", err.Error()), "CheckSubscription")
+					return
+				}
+			}
+
+			if time.Now().Add(+3 * time.Hour).After(customer.SubscriptionEnd) {
+				a.Log("subscription expired", "CheckSubscription")
+				isSubscription = false
+				fmt.Println("IMHERE - No Subscription")
+				c.Set("isSubscription", isSubscription)
+				c.Next()
+				return
+			}
+
+			// Обновляем Redis запись, если подписка еще действительна
+			if err := a.redis.Set(a.ctx, redisKey, "active", time.Until(customer.SubscriptionEnd)).Err(); err != nil {
+				newErrorResponse(c, http.StatusInternalServerError, "can't exec query in subscription database")
+				a.Log("can't set key into redis", "CheckSubscription")
+				return
+			}
+			isSubscription = true
+		} else if err != nil {
+			a.SuccessLog("error fetching subscription from redis", customerId)
+			isSubscription = false
+		} else {
+			a.SuccessLog("subscription status from redis: "+subscriptionStatus, customerId)
+			isSubscription = subscriptionStatus == "active"
+		}
+
+		a.SuccessLog(fmt.Sprintf("subscription status for customer %s: %v", customerId, isSubscription), "CheckSubscription")
+		c.Set("isSubscription", isSubscription)
+		c.Next()
+	}
+}
 
 // BasicAuthMiddleware промежуточное ПО для проверки является ли отправитель администратором
 func (a *Application) BasicAuthMiddleware() gin.HandlerFunc {
@@ -92,8 +149,8 @@ func (a *Application) FullAccessControl() gin.HandlerFunc {
 		b, err := a.repo.AccessControl(customerId, projectId, 1)
 		if !b {
 			if err == nil {
-				newErrorResponse(c, http.StatusForbidden, "you don't have permission to work with that project")
-				a.Log("customer don't have permission to work with project", customerId)
+				newErrorResponse(c, http.StatusForbidden, "you don't have permission to edit that project")
+				a.Log("customer don't have permission to edit with project", customerId)
 				return
 			} else {
 				newErrorResponse(c, http.StatusInternalServerError, "database can't parse you query")
@@ -174,6 +231,14 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		// Парсим токен и получаем id клиента
+		customerId, err := getJWTClaims(tokenString)
+		if err != nil {
+			newErrorResponse(c, http.StatusForbidden, "can't parse JWT token")
+			return
+		}
+
+		c.Set("customer_id", customerId)
 		// Продолжаем выполнение запроса
 		c.Next()
 	}

@@ -948,3 +948,198 @@
 {"time":"2024-05-21T12:40:00+03:00","message":"[1min]messages sent"}
 {"time":"2024-05-21T12:41:00+03:00","message":"[1min]messages sent"}
 {"time":"2024-05-21T12:42:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T14:42:00+03:00","message":"[1min]messages sent"}
+{"level":"error","time":"2024-05-22T17:51:00+03:00","message":"Error notifying upcoming deadlines: [pgxpool.Pool.Query] can't exec query: ERROR: relation \"note\" does not exist (SQLSTATE 42P01)"}
+{"time":"2024-05-22T17:51:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T17:52:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T17:53:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T17:54:00+03:00","message":"[1min]messages sent"}
+{"level":"error","time":"2024-05-22T18:06:00+03:00","message":"Error notifying upcoming deadlines: [pgxpool.Pool.Query] can't exec query: ERROR: relation \"note\" does not exist (SQLSTATE 42P01)"}
+{"time":"2024-05-22T18:06:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:07:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:08:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:14:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:15:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:16:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:18:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:19:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:20:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:21:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:22:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:23:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:24:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:25:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:26:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:27:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:33:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:35:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:36:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:37:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:39:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:41:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T18:42:00+03:00","message":"[1min]messages sent"}
+{"time":"2024-05-22T21:46:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T21:47:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T21:48:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T21:49:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T21:50:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T21:51:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T21:52:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T21:53:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T21:54:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T21:55:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T21:56:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T21:57:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T21:59:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:00:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:00:00+03:00","message":"[hourly]checked"}
+{"time":"2024-05-22T22:01:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:02:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:03:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:11:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:12:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:13:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:14:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:15:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:16:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:17:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:18:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:21:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:22:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:23:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:24:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:25:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:26:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:27:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:28:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:29:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:30:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:31:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:32:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:33:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:34:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:35:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:36:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:37:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:38:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:39:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:41:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:42:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:43:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:45:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:46:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:47:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:49:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:50:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:51:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:53:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:54:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:55:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:57:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:58:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T22:59:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:00:00+03:00","message":"[hourly]checked"}
+{"time":"2024-05-22T23:00:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:02:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:03:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:04:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:05:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:06:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:07:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:08:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:09:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:10:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:11:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:12:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:13:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:14:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:15:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:16:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:17:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:18:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:19:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:21:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:22:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:23:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:24:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:25:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:26:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:27:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:28:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:29:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:30:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:31:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:32:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:33:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:34:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:35:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:36:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:37:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:38:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:39:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:41:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:42:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:43:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:44:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:45:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:46:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:47:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:48:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:49:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:50:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:51:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:52:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:53:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:54:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:55:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:56:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:57:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:58:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-22T23:59:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:00:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:00:00+03:00","message":"[hourly]checked"}
+{"time":"2024-05-23T00:00:00+03:00","message":"[daily]checked"}
+{"time":"2024-05-23T00:01:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:02:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:03:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:04:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:05:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:06:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:07:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:08:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:09:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:10:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:11:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:12:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:13:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:14:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:15:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:16:00+03:00","message":"[1min]checked"}
+{"level":"error","time":"2024-05-23T00:17:00+03:00","message":"Error notifying upcoming deadlines: [NoteOverdue]: [pgxpool.Pool.QueryRow] Can't exec query number of field descriptions must equal number of destinations, got 8 and 7"}
+{"time":"2024-05-23T00:17:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:18:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:19:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:20:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:21:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:22:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:23:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:24:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:25:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:26:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:27:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:28:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:29:00+03:00","message":"[1min]checked"}
+{"level":"error","time":"2024-05-23T00:31:00+03:00","message":"Error notifying upcoming deadlines: [NoteOverdue]: [pgxpool.Pool.QueryRow] Can't exec query number of field descriptions must equal number of destinations, got 8 and 7"}
+{"time":"2024-05-23T00:31:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:32:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:35:01+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:36:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:37:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:38:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:39:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:40:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:41:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:42:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:43:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:44:00+03:00","message":"[1min]checked"}
+{"time":"2024-05-23T00:45:00+03:00","message":"[1min]checked"}

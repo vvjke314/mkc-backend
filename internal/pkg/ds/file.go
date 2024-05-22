@@ -11,7 +11,7 @@ type File struct {
 	ProjectId      uuid.UUID `json:"project_id"`
 	Filename       string    `json:"filename"`
 	Extension      string    `json:"extension"`
-	Size           int       `json:"size"`
+	Size           int64     `json:"size"`
 	FilePath       string    `json:"file_path"`
 	UpdateDatetime time.Time `json:"update_datetime"`
 }

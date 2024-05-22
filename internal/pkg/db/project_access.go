@@ -95,7 +95,7 @@ func (r *Repo) GetParticipants(projectId string) ([]ds.Customer, error) {
 	}
 
 	query = "SELECT * FROM customer WHERE id = $1"
-	err = r.pool.QueryRow(r.ctx, query, customer.Id.String()).Scan(&customer.Id, &customer.FirstName, &customer.SecondName, &customer.Login, &customer.Password, &customer.Email, &customer.Type)
+	err = r.pool.QueryRow(r.ctx, query, customer.Id.String()).Scan(&customer.Id, &customer.FirstName, &customer.SecondName, &customer.Login, &customer.Password, &customer.Email, &customer.Type, &customer.SubscriptionEnd)
 	if err != nil {
 		return nil, fmt.Errorf("[pgxpool.Pool.QueryRow] Can't exec query %w", err)
 	}
@@ -114,7 +114,7 @@ func (r *Repo) GetParticipants(projectId string) ([]ds.Customer, error) {
 
 	for rows.Next() {
 		var customer ds.Customer
-		err := rows.Scan(&customer.Id, &customer.FirstName, &customer.SecondName, &customer.Login, &customer.Password, &customer.Email, &customer.Type)
+		err := rows.Scan(&customer.Id, &customer.FirstName, &customer.SecondName, &customer.Login, &customer.Password, &customer.Email, &customer.Type, &customer.SubscriptionEnd)
 		if err != nil {
 			log.Fatalf("Scan error: %v\n", err)
 		}

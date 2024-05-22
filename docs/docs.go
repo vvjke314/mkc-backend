@@ -24,7 +24,7 @@ const docTemplate = `{
                         "BasicAuth": []
                     }
                 ],
-                "description": "Возравщает все проекты которые прикреплены к администратору",
+                "description": "Возвращает все проекты которые прикреплены к администратору",
                 "produces": [
                     "application/json"
                 ],
@@ -66,6 +66,15 @@ const docTemplate = `{
                     "administrator"
                 ],
                 "summary": "Прикрепляет администратора к проекту",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Уникальный идентификатор проекта",
+                        "name": "project_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -174,6 +183,15 @@ const docTemplate = `{
                     "administrator"
                 ],
                 "summary": "Получает электронную почту пользователя, владеющего проектом",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Уникальный идентификатор проекта",
+                        "name": "project_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -458,6 +476,37 @@ const docTemplate = `{
                 }
             }
         },
+        "/payment_url": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Возрващает Url для оплаты подписки",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subscription"
+                ],
+                "summary": "Возрващает Url для оплаты подписки",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/project": {
             "post": {
                 "security": [
@@ -492,6 +541,18 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/ds.Project"
                             }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
                         }
                     },
                     "500": {
@@ -599,7 +660,7 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "obejct"
+                            "$ref": "#/definitions/app.errorResponse"
                         }
                     },
                     "403": {
@@ -717,7 +778,7 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "obejct"
+                            "$ref": "#/definitions/app.errorResponse"
                         }
                     },
                     "403": {
@@ -770,7 +831,7 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "obejct"
+                            "$ref": "#/definitions/app.errorResponse"
                         }
                     },
                     "403": {
@@ -890,7 +951,7 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "obejct"
+                            "$ref": "#/definitions/app.errorResponse"
                         }
                     },
                     "403": {
@@ -978,14 +1039,14 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Создание заявки в проекте и добавление записи в БД",
+                "description": "Создание заметки в проекте и добавление записи в БД",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "note"
                 ],
-                "summary": "Создание заявки в проекте",
+                "summary": "Создание заметки в проекте",
                 "parameters": [
                     {
                         "description": "New project",
@@ -995,6 +1056,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/ds.CreateNoteReq"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Идентификатор проекта",
+                        "name": "project_id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1005,6 +1073,18 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/ds.Note"
                             }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
                         }
                     },
                     "500": {
@@ -1057,10 +1137,16 @@ const docTemplate = `{
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
-                            "type": "obejct"
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
                         }
                     },
                     "500": {
@@ -1114,7 +1200,7 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "obejct"
+                            "$ref": "#/definitions/app.errorResponse"
                         }
                     },
                     "403": {
@@ -1155,6 +1241,18 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/ds.Project"
                             }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
                         }
                     },
                     "500": {
@@ -1198,6 +1296,41 @@ const docTemplate = `{
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/app.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/subscription/{customer_id}": {
+            "get": {
+                "description": "Успешная оплата подписки и повышение статуса его личного аккаунта",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "subscription"
+                ],
+                "summary": "Получение подписки пользователем",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Уникальный идентификатор клиента",
+                        "name": "customer_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ds.Customer"
                         }
                     },
                     "500": {
@@ -1287,6 +1420,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "second_name": {
+                    "type": "string"
+                },
+                "subscription_end": {
                     "type": "string"
                 },
                 "type": {
@@ -1479,6 +1615,9 @@ const docTemplate = `{
         }
     },
     "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        },
         "BearerAuth": {
             "type": "apiKey",
             "name": "Authorization",

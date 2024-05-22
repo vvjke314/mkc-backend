@@ -121,8 +121,39 @@ func (r *Repo) GetProjectIdbyName(customerId, projectName string) (string, error
 		if err == pgx.ErrNoRows {
 			return "NaN", err
 		}
-		return "", fmt.Errorf("[*pgxpool.Pool.QueryRow] Can't exec query: %w", err)
+		return "", fmt.Errorf("[pgxpool.Pool.QueryRow] Can't exec query: %w", err)
 	}
 
 	return pId, err
+}
+
+// CheckProjectSize проверяем размер проекта при добавлении файлов
+func (r *Repo) CheckProjectSize(projectId string, addSize int64) (bool, error) {
+	p := &ds.Project{}
+	err := r.GetProjectById(projectId, p)
+	if err != nil {
+		return false, fmt.Errorf("[repo.GetProjectById]%w", err)
+	}
+	size, err := r.GetProjectSize(projectId)
+	if err != nil {
+		return false, fmt.Errorf("[repo.GetProjectSize]%w", err)
+	}
+	if size+addSize > p.Capacity {
+		return false, nil
+	}
+	return true, nil
+}
+
+// GetProjectSize получаем размер проекта
+func (r *Repo) GetProjectSize(projectId string) (int64, error) {
+	files, err := r.GetFiles(projectId)
+	if err != nil {
+		return 0, fmt.Errorf("[repo.GetFiles] can't exec query: %w", err)
+	}
+
+	var summSize int64
+	for _, file := range files {
+		summSize += int64(file.Size)
+	}
+	return summSize, nil
 }

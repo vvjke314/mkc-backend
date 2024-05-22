@@ -19,6 +19,7 @@ type Application interface {
 // @host			localhost:8080
 // @BasePath		/
 // @schemes http
+// @securityDefinitions.basic BasicAuth
 // @securityDefinitions.apikey	BearerAuth
 // @in							header
 // @name						Authorization

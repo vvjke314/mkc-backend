@@ -13,14 +13,17 @@ import (
 )
 
 // CreateNote создает заметку
-// @Summary      Создание заявки в проекте
-// @Description  Создание заявки в проекте и добавление записи в БД
+// @Summary      Создание заметки в проекте
+// @Description  Создание заметки в проекте и добавление записи в БД
 // @Tags         note
 // @Produce      json
 // @Security 	 BearerAuth
 // @Param data body ds.CreateNoteReq true "New project"
+// @Param project_id path string true "Идентификатор проекта"
 // @Success      200 {object} []ds.Note
 // @Failure 500 {object} errorResponse
+// @Failure 401 {object} errorResponse
+// @Failure 403 {object} errorResponse
 // @Router      /project/{project_id}/note [post]
 func (a *Application) CreateNote(c *gin.Context) {
 	customerId := c.GetString("customerId")
@@ -86,7 +89,7 @@ func (a *Application) CreateNote(c *gin.Context) {
 // @Param note_id path string true "Идентификатор заметки"
 // @Success 200 {object} []ds.Note
 // @Failure 500 {object} errorResponse
-// @Failure 401 {obejct} errorResponse
+// @Failure 401 {object} errorResponse
 // @Failure 403 {object} errorResponse
 // @Router /project/{project_id}/note/{note_id} [delete]
 func (a *Application) DeleteNote(c *gin.Context) {
@@ -140,7 +143,8 @@ func (a *Application) DeleteNote(c *gin.Context) {
 // @Param note_id path string true "Идентификатор заметки"
 // @Success 200 {object} []ds.Note
 // @Failure 500 {object} errorResponse
-// @Failure 400 {obejct} errorResponse
+// @Failure 401 {object} errorResponse
+// @Failure 403 {object} errorResponse
 // @Router /project/{project_id}/note/{note_id} [put]
 func (a *Application) UpdateNoteDeadline(c *gin.Context) {
 	projectId := c.GetString("projectId")

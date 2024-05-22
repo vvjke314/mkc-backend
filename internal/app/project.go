@@ -22,9 +22,11 @@ import (
 // @Security 	 BearerAuth
 // @Success      200 {object} []ds.Project
 // @Failure 500 {object} errorResponse
+// @Failure 401 {object} errorResponse
+// @Failure 403 {object} errorResponse
 // @Router      /projects [get]
 func (a *Application) GetProjects(c *gin.Context) {
-	customerId := c.GetString("customerId")
+	customerId := c.GetString("customer_id")
 
 	// Возвращаем все проекты в ответ на запрос
 	projects, err := a.repo.GetProjects(customerId)
@@ -48,6 +50,8 @@ func (a *Application) GetProjects(c *gin.Context) {
 // @Param data body ds.CreateProjectReq true "New project"
 // @Success      200 {object} []ds.Project
 // @Failure 500 {object} errorResponse
+// @Failure 401 {object} errorResponse
+// @Failure 403 {object} errorResponse
 // @Router      /project [post]
 func (a *Application) CreateProject(c *gin.Context) {
 	// Получаем JWT Токен
@@ -69,9 +73,26 @@ func (a *Application) CreateProject(c *gin.Context) {
 		return
 	}
 
+	// Проверяем проект на существование
 	if err = a.repo.GetProjectbyName(customerId, req.Name, &ds.Project{}); err == nil {
 		newErrorResponse(c, http.StatusBadRequest, "such project name already exists")
 		a.Log("[CreateProject]:such project already exists", customerId)
+		return
+	}
+
+	// Получаем все проекты
+	prjcts, err := a.repo.GetProjects(customerId)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, "database can't exec your query")
+		a.Log("[CreateProject]:such project already exists", customerId)
+		return
+	}
+
+	isSub := c.GetBool("isSubscription")
+	// Проверка на подписку
+	if !isSub && len(prjcts) >= 5 {
+		newErrorResponse(c, http.StatusForbidden, "you already in 5 projects you need to upgrade your account status")
+		a.Log("[CreateProject]:you already in 5 projects you need to upgrade your account status", customerId)
 		return
 	}
 
@@ -79,9 +100,14 @@ func (a *Application) CreateProject(c *gin.Context) {
 	project := ds.Project{
 		Id:           uuid.New(),
 		OwnerId:      uuid.MustParse(customerId),
-		Capacity:     0,
+		Capacity:     52428800,
 		Name:         req.Name,
 		CreationDate: time.Now(),
+	}
+
+	// Для пользователей с платной подпиской больше места для хранения данных
+	if isSub {
+		project.Capacity = 56000000
 	}
 
 	// Создаем папку проекта в нашем хранилище
@@ -125,7 +151,7 @@ func (a *Application) CreateProject(c *gin.Context) {
 // @Param data body ds.UpdateProjectNameReq true "New project name"
 // @Success      200 {object} []ds.Project
 // @Failure 500 {object} errorResponse
-// @Failure 401 {obejct} errorResponse
+// @Failure 401 {object} errorResponse
 // @Failure 403 {object} errorResponse
 // @Router      /project/{project_id} [put]
 func (a *Application) UpdateProjectName(c *gin.Context) {
@@ -256,7 +282,7 @@ func (a *Application) AddParticipant(c *gin.Context) {
 
 // UpdateParticipantAccess godoc
 // @Summary      Обновить доступ участнику проекта
-// @Description  Обновить доступ участнику проекта
+// @Description  Обновить доступ участнику проекта. В поле CustomerAccess вводить либо "полный" либо "просмотр"
 // @Tags         participants
 // @Produce      json
 // @Security 	 BearerAuth
@@ -312,9 +338,10 @@ func (a *Application) UpdateParticipantAccess(c *gin.Context) {
 		}
 		a.SuccessLog("[UpdateParticipantAccess]", customerId)
 		c.JSON(http.StatusOK, customers)
+		return
 	}
 
-	newErrorResponse(c, http.StatusBadRequest, err.Error())
+	newErrorResponse(c, http.StatusBadRequest, "no such customer in project check your data")
 	err = fmt.Errorf("[UpdateParticipantAccess][CheckParticipant]: %w", err)
 	a.Log(err.Error(), customerId)
 }

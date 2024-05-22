@@ -131,12 +131,6 @@ func (app *ApplicationTest) Run() error {
 		return fmt.Errorf("[db.SetAdministator]: Can't set administrator to project: %w", err)
 	}
 
-	// 7. Повышение статуса клиента
-	err = app.r.UpgradeCustomerStatus(customer.Id.String(), 1)
-	if err != nil {
-		return fmt.Errorf("[db.UpgradeCustomerStatus]: Can't upgrade user status: %w", err)
-	}
-
 	// 8. Удаление файла из проекта
 	file2 := ds.File{
 		Id:             uuid.New(),

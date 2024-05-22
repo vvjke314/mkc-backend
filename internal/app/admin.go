@@ -73,6 +73,7 @@ func (a *Application) SignUpAdmin(c *gin.Context) {
 // @Tags         administrator
 // @Produce      json
 // @Security 	 BasicAuth
+// @Param project_id path string true "Уникальный идентификатор проекта"
 // @Success      200 {object} successResponse
 // @Failure 500 {object} errorResponse
 // @Router      /admin/project/{project_id} [get]
@@ -120,7 +121,7 @@ func (a *Application) GetAllUnattachedProjects(c *gin.Context) {
 
 // GetAllAttachedProjects
 // @Summary      Все проекты которые прикреплены к администратору
-// @Description  Возравщает все проекты которые прикреплены к администратору
+// @Description  Возвращает все проекты которые прикреплены к администратору
 // @Tags         administrator
 // @Produce      json
 // @Security 	 BasicAuth
@@ -149,6 +150,7 @@ func (a *Application) GetAllAttachedProjects(c *gin.Context) {
 // @Tags         administrator
 // @Produce      json
 // @Security 	 BasicAuth
+// @Param project_id path string true "Уникальный идентификатор проекта"
 // @Success      200 {object} ds.GetCustomerEmailResponse
 // @Failure 500 {object} errorResponse
 // @Router      /admin/{project_id}/send [post]

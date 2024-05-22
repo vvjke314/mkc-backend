@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v8"
 	"github.com/rs/zerolog"
 	"github.com/vvjke314/mkc-backend/internal/pkg/db"
 )
@@ -14,6 +15,7 @@ type Application struct {
 	ctx    context.Context
 	repo   *db.Repo
 	logger zerolog.Logger
+	redis  *redis.Client
 }
 
 func NewApplication() *Application {
@@ -36,6 +38,17 @@ func (app *Application) Init() error {
 	err = app.repo.Init()
 	if err != nil {
 		return fmt.Errorf("[db.Init] %w", err)
+	}
+	app.redis = redis.NewClient(&redis.Options{
+		Addr:     "redis:6379",
+		Password: "",
+		DB:       0,
+	})
+
+	str, err := app.redis.Ping(app.ctx).Result()
+	fmt.Println(str)
+	if err != nil {
+		return fmt.Errorf("[redis.Init] %w", err)
 	}
 	return nil
 }
@@ -63,46 +76,51 @@ func (app *Application) Run() error {
 	r.Use(CORSMiddleware())
 
 	// authorize
-	r.POST("/login", app.Login)
-	r.POST("/signup", app.Signup)
+	r.POST("/login", app.Login)   // +
+	r.POST("/signup", app.Signup) // +
 
 	// administrator
 	administrator := r.Group("/admin")
-	administrator.POST("/signup", app.SignUpAdmin)
-	administrator.Use(app.BasicAuthMiddleware())
-	administrator.GET("/unattached", app.GetAllUnattachedProjects)
-	administrator.GET("/attached", app.GetAllAttachedProjects)
-	administrator.GET("/attach/:project_id", app.AttachAdmin)
-	administrator.POST("/:project_id/send", app.GetCustomerEmail)
+	administrator.POST("/signup", app.SignUpAdmin)                 // +-
+	administrator.Use(app.BasicAuthMiddleware())                   //
+	administrator.GET("/unattached", app.GetAllUnattachedProjects) // +
+	administrator.GET("/attached", app.GetAllAttachedProjects)     // +-
+	administrator.GET("/attach/:project_id", app.AttachAdmin)      // +
+	administrator.POST("/:project_id/send", app.GetCustomerEmail)  // +-
+
+	r.GET("/subscription/:customer_id", app.GetSubscription) //
 
 	authorized := r.Group("/")
 
 	authorized.Use(AuthMiddleware())
 	{
-		authorized.GET("/logout", app.Logout)
+		authorized.GET("/logout", app.Logout) // +
+
+		// subscription
+		authorized.GET("/payment_info", app.GetPaymentUrl) //
 
 		// project
-		authorized.GET("/projects", app.GetProjects)
-		authorized.POST("/project", app.CreateProject)
-		authorized.Use(app.AccessControl()).GET("/project/:project_id", app.GetProjectInfo)
-		authorized.Use(app.FullAccessControl()).PUT("/project/:project_id", app.UpdateProjectName)
-		authorized.Use(app.FullAccessControl()).DELETE("/project/:project_id", app.DeleteProject)
+		authorized.GET("/projects", app.GetProjects)                                           // +
+		authorized.POST("/project", app.CheckSubscription(), app.CreateProject)                // +
+		authorized.GET("/project/:project_id", app.AccessControl(), app.GetProjectInfo)        // +
+		authorized.PUT("/project/:project_id", app.FullAccessControl(), app.UpdateProjectName) // +
+		authorized.DELETE("/project/:project_id", app.FullAccessControl(), app.DeleteProject)  // +
 
 		// file
-		authorized.Use(app.FullAccessControl()).POST("/project/:project_id/file", app.UploadFile)
-		authorized.Use(app.FullAccessControl()).POST("/project/:project_id/files", app.UploadFiles)
-		authorized.Use(app.FullAccessControl()).DELETE("/project/:project_id/file", app.DeleteFile)
-		authorized.Use(app.AccessControl()).GET("/project/:project_id/file/:file_id", app.DownloadFile)
+		authorized.POST("/project/:project_id/file", app.FullAccessControl(), app.CheckSubscription(), app.UploadFile)   // +
+		authorized.POST("/project/:project_id/files", app.FullAccessControl(), app.CheckSubscription(), app.UploadFiles) // +
+		authorized.DELETE("/project/:project_id/file", app.FullAccessControl(), app.DeleteFile)                          // +
+		authorized.GET("/project/:project_id/file/:file_id", app.AccessControl(), app.DownloadFile)                      // +
 
 		// note
-		authorized.Use(app.FullAccessControl()).POST("/project/:project_id/note", app.CreateNote)
-		authorized.Use(app.FullAccessControl()).PUT("/project/:project_id/note/:note_id", app.UpdateNoteDeadline)
-		authorized.Use(app.FullAccessControl()).DELETE("/project/:project_id/note/:note_id", app.DeleteNote)
+		authorized.POST("/project/:project_id/note", app.FullAccessControl(), app.CreateNote)                 // +
+		authorized.PUT("/project/:project_id/note/:note_id", app.FullAccessControl(), app.UpdateNoteDeadline) // +-
+		authorized.DELETE("/project/:project_id/note/:note_id", app.FullAccessControl(), app.DeleteNote)      // +
 
 		// participants
-		authorized.Use(app.FullAccessControl()).POST("/participants/:project_id", app.AddParticipant)
-		authorized.Use(app.FullAccessControl()).PUT("/participants/:project_id", app.UpdateParticipantAccess)
-		authorized.Use(app.FullAccessControl()).DELETE("/participants/:project_id", app.DeleteParticipant)
+		authorized.POST("/participants/:project_id", app.FullAccessControl(), app.AddParticipant)         // +
+		authorized.PUT("/participants/:project_id", app.FullAccessControl(), app.UpdateParticipantAccess) // +-
+		authorized.DELETE("/participants/:project_id", app.FullAccessControl(), app.DeleteParticipant)    // +-
 	}
 
 	r.Run()
