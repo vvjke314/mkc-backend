@@ -128,6 +128,7 @@ func (app *Application) Run() error {
 		authorized.POST("/participants/:project_id", app.FullAccessControl(), app.AddParticipant)         // +
 		authorized.PUT("/participants/:project_id", app.FullAccessControl(), app.UpdateParticipantAccess) // +-
 		authorized.DELETE("/participants/:project_id", app.FullAccessControl(), app.DeleteParticipant)    // +-
+		authorized.GET("/participants/:project_id", app.AccessControl(), app.GetAllParticipants)          // +
 	}
 
 	r.Run()

@@ -248,3 +248,31 @@ func (a *Application) DeleteParticipant(c *gin.Context) {
 	a.SuccessLog("[DeleteParticipant]", customerId)
 	c.JSON(http.StatusOK, customers)
 }
+
+// GetAllParticipants godoc
+// @Summary      показать всех участников проекта
+// @Description  показать всех участников проекта, включая его создателя
+// @Tags         participants
+// @Produce      json
+// @Security 	 BearerAuth
+// @Param project_id path string true "Project ID"
+// @Success      200 {object} []ds.Customer
+// @Failure 500 {object} errorResponse
+// @Failure 403 {object} errorResponse
+// @Failure 401 {object} errorResponse
+// @Router      /participants/{project_id} [get]
+func (a *Application) GetAllParticipants(c *gin.Context) {
+	customerId := c.GetString("customerId")
+
+	// Получаем всех участников проекта
+	customers, err := a.repo.GetParticipants(c.Param("project_id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "Can't add participant")
+		err = fmt.Errorf("[GetAllParticipants][repo.GetParticipant]: %w", err)
+		a.Log(err.Error(), customerId)
+		return
+	}
+
+	a.SuccessLog("[GetAllParticipants]", customerId)
+	c.JSON(http.StatusOK, customers)
+}

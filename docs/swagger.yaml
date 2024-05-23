@@ -404,6 +404,40 @@ paths:
       summary: Убрать участника из проекта
       tags:
       - participants
+    get:
+      description: показать всех участников проекта, включая его создателя
+      parameters:
+      - description: Project ID
+        in: path
+        name: project_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Customer'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: показать всех участников проекта
+      tags:
+      - participants
     post:
       description: Добавляет участника в проект
       parameters:
