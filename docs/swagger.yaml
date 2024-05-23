@@ -166,6 +166,11 @@ definitions:
       second_name:
         type: string
     type: object
+  ds.UpdateNoteDeadlineReq:
+    properties:
+      deadline:
+        type: string
+    type: object
   ds.UpdateParticipantAccessReq:
     properties:
       customer_access:
@@ -215,28 +220,7 @@ paths:
       summary: Получает электронную почту пользователя, владеющего проектом
       tags:
       - administrator
-  /admin/attached:
-    get:
-      description: Возвращает все проекты которые прикреплены к администратору
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/ds.Project'
-            type: array
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/app.errorResponse'
-      security:
-      - BasicAuth: []
-      summary: Все проекты которые прикреплены к администратору
-      tags:
-      - administrator
-  /admin/project/{project_id}:
+  /admin/attach/{project_id}:
     get:
       description: Прикрепляет администратора к выбраному проекту
       parameters:
@@ -261,6 +245,27 @@ paths:
       security:
       - BasicAuth: []
       summary: Прикрепляет администратора к проекту
+      tags:
+      - administrator
+  /admin/attached:
+    get:
+      description: Возвращает все проекты которые прикреплены к администратору
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Project'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BasicAuth: []
+      summary: Все проекты которые прикреплены к администратору
       tags:
       - administrator
   /admin/signup:
@@ -925,6 +930,12 @@ paths:
     put:
       description: Обновляет дедлайн заметки в БД
       parameters:
+      - description: Updated note deadline
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.UpdateNoteDeadlineReq'
       - description: Идентификатор проекта
         in: path
         name: project_id

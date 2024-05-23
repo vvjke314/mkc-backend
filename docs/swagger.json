@@ -14,41 +14,7 @@
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
-        "/admin/attached": {
-            "get": {
-                "security": [
-                    {
-                        "BasicAuth": []
-                    }
-                ],
-                "description": "Возвращает все проекты которые прикреплены к администратору",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "administrator"
-                ],
-                "summary": "Все проекты которые прикреплены к администратору",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/ds.Project"
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.errorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/admin/project/{project_id}": {
+        "/admin/attach/{project_id}": {
             "get": {
                 "security": [
                     {
@@ -72,6 +38,40 @@
                         "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ds.Project"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/attached": {
+            "get": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "description": "Возвращает все проекты которые прикреплены к администратору",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "administrator"
+                ],
+                "summary": "Все проекты которые прикреплены к администратору",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1119,6 +1119,15 @@
                 "summary": "Обновить дедлайн заметки",
                 "parameters": [
                     {
+                        "description": "Updated note deadline",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ds.UpdateNoteDeadlineReq"
+                        }
+                    },
+                    {
                         "type": "string",
                         "description": "Идентификатор проекта",
                         "name": "project_id",
@@ -1604,6 +1613,14 @@
                     "type": "string"
                 },
                 "second_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "ds.UpdateNoteDeadlineReq": {
+            "type": "object",
+            "properties": {
+                "deadline": {
                     "type": "string"
                 }
             }
