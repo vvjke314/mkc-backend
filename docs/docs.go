@@ -79,7 +79,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/app.successResponse"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ds.Project"
+                            }
                         }
                     },
                     "500": {
@@ -197,6 +200,12 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/ds.GetCustomerEmailResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/app.errorResponse"
                         }
                     },
                     "500": {

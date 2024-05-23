@@ -202,6 +202,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/ds.GetCustomerEmailResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.errorResponse'
         "500":
           description: Internal Server Error
           schema:
@@ -247,7 +251,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/app.successResponse'
+            items:
+              $ref: '#/definitions/ds.Project'
+            type: array
         "500":
           description: Internal Server Error
           schema:
