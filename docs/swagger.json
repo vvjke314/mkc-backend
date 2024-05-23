@@ -207,14 +207,14 @@
         },
         "/login": {
             "post": {
-                "description": "Логинит пользователя",
+                "description": "Аутентификация пользователя",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "auth"
                 ],
-                "summary": "Логинит пользователя",
+                "summary": "Аутентификация пользователя",
                 "parameters": [
                     {
                         "description": "Customer data",
@@ -255,14 +255,14 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Разлогинивает пользователя",
+                "description": "Выход из аккаунта пользователя и удаление его токена",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "auth"
                 ],
-                "summary": "Разлогинивает пользователя",
+                "summary": "Выход из аккаунта пользователя",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -292,7 +292,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "Обновить доступ участнику проекта",
+                "description": "Обновить доступ участнику проекта. В поле CustomerAccess вводить либо \"полный\" либо \"просмотр\"",
                 "produces": [
                     "application/json"
                 ],
@@ -492,7 +492,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/app.paymentURL"
                         }
                     },
                     "500": {
@@ -1353,6 +1353,14 @@
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "app.paymentURL": {
+            "type": "object",
+            "properties": {
+                "url": {
                     "type": "string"
                 }
             }

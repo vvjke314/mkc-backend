@@ -7,8 +7,7 @@ import (
 	"github.com/vvjke314/mkc-backend/internal/pkg/config"
 )
 
-// GetDSN
-// функция для получения DSN
+// GetDSN функция для получения DSN
 func GetDSN() (string, error) {
 	err := config.GetConfig()
 	if err != nil {
@@ -19,8 +18,7 @@ func GetDSN() (string, error) {
 	return url, nil
 }
 
-// GetDSNBack
-// функция для получения DSN
+// GetDSNBack функция для получения DSN
 func GetDSNBack() (string, error) {
 	err := config.GetConfig()
 	if err != nil {

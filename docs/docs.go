@@ -210,14 +210,14 @@ const docTemplate = `{
         },
         "/login": {
             "post": {
-                "description": "Логинит пользователя",
+                "description": "Аутентификация пользователя",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "auth"
                 ],
-                "summary": "Логинит пользователя",
+                "summary": "Аутентификация пользователя",
                 "parameters": [
                     {
                         "description": "Customer data",
@@ -258,14 +258,14 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Разлогинивает пользователя",
+                "description": "Выход из аккаунта пользователя и удаление его токена",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "auth"
                 ],
-                "summary": "Разлогинивает пользователя",
+                "summary": "Выход из аккаунта пользователя",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -295,7 +295,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Обновить доступ участнику проекта",
+                "description": "Обновить доступ участнику проекта. В поле CustomerAccess вводить либо \"полный\" либо \"просмотр\"",
                 "produces": [
                     "application/json"
                 ],
@@ -495,7 +495,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/app.paymentURL"
                         }
                     },
                     "500": {
@@ -1356,6 +1356,14 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "app.paymentURL": {
+            "type": "object",
+            "properties": {
+                "url": {
                     "type": "string"
                 }
             }

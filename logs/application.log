@@ -318,3 +318,39 @@
 {"level":"error","time":"2024-05-23T00:44:12+03:00","message":"620ec85c-baab-4569-a0a2-e1171f54f641:error:[GetAllUnattachedProjects]"}
 {"level":"error","time":"2024-05-23T00:44:22+03:00","message":"620ec85c-baab-4569-a0a2-e1171f54f641:error:[GetAllAttachedProjects]"}
 {"level":"error","time":"2024-05-23T00:44:27+03:00","message":"620ec85c-baab-4569-a0a2-e1171f54f641:error:[GetCustomerEmail]"}
+{"level":"error","time":"2024-05-23T10:53:39+03:00","message":"service:error:[app.Init]: can't initialize application: [redis.Init] dial tcp: lookup redis on 127.0.0.53:53: server misbehaving\n"}
+{"time":"2024-05-23T11:58:16+03:00","message":"[Authentification]:success_request:signed up"}
+{"level":"error","time":"2024-05-23T11:59:47+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-23T11:59:47+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[CreateProject]"}
+{"time":"2024-05-23T12:00:43+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[CreateNote]"}
+{"level":"error","time":"2024-05-23T12:02:07+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:error:[AddParticipant]:you owner of this project"}
+{"level":"error","time":"2024-05-23T12:02:14+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:error:[AddParticipant][repo.GetCustomerByEmail]:no rows in result set"}
+{"time":"2024-05-23T12:02:51+03:00","message":"[Authentification]:success_request:signed up"}
+{"level":"error","time":"2024-05-23T12:02:56+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:error:[AddParticipant][repo.GetCustomerByEmail]:no rows in result set"}
+{"time":"2024-05-23T12:03:08+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[AddParticipant]"}
+{"level":"error","time":"2024-05-23T12:04:47+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:error:[DeleteParticipant][repo.GetCustomerByEmail]:no rows in result set"}
+{"level":"error","time":"2024-05-23T12:04:47+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:error:[DeleteParticipant][repo.CheckParticipant]:%!w(<nil>)"}
+{"time":"2024-05-23T12:04:47+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[DeleteParticipant]"}
+{"time":"2024-05-23T12:08:29+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:successfuly signed up"}
+{"level":"error","time":"2024-05-23T12:08:42+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:error:[DeleteParticipant][repo.GetCustomerByEmail]:no rows in result set"}
+{"time":"2024-05-23T12:09:01+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[DeleteParticipant]"}
+{"level":"error","time":"2024-05-23T12:09:03+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:error:[DeleteParticipant][repo.CheckParticipant]:%!w(<nil>)"}
+{"time":"2024-05-23T12:09:17+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[AddParticipant]"}
+{"time":"2024-05-23T12:12:49+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[UpdateNoteDeadline]"}
+{"time":"2024-05-23T12:13:32+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[UpdateNoteDeadline]"}
+{"time":"2024-05-23T12:14:14+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[DeleteNote]"}
+{"level":"error","time":"2024-05-23T12:16:18+03:00","message":"80a7af5d-ae4b-46a2-8403-a13f14f82910:error:[GetAllUnattachedProjects]"}
+{"level":"error","time":"2024-05-23T12:17:24+03:00","message":"80a7af5d-ae4b-46a2-8403-a13f14f82910:error:[AttachAdmin]"}
+{"level":"error","time":"2024-05-23T12:17:29+03:00","message":"80a7af5d-ae4b-46a2-8403-a13f14f82910:error:[GetAllAttachedProjects]"}
+{"level":"error","time":"2024-05-23T12:17:33+03:00","message":"80a7af5d-ae4b-46a2-8403-a13f14f82910:error:[GetAllUnattachedProjects]"}
+{"level":"error","time":"2024-05-23T12:17:41+03:00","message":"80a7af5d-ae4b-46a2-8403-a13f14f82910:error:[GetCustomerEmail]"}
+{"level":"error","time":"2024-05-23T12:17:56+03:00","message":"c34c3459-901e-49ae-9a13-a446b5294e3f:error:[GetCustomerEmail][repo.GetCustomerEmail]: you can't work with that project: c279b7d7-8edc-420e-9042-e5e25da99251"}
+{"time":"2024-05-23T12:33:50+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:successfuly signed up"}
+{"time":"2024-05-23T12:35:09+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[CreateNote]"}
+{"time":"2024-05-23T12:37:33+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:successfuly signed up"}
+{"time":"2024-05-23T12:38:07+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[UpdateNoteDeadline]"}
+{"time":"2024-05-23T12:43:13+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:successfuly signed up"}
+{"time":"2024-05-23T12:49:19+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[UpdateNoteDeadline]"}
+{"time":"2024-05-23T13:14:24+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:successfuly signed up"}
+{"time":"2024-05-23T13:14:58+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[UpdateNoteDeadline]"}
+{"time":"2024-05-23T13:17:29+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[UpdateNoteDeadline]"}

@@ -42,13 +42,22 @@ func (r *Repo) UpdateNoteName(noteId, noteName string) error {
 	return nil
 }
 
-// UpdateNoteDeadLine
-// Изменение дедлайна заметки
+// UpdateNoteDeadLine изменение дедлайна заметки
 func (r *Repo) UpdateNoteDeadLine(noteId string, deadline time.Time) error {
-	query := "UPDATE note SET deadline = $1, update_datetime = $2 WHERE id = $3"
-	_, err := r.pool.Exec(r.ctx, query, deadline, time.Now(), noteId)
-	if err != nil {
-		return fmt.Errorf("[pgxpool.Pool.Exec] can't exec query %w", err)
+	var query string
+	var err error
+	if deadline.After(time.Now().Add(+3 * time.Hour)) {
+		query = "UPDATE note SET deadline = $1, update_datetime = $2, overdue = 0 WHERE id = $3"
+		_, err = r.pool.Exec(r.ctx, query, deadline, time.Now(), noteId)
+		if err != nil {
+			return fmt.Errorf("[pgxpool.Pool.Exec] can't exec query %w", err)
+		}
+	} else {
+		query = "UPDATE note SET deadline = $1, update_datetime = $2, overdue = 1 WHERE id = $3"
+		_, err = r.pool.Exec(r.ctx, query, deadline, time.Now(), noteId)
+		if err != nil {
+			return fmt.Errorf("[pgxpool.Pool.Exec] can't exec query %w", err)
+		}
 	}
 
 	return nil

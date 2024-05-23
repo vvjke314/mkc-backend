@@ -10,6 +10,11 @@ definitions:
       message:
         type: string
     type: object
+  app.paymentURL:
+    properties:
+      url:
+        type: string
+    type: object
   app.successResponse:
     properties:
       message:
@@ -303,7 +308,7 @@ paths:
       - administrator
   /login:
     post:
-      description: Логинит пользователя
+      description: Аутентификация пользователя
       parameters:
       - description: Customer data
         in: body
@@ -326,12 +331,12 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/app.errorResponse'
-      summary: Логинит пользователя
+      summary: Аутентификация пользователя
       tags:
       - auth
   /logout:
     get:
-      description: Разлогинивает пользователя
+      description: Выход из аккаунта пользователя и удаление его токена
       produces:
       - application/json
       responses:
@@ -349,7 +354,7 @@ paths:
             $ref: '#/definitions/app.errorResponse'
       security:
       - BearerAuth: []
-      summary: Разлогинивает пользователя
+      summary: Выход из аккаунта пользователя
       tags:
       - auth
   /participants/{project_id}:
@@ -434,7 +439,8 @@ paths:
       tags:
       - participants
     put:
-      description: Обновить доступ участнику проекта
+      description: Обновить доступ участнику проекта. В поле CustomerAccess вводить
+        либо "полный" либо "просмотр"
       parameters:
       - description: Project ID
         in: path
@@ -482,7 +488,7 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            $ref: '#/definitions/app.paymentURL'
         "500":
           description: Internal Server Error
           schema:

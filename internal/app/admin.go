@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/vvjke314/mkc-backend/internal/pkg/crypt"
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 )
@@ -26,28 +27,33 @@ func (a *Application) SignUpAdmin(c *gin.Context) {
 
 	err := json.NewDecoder(c.Request.Body).Decode(req)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Can't decode body params")
+		a.Log("bad request data", "SignUpAdmin")
+		newErrorResponse(c, http.StatusBadRequest, "can't decode body params")
 		return
 	}
 
 	if req.Password == "" {
-		newErrorResponse(c, http.StatusBadRequest, "Password is empty")
+		a.Log("password is empty", "SignUpAdmin")
+		newErrorResponse(c, http.StatusBadRequest, "password is empty")
 		return
 	}
 
 	if req.Name == "" {
-		newErrorResponse(c, http.StatusBadRequest, "Name is empty")
+		a.Log("name is empty", "SignUpAdmin")
+		newErrorResponse(c, http.StatusBadRequest, "name is empty")
 		return
 	}
 
 	if req.Email == "" {
-		newErrorResponse(c, http.StatusBadRequest, "Email is empty")
+		a.Log("email is empty", "SignUpAdmin")
+		newErrorResponse(c, http.StatusBadRequest, "email is empty")
 		return
 	}
 
 	password, err := crypt.HashPassword(req.Password)
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "Bad password entered")
+		a.Log("bad password entered", "SignUpAdmin")
+		newErrorResponse(c, http.StatusBadRequest, "bad password entered")
 		return
 	}
 
@@ -59,6 +65,10 @@ func (a *Application) SignUpAdmin(c *gin.Context) {
 	}
 	err = a.repo.SignUpAdministrator(admin)
 	if err != nil {
+		if err.Error() == "23505" {
+			newErrorResponse(c, http.StatusBadRequest, "administrator with such credentials already exist")
+			return
+		}
 		newErrorResponse(c, http.StatusInternalServerError, "failed with signing up")
 		return
 	}
@@ -74,7 +84,7 @@ func (a *Application) SignUpAdmin(c *gin.Context) {
 // @Produce      json
 // @Security 	 BasicAuth
 // @Param project_id path string true "Уникальный идентификатор проекта"
-// @Success      200 {object} successResponse
+// @Success      200 {object} []ds.Project
 // @Failure 500 {object} errorResponse
 // @Router      /admin/project/{project_id} [get]
 func (a *Application) AttachAdmin(c *gin.Context) {
@@ -89,9 +99,18 @@ func (a *Application) AttachAdmin(c *gin.Context) {
 		return
 	}
 
+	// Получаем все проекты администратора
+	projects, err := a.repo.GetAllAttachedProjects(adminId)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, "can't get all atached projects")
+		err = fmt.Errorf("[AttachAdmin][repo.GetAllAttachedProjects]: %w", err)
+		a.Log(err.Error(), adminId)
+		return
+	}
+
 	// Успешный ответ на запрос
 	a.Log("[AttachAdmin]", adminId)
-	newSuccessResponse(c, 200, "successfully attached")
+	c.JSON(200, projects)
 }
 
 // GetAllUnattachedProjects
@@ -153,13 +172,20 @@ func (a *Application) GetAllAttachedProjects(c *gin.Context) {
 // @Param project_id path string true "Уникальный идентификатор проекта"
 // @Success      200 {object} ds.GetCustomerEmailResponse
 // @Failure 500 {object} errorResponse
+// @Failure 400 {object} errorResponse
 // @Router      /admin/{project_id}/send [post]
 func (a *Application) GetCustomerEmail(c *gin.Context) {
 	projectId := c.Param("project_id")
 	adminId := c.GetString("adminId")
 
-	email, err := a.repo.GetCustomerEmail(projectId)
+	email, err := a.repo.GetCustomerEmail(projectId, adminId)
 	if err != nil {
+		if err == pgx.ErrNoRows {
+			newErrorResponse(c, http.StatusBadRequest, "you don't permission to work with that project")
+			err = fmt.Errorf("[GetCustomerEmail][repo.GetCustomerEmail]: %w", err)
+			a.Log(err.Error(), adminId)
+			return
+		}
 		newErrorResponse(c, http.StatusInternalServerError, "can't get customer email")
 		err = fmt.Errorf("[GetCustomerEmail][repo.GetCustomerEmail]: %w", err)
 		a.Log(err.Error(), adminId)

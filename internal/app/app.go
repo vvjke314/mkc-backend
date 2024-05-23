@@ -8,6 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/rs/zerolog"
+	"github.com/spf13/viper"
+	"github.com/vvjke314/mkc-backend/internal/pkg/config"
 	"github.com/vvjke314/mkc-backend/internal/pkg/db"
 )
 
@@ -39,8 +41,13 @@ func (app *Application) Init() error {
 	if err != nil {
 		return fmt.Errorf("[db.Init] %w", err)
 	}
+	err = config.GetConfig()
+	if err != nil {
+		return fmt.Errorf("[config.GetConfig] %w", err)
+	}
+	adr := fmt.Sprintf("%s:%s", viper.GetString("REDIS_HOSTNAME"), viper.GetString("REDIS_PORT"))
 	app.redis = redis.NewClient(&redis.Options{
-		Addr:     "redis:6379",
+		Addr:     adr,
 		Password: "",
 		DB:       0,
 	})

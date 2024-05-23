@@ -19,8 +19,7 @@ func (r *Repo) CreateParticipant(p ds.ProjectAccess) error {
 	return nil
 }
 
-// UpdateParticipantAccess [unchecked]
-// Изменяет статус участника в проекте {0 : Чтение, 1 : Запись + Чтение}
+// UpdateParticipantAccess изменяет статус участника в проекте {0 : Чтение, 1 : Запись + Чтение}
 func (r *Repo) UpdateParticipantAccess(participantId string, mod int) error {
 	query := "UPDATE project_access SET customer_access = $1 WHERE customer_id = $2"
 	_, err := r.pool.Exec(r.ctx, query, mod, participantId)

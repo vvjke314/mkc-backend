@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 )
 
@@ -12,7 +13,12 @@ func (r *Repo) SignUpAdministrator(a ds.Administrator) error {
 	query := "INSERT INTO administrator (id, name, email, password) VALUES ($1, $2, $3, $4)"
 	_, err := r.pool.Exec(r.ctx, query, a.Id, a.Name, a.Email, a.Password)
 	if err != nil {
-		return fmt.Errorf("[pgxpool.Pool.Exec] Can't exec query: %w", err)
+		if pgErr, ok := err.(*pgconn.PgError); ok {
+			if pgErr.Code == "23505" {
+				return fmt.Errorf("23505")
+			}
+		}
+		return fmt.Errorf("[pgxpool.Pool.Exec] can't exec query: %w", err)
 	}
 	return nil
 }
@@ -42,19 +48,19 @@ func (r *Repo) GetAdminId(adminName, adminPass string) (string, error) {
 }
 
 // GetCustomerEmail получает почту создателя проекта
-func (r *Repo) GetCustomerEmail(projectId string) (string, error) {
+func (r *Repo) GetCustomerEmail(projectId, adminId string) (string, error) {
 	var email string
 	query := `
 		SELECT c.email
 		FROM Project p
 		JOIN Customer c ON p.owner_id = c.id
-		WHERE p.id = $1;
+		WHERE p.id = $1 AND p.admin_id = $2;
 	`
 
-	err := r.pool.QueryRow(r.ctx, query, projectId).Scan(&email)
+	err := r.pool.QueryRow(r.ctx, query, projectId, adminId).Scan(&email)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			return "", fmt.Errorf("no customer found for project ID: %s", projectId)
+			return "", fmt.Errorf("you can't work with that project: %s", projectId)
 		}
 		return "", fmt.Errorf("query row failed: %w", err)
 	}

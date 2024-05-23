@@ -37,8 +37,21 @@ func (r *Repo) GetCustomerByEmail(customerEmail string, c *ds.Customer) error {
 	err := r.pool.QueryRow(r.ctx, query, customerEmail).Scan(&c.Id, &c.FirstName, &c.SecondName, &c.Login, &c.Password, &c.Email, &c.Type)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			// Если запись отсутствует, возвращаем nil ошибку
-			return nil
+			return err
+		}
+		return fmt.Errorf("[pgxpool.Pool.QueryRow] Can't exec query %w", err)
+	}
+
+	return nil
+}
+
+// GetParticipantByEmail получает id участника проекта через email
+func (r *Repo) GetParticipantByEmail(customerEmail, project_id string, c *ds.Customer) error {
+	query := "SELECT id, first_name, second_name, login, password, email, type FROM customer WHERE email = $1"
+	err := r.pool.QueryRow(r.ctx, query, customerEmail).Scan(&c.Id, &c.FirstName, &c.SecondName, &c.Login, &c.Password, &c.Email, &c.Type)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return err
 		}
 		return fmt.Errorf("[pgxpool.Pool.QueryRow] Can't exec query %w", err)
 	}
