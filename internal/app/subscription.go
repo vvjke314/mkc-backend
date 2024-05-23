@@ -29,6 +29,8 @@ func (a *Application) GetSubscription(c *gin.Context) {
 		return
 	}
 
+	// Тут проверка для оплаты
+
 	// Проверка оплаты прошла успешно
 	now := time.Now()
 	subscriptionEnd := now.AddDate(0, 1, 0) // Добавляем 1 месяц к текущей дате
@@ -69,7 +71,10 @@ func (a *Application) GetSubscription(c *gin.Context) {
 func (a *Application) GetPaymentUrl(c *gin.Context) {
 	var url paymentURL
 	customerId := c.GetString("customer_id")
-	// !!!!Здесь дернуть сашку!!!!
+	urlString := fmt.Sprintf("http:/youcassa.com/payment/%s", customerId)
+	url = paymentURL{
+		Url: urlString,
+	}
 	a.SuccessLog("confrimed payment", customerId)
 	c.JSON(http.StatusOK, url)
 }
