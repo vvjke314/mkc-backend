@@ -86,7 +86,7 @@ func (a *Application) SignUpAdmin(c *gin.Context) {
 // @Param project_id path string true "Уникальный идентификатор проекта"
 // @Success      200 {object} []ds.Project
 // @Failure 500 {object} errorResponse
-// @Router      /admin/project/{project_id} [get]
+// @Router      /admin/attach/{project_id} [get]
 func (a *Application) AttachAdmin(c *gin.Context) {
 	projectId := c.Param("project_id")
 	adminId := c.GetString("adminId")

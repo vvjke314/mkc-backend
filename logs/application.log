@@ -354,3 +354,42 @@
 {"time":"2024-05-23T13:14:24+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:successfuly signed up"}
 {"time":"2024-05-23T13:14:58+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[UpdateNoteDeadline]"}
 {"time":"2024-05-23T13:17:29+03:00","message":"f08417f5-f059-4e24-ad5b-a2d60a7024bb:success_request:[UpdateNoteDeadline]"}
+{"time":"2024-05-23T20:11:44+03:00","message":"[Authentification]:success_request:signed up"}
+{"time":"2024-05-23T20:54:51+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:successfuly signed up"}
+{"level":"error","time":"2024-05-23T20:56:32+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-23T20:56:32+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[CreateProject]"}
+{"time":"2024-05-23T20:58:20+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[UpdateProjectName]"}
+{"time":"2024-05-23T20:59:00+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[GetProjects]"}
+{"time":"2024-05-23T21:00:07+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[DeleteProject]"}
+{"level":"error","time":"2024-05-23T21:00:31+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-23T21:00:31+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[CreateProject]"}
+{"level":"error","time":"2024-05-23T21:01:21+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-23T21:01:21+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[UploadFile]"}
+{"level":"error","time":"2024-05-23T21:02:47+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-23T21:02:47+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[UploadFile]"}
+{"level":"error","time":"2024-05-23T21:03:00+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:error:[DownloadFile][io.Copy]: write tcp 172.20.0.6:8080->172.20.0.1:43908: write: broken pipe"}
+{"level":"error","time":"2024-05-23T21:03:23+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:error:[DownloadFile][io.Copy]: write tcp 172.20.0.6:8080->172.20.0.1:43822: write: broken pipe"}
+{"level":"error","time":"2024-05-23T21:03:27+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:error:[DownloadFile][io.Copy]: write tcp 172.20.0.6:8080->172.20.0.1:43824: write: broken pipe"}
+{"time":"2024-05-23T21:05:30+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[DeleteFile]"}
+{"time":"2024-05-23T21:06:19+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[DeleteFile]"}
+{"level":"error","time":"2024-05-23T21:08:50+03:00","message":"CheckSubscription:error:subscription expired"}
+{"time":"2024-05-23T21:08:50+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[UploadFile]"}
+{"level":"error","time":"2024-05-23T21:12:16+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:error:[CreateNote][json.NewDecoder]: parsing time \"2024-11-30T21:13:00\" as \"2006-01-02T15:04:05Z07:00\": cannot parse \"\" as \"Z07:00\""}
+{"time":"2024-05-23T21:12:38+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[CreateNote]"}
+{"time":"2024-05-23T21:15:30+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[CreateNote]"}
+{"level":"error","time":"2024-05-23T21:18:09+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:error:[UpdateNoteDeadline][json.NewDecoder]: EOF"}
+{"time":"2024-05-23T21:21:48+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[GetProjects]"}
+{"time":"2024-05-23T21:22:34+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[CreateNote]"}
+{"time":"2024-05-23T21:23:26+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[UpdateNoteDeadline]"}
+{"time":"2024-05-23T21:24:41+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[DeleteNote]"}
+{"time":"2024-05-23T21:25:42+03:00","message":"[Authentification]:success_request:signed up"}
+{"time":"2024-05-23T21:26:19+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[AddParticipant]"}
+{"level":"error","time":"2024-05-23T21:26:37+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:error:[AddParticipant][repo.CheckParticipants]: such participant already in this project"}
+{"time":"2024-05-23T21:27:42+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[DeleteParticipant]"}
+{"time":"2024-05-23T21:28:33+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[AddParticipant]"}
+{"time":"2024-05-23T21:29:20+03:00","message":"8606dbe3-0bac-4055-b8a1-d814ba6224c5:success_request:[UpdateParticipantAccess]"}
+{"level":"error","time":"2024-05-23T21:31:39+03:00","message":"1a0ce7c4-f2f0-49bf-b799-6295daf18f8f:error:[GetAllUnattachedProjects]"}
+{"level":"error","time":"2024-05-23T21:34:20+03:00","message":"1a0ce7c4-f2f0-49bf-b799-6295daf18f8f:error:[GetAllUnattachedProjects]"}
+{"level":"error","time":"2024-05-23T21:35:07+03:00","message":"1a0ce7c4-f2f0-49bf-b799-6295daf18f8f:error:[AttachAdmin]"}
+{"level":"error","time":"2024-05-23T21:49:25+03:00","message":"1a0ce7c4-f2f0-49bf-b799-6295daf18f8f:error:[GetAllAttachedProjects]"}
+{"level":"error","time":"2024-05-23T21:50:20+03:00","message":"1a0ce7c4-f2f0-49bf-b799-6295daf18f8f:error:[GetCustomerEmail]"}

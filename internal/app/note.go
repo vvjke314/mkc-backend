@@ -139,6 +139,7 @@ func (a *Application) DeleteNote(c *gin.Context) {
 // @Tags note
 // @Security 	 BearerAuth
 // @Produce json
+// @Param data body ds.UpdateNoteDeadlineReq true "Updated note deadline"
 // @Param project_id path string true "Идентификатор проекта"
 // @Param note_id path string true "Идентификатор заметки"
 // @Success 200 {object} []ds.Note
