@@ -118,6 +118,7 @@ func (app *Application) Run() error {
 		authorized.POST("/project/:project_id/files", app.FullAccessControl(), app.CheckSubscription(), app.UploadFiles) // +
 		authorized.DELETE("/project/:project_id/file", app.FullAccessControl(), app.DeleteFile)                          // +
 		authorized.GET("/project/:project_id/file/:file_id", app.AccessControl(), app.DownloadFile)                      // +
+		authorized.GET("/project/:project_id/files", app.AccessControl(), app.GetFiles)                                  // +
 
 		// note
 		authorized.POST("/project/:project_id/note", app.FullAccessControl(), app.CreateNote)                 // +
