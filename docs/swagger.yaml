@@ -1,13 +1,1096 @@
 basePath: /
+definitions:
+  app.AuthToken:
+    properties:
+      token:
+        type: string
+    type: object
+  app.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  app.paymentURL:
+    properties:
+      url:
+        type: string
+    type: object
+  app.successResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  ds.AddParticipantReq:
+    properties:
+      customer_access:
+        type: string
+      email:
+        type: string
+    type: object
+  ds.CreateNoteReq:
+    properties:
+      content:
+        type: string
+      deadline:
+        type: string
+      title:
+        type: string
+    type: object
+  ds.CreateProjectReq:
+    properties:
+      name:
+        type: string
+    type: object
+  ds.Customer:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      login:
+        type: string
+      password:
+        type: string
+      second_name:
+        type: string
+      subscription_end:
+        type: string
+      type:
+        type: integer
+    type: object
+  ds.DeleteFileReq:
+    properties:
+      extension:
+        type: string
+      filename:
+        type: string
+    type: object
+  ds.DeleteParticipantReq:
+    properties:
+      email:
+        type: string
+    type: object
+  ds.File:
+    properties:
+      extension:
+        type: string
+      file_path:
+        type: string
+      filename:
+        type: string
+      id:
+        type: string
+      project_id:
+        type: string
+      size:
+        type: integer
+      update_datetime:
+        type: string
+    type: object
+  ds.GetCustomerEmailResponse:
+    properties:
+      email:
+        type: string
+    type: object
+  ds.LoginCustomerReq:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+  ds.Note:
+    properties:
+      content:
+        type: string
+      deadline:
+        type: string
+      id:
+        type: string
+      overdue:
+        type: integer
+      project_id:
+        type: string
+      title:
+        type: string
+      update_datetime:
+        type: string
+    type: object
+  ds.Project:
+    properties:
+      admin_id:
+        type: string
+      capacity:
+        type: integer
+      creation_date:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      owner_id:
+        type: string
+    type: object
+  ds.ProjectData:
+    properties:
+      files:
+        items:
+          $ref: '#/definitions/ds.File'
+        type: array
+      notes:
+        items:
+          $ref: '#/definitions/ds.Note'
+        type: array
+    type: object
+  ds.SignUpAdmin:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  ds.SignUpCustomerReq:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      login:
+        type: string
+      password:
+        type: string
+      second_name:
+        type: string
+    type: object
+  ds.UpdateNoteDeadlineReq:
+    properties:
+      deadline:
+        type: string
+    type: object
+  ds.UpdateParticipantAccessReq:
+    properties:
+      customer_access:
+        type: string
+      email:
+        type: string
+    type: object
+  ds.UpdateProjectNameReq:
+    properties:
+      name:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
-    email: mail-bla-bla
+    email: mail@dump
   description: MK CLOUD backend service.
   title: MKC API
   version: "1.0"
-paths: {}
+paths:
+  /admin/{project_id}/send:
+    post:
+      description: Получает электронную почту пользователя, владеющего проектом
+      parameters:
+      - description: Уникальный идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ds.GetCustomerEmailResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BasicAuth: []
+      summary: Получает электронную почту пользователя, владеющего проектом
+      tags:
+      - administrator
+  /admin/attach/{project_id}:
+    get:
+      description: Прикрепляет администратора к выбраному проекту
+      parameters:
+      - description: Уникальный идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Project'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BasicAuth: []
+      summary: Прикрепляет администратора к проекту
+      tags:
+      - administrator
+  /admin/attached:
+    get:
+      description: Возвращает все проекты которые прикреплены к администратору
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Project'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BasicAuth: []
+      summary: Все проекты которые прикреплены к администратору
+      tags:
+      - administrator
+  /admin/signup:
+    post:
+      description: Добавляет администратора на сервис
+      parameters:
+      - description: Информация о администраторе
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.SignUpAdmin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.successResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      summary: Добавляет администратора на сервис
+      tags:
+      - administrator
+  /admin/unattached:
+    get:
+      description: Возвращает все проекты которые еще не прикреплены
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Project'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BasicAuth: []
+      summary: Все проекты которые еще не прикреплены
+      tags:
+      - administrator
+  /login:
+    post:
+      description: Аутентификация пользователя
+      parameters:
+      - description: Customer data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.LoginCustomerReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.AuthToken'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      summary: Аутентификация пользователя
+      tags:
+      - auth
+  /logout:
+    get:
+      description: Выход из аккаунта пользователя и удаление его токена
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.successResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Выход из аккаунта пользователя
+      tags:
+      - auth
+  /participants/{project_id}:
+    delete:
+      description: Убрать участника из проекта
+      parameters:
+      - description: Project ID
+        in: path
+        name: project_id
+        required: true
+        type: string
+      - description: CHANGE IT
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.DeleteParticipantReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Customer'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Убрать участника из проекта
+      tags:
+      - participants
+    get:
+      description: показать всех участников проекта, включая его создателя
+      parameters:
+      - description: Project ID
+        in: path
+        name: project_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Customer'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: показать всех участников проекта
+      tags:
+      - participants
+    post:
+      description: Добавляет участника в проект
+      parameters:
+      - description: Project ID
+        in: path
+        name: project_id
+        required: true
+        type: string
+      - description: CHANGE IT
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.AddParticipantReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Customer'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Добавляет участника в проект
+      tags:
+      - participants
+    put:
+      description: Обновить доступ участнику проекта. В поле CustomerAccess вводить
+        либо "полный" либо "просмотр"
+      parameters:
+      - description: Project ID
+        in: path
+        name: project_id
+        required: true
+        type: string
+      - description: CHANGE IT
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.UpdateParticipantAccessReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Customer'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Обновить доступ участнику проекта
+      tags:
+      - participants
+  /payment_url:
+    get:
+      description: Возрващает Url для оплаты подписки
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.paymentURL'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Возрващает Url для оплаты подписки
+      tags:
+      - subscription
+  /project:
+    post:
+      description: Создает проект пользователю
+      parameters:
+      - description: New project
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.CreateProjectReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Project'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Создает проект пользователю
+      tags:
+      - project
+  /project/{project_id}:
+    delete:
+      description: Удаляет проект
+      parameters:
+      - description: Project ID
+        in: path
+        name: project_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Project'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Удаляет проект
+      tags:
+      - project
+    get:
+      description: Получаем массив всех файлов и заметок
+      parameters:
+      - description: Идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ds.ProjectData'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Получаем информацию о содержании проекта
+      tags:
+      - project
+    put:
+      description: Обновляет имя проекта
+      parameters:
+      - description: Project name
+        in: path
+        name: project_id
+        required: true
+        type: string
+      - description: New project name
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.UpdateProjectNameReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Project'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Обновляет имя проекта
+      tags:
+      - project
+  /project/{project_id}/file:
+    delete:
+      description: Удаляет файл с сервера и из БД
+      parameters:
+      - description: Идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
+      - description: Структура хранящая тело запроса для удаления файла
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.DeleteFileReq'
+      produces:
+      - application/json
+      responses:
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Удалить файл
+      tags:
+      - file
+    post:
+      consumes:
+      - multipart/form-data
+      description: Загружает файл на сервер
+      parameters:
+      - description: Идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
+      - description: Файл для загрузки
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.File'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Загрузить файл
+      tags:
+      - file
+  /project/{project_id}/file/{file_id}:
+    get:
+      consumes:
+      - application/json
+      description: Скачивает файл с сервера
+      parameters:
+      - description: Идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
+      - description: Идентификатор файла
+        in: path
+        name: file_id
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Скачать файл
+      tags:
+      - file
+  /project/{project_id}/files:
+    get:
+      consumes:
+      - multipart/form-data
+      description: Получить все файлы проекта
+      parameters:
+      - description: Идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.File'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Просмотреть все файлы проекта
+      tags:
+      - file
+    post:
+      consumes:
+      - multipart/form-data
+      description: Загружает файлы на сервер
+      parameters:
+      - description: Идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
+      - description: Файлы для загрузки
+        in: formData
+        name: files
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.File'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Загрузить файлы
+      tags:
+      - file
+  /project/{project_id}/note:
+    post:
+      description: Создание заметки в проекте и добавление записи в БД
+      parameters:
+      - description: New project
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.CreateNoteReq'
+      - description: Идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Note'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Создание заметки в проекте
+      tags:
+      - note
+  /project/{project_id}/note/{note_id}:
+    delete:
+      description: Удаляет заметки из проекта и БД
+      parameters:
+      - description: Идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
+      - description: Идентификатор заметки
+        in: path
+        name: note_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Note'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Удалить заметку
+      tags:
+      - note
+    put:
+      description: Обновляет дедлайн заметки в БД
+      parameters:
+      - description: Updated note deadline
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.UpdateNoteDeadlineReq'
+      - description: Идентификатор проекта
+        in: path
+        name: project_id
+        required: true
+        type: string
+      - description: Идентификатор заметки
+        in: path
+        name: note_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Note'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Обновить дедлайн заметки
+      tags:
+      - note
+  /projects:
+    get:
+      description: Возращает все проекты пользователя
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ds.Project'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Возвращаем все проекты пользователя
+      tags:
+      - project
+  /signup:
+    post:
+      description: Регистрирует пользователя
+      parameters:
+      - description: Customer data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ds.SignUpCustomerReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.AuthToken'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      summary: Регистрирует пользователя
+      tags:
+      - auth
+  /subscription/{customer_id}:
+    get:
+      description: Успешная оплата подписки и повышение статуса его личного аккаунта
+      parameters:
+      - description: Уникальный идентификатор клиента
+        in: path
+        name: customer_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ds.Customer'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.errorResponse'
+      summary: Получение подписки пользователем
+      tags:
+      - subscription
+schemes:
+- http
 securityDefinitions:
+  BasicAuth:
+    type: basic
   BearerAuth:
     in: header
     name: Authorization

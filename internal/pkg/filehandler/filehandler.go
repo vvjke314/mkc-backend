@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-const Path = "/home/vvjkee/Workspace/university/diplom/storage/"
+const Path = "./storage/"
 
 // type Filehandler struct {
 // }
@@ -14,8 +14,7 @@ const Path = "/home/vvjkee/Workspace/university/diplom/storage/"
 // 	return &Filehandler{}
 // }
 
-// CreateDir
-// Создает директорию
+// CreateDir Создает директорию
 func CreateDir(dirName string) error {
 	err := os.Mkdir(Path+dirName, 0755) // Создание папки с правами доступа 0755
 	if err != nil {
@@ -25,8 +24,7 @@ func CreateDir(dirName string) error {
 	return err
 }
 
-// CreateFile
-// Создает файл в локальном хранилище
+// CreateFile Создает файл в локальном хранилище
 func CreateFile(fileName string, content []byte) error {
 	file, err := os.Create(Path + fileName)
 	if err != nil {

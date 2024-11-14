@@ -22,17 +22,16 @@ func NewRepo() *Repo {
 	return &Repo{}
 }
 
-// Init
-// медот для инициализации конфига
+// Init медот для инициализации конфига
 func (r *Repo) Init() error {
 	url, err := dsn.GetDSN()
 	if err != nil {
-		return fmt.Errorf("[dsn.GetDSN]: Can't get data string name: %w", err)
+		return fmt.Errorf("[dsn.GetDSN]: can't get data string name: %w", err)
 	}
 
 	pgxConfig, err := pgxpool.ParseConfig(url)
 	if err != nil {
-		return fmt.Errorf("[pgxpool.ParseConfig]: Can't parse config: %w", err)
+		return fmt.Errorf("[pgxpool.ParseConfig]: can't parse config: %w", err)
 	}
 
 	pgxConfig.AfterConnect = func(ctx context.Context, conn *pgx.Conn) error {
@@ -45,8 +44,7 @@ func (r *Repo) Init() error {
 	return nil
 }
 
-// Connect
-// метод для создания pool'a
+// Connect создание pool'a для подключения к БД
 func (r *Repo) Connect() error {
 	pgxConnPool, err := pgxpool.NewWithConfig(context.TODO(), r.config)
 	if err != nil {
@@ -57,8 +55,7 @@ func (r *Repo) Connect() error {
 	return nil
 }
 
-// Close
-// метод для закрытия pgxPool
+// Close закрытие pgxPool
 func (r *Repo) Close() {
 	r.pool.Close()
 }

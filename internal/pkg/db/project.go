@@ -3,11 +3,11 @@ package db
 import (
 	"fmt"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/vvjke314/mkc-backend/internal/pkg/ds"
 )
 
-// CreateProject
-// Добавляет новый проект в БД
+// CreateProject добавляет новый проект в БД
 func (r *Repo) CreateProject(p ds.Project) error {
 	query := "INSERT INTO project (id, owner_id, capacity, name, creation_date) VALUES ($1, $2, $3, $4, $5)"
 	_, err := r.pool.Exec(r.ctx, query, p.Id, p.OwnerId, p.Capacity, p.Name, p.CreationDate)
@@ -17,8 +17,7 @@ func (r *Repo) CreateProject(p ds.Project) error {
 	return nil
 }
 
-// DeleteProject [unchecked]
-// Удаляет проект из БД
+// DeleteProject удаляет проект из БД
 func (r *Repo) DeleteProject(projectId string) error {
 	err := r.DeleteFiles(projectId)
 	if err != nil {
@@ -44,10 +43,9 @@ func (r *Repo) DeleteProject(projectId string) error {
 	return nil
 }
 
-// UpdateProjectName [unchecked]
-// Изменение имени проекта в БД
+// UpdateProjectName изменение имени проекта в БД
 func (r *Repo) UpdateProjectName(projectId, projectName string) error {
-	query := "UPDATE project SET project_name = $1 WHERE project_id = $2"
+	query := "UPDATE project SET name = $1 WHERE id = $2"
 	_, err := r.pool.Exec(r.ctx, query, projectName, projectId)
 	if err != nil {
 		return fmt.Errorf("[*pgxpool.Pool.Exec] Can't exec query: %w", err)
@@ -56,8 +54,7 @@ func (r *Repo) UpdateProjectName(projectId, projectName string) error {
 	return nil
 }
 
-// GetProjectById [unchecked]
-// Получает структуру проект по id проекта
+// GetProjectById получает структуру проект по id проекта
 func (r *Repo) GetProjectById(projectId string, p *ds.Project) error {
 	query := "SELECT id, owner_id, capacity, name, creation_date FROM project WHERE id = $1"
 	err := r.pool.QueryRow(r.ctx, query, projectId).Scan(&p.Id, &p.OwnerId, &p.Capacity, &p.Name, &p.CreationDate)
@@ -68,21 +65,31 @@ func (r *Repo) GetProjectById(projectId string, p *ds.Project) error {
 	return nil
 }
 
-// GetProjects [unchecked]
-// Возращает все проекты пользователя
+// GetProjects возращает все проекты пользователя
 func (r *Repo) GetProjects(customerId string) ([]ds.Project, error) {
 	var projects []ds.Project
-	query := "SELECT id, project_id, filename, extension, size, file_path, update_datetime FROM project WHERE project_id = $1"
+	query := `
+		SELECT id, owner_id, capacity, name, creation_date, admin_id
+		FROM project
+		WHERE owner_id = $1
 
-	rows, err := r.pool.Query(r.ctx, query, customerId)
+		UNION
+
+		SELECT p.id, p.owner_id, p.capacity, p.name, p.creation_date, p.admin_id
+		FROM project p
+		JOIN project_access pa ON p.id = pa.project_id
+		WHERE pa.customer_id = $2
+	`
+
+	rows, err := r.pool.Query(r.ctx, query, customerId, customerId)
 	if err != nil {
-		return projects, fmt.Errorf("[*pgxpool.Pool.Query] Can't exec query: %w", err)
+		return projects, fmt.Errorf("[pgxpool.Pool.Query] Can't exec query: %w", err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		var p ds.Project
-		if err := rows.Scan(&p.Id, &p.OwnerId, &p.Capacity, &p.Name, &p.CreationDate); err != nil {
+		if err := rows.Scan(&p.Id, &p.OwnerId, &p.Capacity, &p.Name, &p.CreationDate, &p.AdminId); err != nil {
 			return projects, fmt.Errorf("[pgx.Rows.Scan] Can't scan data: %w", err)
 		}
 		projects = append(projects, p)
@@ -92,4 +99,61 @@ func (r *Repo) GetProjects(customerId string) ([]ds.Project, error) {
 	}
 
 	return projects, nil
+}
+
+// GetProjectbyName получаем нужный проект по имени
+func (r *Repo) GetProjectbyName(customerId, projectName string, p *ds.Project) error {
+	query := "SELECT id, owner_id, capacity, name, creation_date FROM project WHERE name = $1 AND owner_id = $2"
+	err := r.pool.QueryRow(r.ctx, query, projectName, customerId).Scan(&p.Id, &p.OwnerId, &p.Capacity, &p.Name, &p.CreationDate)
+	if err != nil {
+		return fmt.Errorf("[*pgxpool.Pool.QueryRow] Can't exec query: %w", err)
+	}
+
+	return nil
+}
+
+// GetProjectIdbyName получаем айди проекта через его имя
+func (r *Repo) GetProjectIdbyName(customerId, projectName string) (string, error) {
+	var pId string
+	query := "SELECT id FROM project WHERE name = $1 AND owner_id = $2"
+	err := r.pool.QueryRow(r.ctx, query, projectName, customerId).Scan(&pId)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return "NaN", err
+		}
+		return "", fmt.Errorf("[pgxpool.Pool.QueryRow] Can't exec query: %w", err)
+	}
+
+	return pId, err
+}
+
+// CheckProjectSize проверяем размер проекта при добавлении файлов
+func (r *Repo) CheckProjectSize(projectId string, addSize int64) (bool, error) {
+	p := &ds.Project{}
+	err := r.GetProjectById(projectId, p)
+	if err != nil {
+		return false, fmt.Errorf("[repo.GetProjectById]%w", err)
+	}
+	size, err := r.GetProjectSize(projectId)
+	if err != nil {
+		return false, fmt.Errorf("[repo.GetProjectSize]%w", err)
+	}
+	if size+addSize > p.Capacity {
+		return false, nil
+	}
+	return true, nil
+}
+
+// GetProjectSize получаем размер проекта
+func (r *Repo) GetProjectSize(projectId string) (int64, error) {
+	files, err := r.GetFiles(projectId)
+	if err != nil {
+		return 0, fmt.Errorf("[repo.GetFiles] can't exec query: %w", err)
+	}
+
+	var summSize int64
+	for _, file := range files {
+		summSize += int64(file.Size)
+	}
+	return summSize, nil
 }

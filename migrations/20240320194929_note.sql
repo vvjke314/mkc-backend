@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS note (
 	"content" varchar NOT NULL DEFAULT '',
 	"update_datetime" TIMESTAMP,
 	"deadline" TIMESTAMP,
+	"overdue" INTEGER,
 	PRIMARY KEY ("id"),
 	FOREIGN KEY (project_id) REFERENCES "project"(id) ON DELETE CASCADE
 );

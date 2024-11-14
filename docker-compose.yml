@@ -20,6 +20,31 @@ services:
       - DATABASE_URL=db
     depends_on:
       - db
+      - redis
+    volumes:
+      - ./logs:/mkc-backend/logs
+      - ../storage/:/mkc-backend/storage
+  backup:
+    build:
+      context: .
+      dockerfile: ./cmd/db-backup/Dockerfile
+    volumes:
+      - ./backups:/backups
+    depends_on:
+      - db
+  notecheker:
+    build:
+      context: .
+      dockerfile: ./cmd/notechecker/Dockerfile
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      - db
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
 
 volumes:
   db:
